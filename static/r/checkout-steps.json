@@ -9,7 +9,7 @@
 	],
 	"files": [
 		{
-			"content": "<script lang=\"ts\">\n\t// We are using one of our custom/local `ui` components here\n\timport * as Stepper from \"$UI$/stepper/index.js\";\n</script>\n\n<Stepper.Root>\n\t{#each { length: 5 } as _, i (i)}\n\t\t<Stepper.Item step={i + 1} />\n\t{/each}\n</Stepper.Root>\n",
+			"content": "<script lang=\"ts\">\r\n\t// We are using one of our custom/local `ui` components here\r\n\timport * as Stepper from \"$UI$/stepper/index.js\";\r\n</script>\r\n\r\n<Stepper.Root>\r\n\t{#each { length: 5 } as _, i (i)}\r\n\t\t<Stepper.Item step={i + 1} />\r\n\t{/each}\r\n</Stepper.Root>\r\n",
 			"type": "registry:component",
 			"target": "checkout-steps.svelte"
 		}

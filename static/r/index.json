@@ -59,5 +59,13 @@
 			"local:stepper"
 		],
 		"relativeUrl": "checkout-steps.json"
+	},
+	{
+		"name": "loading-image",
+		"title": "Loading Image",
+		"type": "registry:component",
+		"description": "A loading image component",
+		"registryDependencies": [],
+		"relativeUrl": "loading-image.json"
 	}
 ]

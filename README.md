@@ -4,6 +4,15 @@ You can use the `shadcn-svelte` CLI to run your own component registry. Running 
 component registry allows you to distribute your custom components, hooks, pages, and
 other files to any Svelte project.
 
+```bash
+pnpm dlx shadcn-svelte@next add https://components.deckweiss.at/r/<component>.json
+```
+
+## Components
+| Name            | Description                                     |
+|-----------------|-------------------------------------------------|
+| `loading-image` | Display placeholders while an image is loading. |
+
 ## Getting Started
 
 This is a template for creating a custom registry using SvelteKit.
