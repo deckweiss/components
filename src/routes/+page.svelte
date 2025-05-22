@@ -65,7 +65,7 @@
 					alt="dog" />
 
 				<LoadingImage
-					src="-"
+					src="https://deckweiss.at/non-existing-image.jpg"
 					class="w-30"
 					containerClass="h-50 bg-[#00ff00] text-center w-50">
 					{#snippet loading()}
