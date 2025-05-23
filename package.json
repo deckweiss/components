@@ -17,12 +17,13 @@
 	"devDependencies": {
 		"@eslint/compat": "^1.2.5",
 		"@eslint/js": "^9.18.0",
+		"@lucide/svelte": "^0.511.0",
 		"@sveltejs/adapter-auto": "^6.0.0",
 		"@sveltejs/adapter-static": "^3.0.8",
 		"@sveltejs/kit": "^2.16.0",
 		"@sveltejs/vite-plugin-svelte": "^5.0.0",
 		"@tailwindcss/vite": "^4.0.0",
-		"bits-ui": "^1.4.8",
+		"bits-ui": "^1.6.0",
 		"clsx": "^2.1.1",
 		"eslint": "^9.18.0",
 		"eslint-config-prettier": "^10.0.1",
@@ -31,12 +32,12 @@
 		"prettier": "^3.4.2",
 		"prettier-plugin-svelte": "^3.3.3",
 		"prettier-plugin-tailwindcss": "^0.6.11",
-		"svelte": "^5.0.0",
+		"svelte": "^5.30.2",
 		"svelte-check": "^4.0.0",
 		"tailwind-merge": "^3.3.0",
 		"tailwind-variants": "^1.0.0",
 		"tailwindcss": "^4.0.0",
-		"tw-animate-css": "^1.2.4",
+		"tw-animate-css": "^1.3.0",
 		"typescript": "^5.0.0",
 		"typescript-eslint": "^8.20.0",
 		"vite": "^6.2.6",
@@ -49,6 +50,11 @@
 	},
 	"packageManager": "pnpm@10.9.0+sha512.0486e394640d3c1fb3c9d43d49cf92879ff74f8516959c235308f5a8f62e2e19528a65cdc2a3058f587cde71eba3d5b56327c8c33a97e4c4051ca48a10ca2d5f",
 	"dependencies": {
-		"shadcn-svelte": "1.0.0-next.16"
+		"@shikijs/langs": "^3.4.2",
+		"@shikijs/themes": "^3.4.2",
+		"isomorphic-dompurify": "^2.25.0",
+		"package-manager-detector": "^1.3.0",
+		"shadcn-svelte": "1.0.0-next.16",
+		"shiki": "^3.4.2"
 	}
 }
