@@ -29,7 +29,7 @@
 			<Tabs.Trigger value="code" disabled={code === undefined}>Code</Tabs.Trigger>
 		</Tabs.List>
 		<Card>
-			<Tabs.Content value="preview">
+			<Tabs.Content value="preview" class="px-4">
 				{@render previewChildren()}
 			</Tabs.Content>
 			<Tabs.Content value="code">

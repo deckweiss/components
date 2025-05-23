@@ -1,6 +1,8 @@
 <script lang="ts">
 	import LoadingImage from "$lib/registry/blocks/loading-image/loading-image.svelte";
 	import ComponentShowcase from "$lib/components/component-showcase.svelte";
+	import { pageLoading, PageProgress } from "$lib/registry/blocks/page-progress";
+	import { Button } from "$lib/components/ui/button";
 
 	const code = {
 		"loading-image":
@@ -20,6 +22,9 @@
 \t\t:(
 \t{/snippet}
 </LoadingImage>`,
+		"page-progress": `<div class="fixed top-0 z-[99] w-full">
+\t<PageProgress />
+</div>`,
 	};
 </script>
 
@@ -65,6 +70,27 @@
 						:(
 					{/snippet}
 				</LoadingImage>
+			</div>
+		</ComponentShowcase>
+
+		<ComponentShowcase
+			name="Page Progress"
+			componentKey="page-progress"
+			description="A page loading progress bar."
+			code={code["page-progress"]}>
+			<div class="flex flex-col gap-2">
+				<PageProgress />
+
+				<Button
+					onclick={() => {
+							pageLoading.invocers = ["test"];
+
+							setTimeout(() => {
+								pageLoading.invocers = [];
+							}, 1000);
+					}}>
+					Test
+				</Button>
 			</div>
 		</ComponentShowcase>
 	</main>

@@ -15,6 +15,25 @@
           "type": "registry:component"
         }
       ]
+    },
+    {
+      "name": "page-progress",
+      "type": "registry:component",
+      "title": "Page Progress",
+      "description": "A page loading progress bar.",
+      "registryDependencies": [
+        "progress"
+      ],
+      "files": [
+        {
+          "path": "src/lib/registry/blocks/page-progress/page-progress.svelte",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/lib/registry/blocks/page-progress/index.ts",
+          "type": "registry:file"
+        }
+      ]
     }
   ]
 }

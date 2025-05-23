@@ -6,5 +6,15 @@
 		"description": "A loading image component",
 		"registryDependencies": [],
 		"relativeUrl": "loading-image.json"
+	},
+	{
+		"name": "page-progress",
+		"title": "Page Progress",
+		"type": "registry:component",
+		"description": "A page loading progress bar.",
+		"registryDependencies": [
+			"progress"
+		],
+		"relativeUrl": "page-progress.json"
 	}
 ]

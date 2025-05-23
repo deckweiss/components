@@ -1,0 +1,22 @@
+{
+	"$schema": "https://next.shadcn-svelte.com/schema/registry-item.json",
+	"name": "page-progress",
+	"title": "Page Progress",
+	"type": "registry:component",
+	"description": "A page loading progress bar.",
+	"registryDependencies": [
+		"progress"
+	],
+	"files": [
+		{
+			"content": "<script lang=\"ts\">\r\n\timport { Progress } from \"$UI$/progress\";\r\n\timport { afterNavigate, beforeNavigate } from \"$app/navigation\";\r\n\timport type { BeforeNavigate, AfterNavigate } from \"@sveltejs/kit\";\r\n\timport { Tween } from \"svelte/motion\";\r\n\timport { cubicInOut } from \"svelte/easing\";\r\n\timport { pageLoading } from \"./page-progress-state.svelte\";\r\n\r\n\ttype Props = {\r\n\t\tclass?: string;\r\n\t};\r\n\r\n\tlet { class: className }: Props = $props();\r\n\r\n\tlet progress = new Tween(0, {\r\n\t\tduration: 100,\r\n\t\teasing: cubicInOut,\r\n\t});\r\n\tlet showProgress = $state(false);\r\n\r\n\tfunction shouldAnimate(nav: BeforeNavigate | AfterNavigate) {\r\n\t\treturn (\r\n\t\t\tnav.from?.url.pathname !== nav.to?.url.pathname || nav.to?.url.search !== nav.from?.url.search\r\n\t\t);\r\n\t}\r\n\r\n\t$effect(() => {\r\n\t\tif (pageLoading.invocers.length > 0) {\r\n\t\t\tstartProgressing();\r\n\t\t} else {\r\n\t\t\tstopProgressing();\r\n\t\t}\r\n\t});\r\n\r\n\tfunction startProgressing() {\r\n\t\tshowProgress = true;\r\n\r\n\t\tprogress.set(33).then(() => {\r\n\t\t\tif (progress.current === 33) {\r\n\t\t\t\tprogress.target = 66;\r\n\t\t\t}\r\n\t\t});\r\n\t}\r\n\r\n\tfunction stopProgressing() {\r\n\t\tprogress.set(100).then(() => {\r\n\t\t\tsetTimeout(() => {\r\n\t\t\t\tshowProgress = false;\r\n\r\n\t\t\t\tsetTimeout(() => {\r\n\t\t\t\t\tprogress.target = 0;\r\n\t\t\t\t}, 300);\r\n\t\t\t}, 500);\r\n\t\t});\r\n\t}\r\n\r\n\tbeforeNavigate((nav) => {\r\n\t\tif (!shouldAnimate(nav)) {\r\n\t\t\treturn;\r\n\t\t}\r\n\r\n\t\tstartProgressing();\r\n\t});\r\n\r\n\tafterNavigate((nav) => {\r\n\t\tif (!shouldAnimate(nav)) {\r\n\t\t\tshowProgress = false;\r\n\t\t\tprogress.target = 0;\r\n\t\t\treturn;\r\n\t\t}\r\n\r\n\t\tstopProgressing();\r\n\r\n\t\tpageLoading.invocers = [];\r\n\t});\r\n</script>\r\n\r\n<Progress\r\n\tvalue={progress.current}\r\n\tclass={[\r\n\t\t'h-1 rounded-none transition-opacity duration-300 ease-in-out',\r\n\t\tclassName,\r\n\t\tshowProgress ? 'opacity-100' : 'opacity-0'\r\n\t]}\r\n/>\r\n",
+			"type": "registry:component",
+			"target": "page-progress.svelte"
+		},
+		{
+			"content": "import PageProgress from \"./page-progress.svelte\";\nimport { pageLoading } from \"./page-progress-state.svelte\";\n\nexport { PageProgress, pageLoading };\n",
+			"type": "registry:file",
+			"target": "page-progress/index.ts"
+		}
+	]
+}
