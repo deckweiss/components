@@ -14,6 +14,11 @@
 			"target": "page-progress.svelte"
 		},
 		{
+			"content": "export const pageLoading = $state({ invocers: [] as string[] });\n",
+			"type": "registry:hook",
+			"target": "page-progress-state.svelte.ts"
+		},
+		{
 			"content": "import PageProgress from \"./page-progress.svelte\";\nimport { pageLoading } from \"./page-progress-state.svelte\";\n\nexport { PageProgress, pageLoading };\n",
 			"type": "registry:file",
 			"target": "page-progress/index.ts"

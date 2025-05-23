@@ -16,5 +16,19 @@
 			"progress"
 		],
 		"relativeUrl": "page-progress.json"
+	},
+	{
+		"name": "toaster",
+		"title": "Custom Toast",
+		"type": "registry:component",
+		"description": "A toast component with custom look.",
+		"dependencies": [
+			"svelte-sonner",
+			"@lucide/svelte"
+		],
+		"registryDependencies": [
+			"button"
+		],
+		"relativeUrl": "toaster.json"
 	}
 ]

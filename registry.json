@@ -30,7 +30,38 @@
           "type": "registry:component"
         },
         {
+          "path": "src/lib/registry/blocks/page-progress/page-progress-state.svelte.ts",
+          "type": "registry:hook"
+        },
+        {
           "path": "src/lib/registry/blocks/page-progress/index.ts",
+          "type": "registry:file"
+        }
+      ]
+    },
+    {
+      "name": "toaster",
+      "type": "registry:component",
+      "title": "Custom Toast",
+      "description": "A toast component with custom look.",
+      "dependencies": [
+        "svelte-sonner",
+        "@lucide/svelte"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        {
+          "path": "src/lib/registry/blocks/toaster/toast.svelte",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/lib/registry/blocks/toaster/toaster.ts",
+          "type": "registry:hook"
+        },
+        {
+          "path": "src/lib/registry/blocks/toaster/index.ts",
           "type": "registry:file"
         }
       ]

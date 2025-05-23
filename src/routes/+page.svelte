@@ -3,6 +3,8 @@
 	import ComponentShowcase from "$lib/components/component-showcase.svelte";
 	import { pageLoading, PageProgress } from "$lib/registry/blocks/page-progress";
 	import { Button } from "$lib/components/ui/button";
+	import { toaster } from "$lib/registry/blocks/toaster";
+	import { Toaster } from "$lib/registry/ui/sonner";
 
 	const code = {
 		"loading-image":
@@ -25,6 +27,7 @@
 		"page-progress": `<div class="fixed top-0 z-[99] w-full">
 \t<PageProgress />
 </div>`,
+		"toaster": `toaster.pushToast({message: 'Test', type: 'success'});`,
 	};
 </script>
 
@@ -88,6 +91,24 @@
 							setTimeout(() => {
 								pageLoading.invocers = [];
 							}, 1000);
+					}}>
+					Test
+				</Button>
+			</div>
+		</ComponentShowcase>
+
+		<ComponentShowcase
+			name="Custom Toast"
+			componentKey="toaster"
+			description="A toast component with customized look."
+			code={code["toaster"]}
+			codeLang="typescript">
+			<div class="flex flex-col gap-2">
+				<Toaster position="bottom-left" offset="20px" />
+
+				<Button
+					onclick={() => {
+							toaster.pushToast({message: 'Test', type: 'success'});
 					}}>
 					Test
 				</Button>

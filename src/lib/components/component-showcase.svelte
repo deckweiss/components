@@ -8,12 +8,13 @@
 	interface Props {
 		children: Snippet;
 		code?: string;
+		codeLang?: "svelte" | "bash" | "diff" | "javascript" | "json" | "typescript" | undefined;
 		componentKey: string;
 		name: string;
 		description?: string;
 	}
 
-	let { children: previewChildren, code, componentKey, name, description }: Props = $props();
+	let { children: previewChildren, code, componentKey, name, description, codeLang: lang = "svelte" }: Props = $props();
 </script>
 
 <div class="relative flex min-h-[450px] flex-col gap-4 rounded-lg border p-4">
@@ -34,7 +35,7 @@
 			</Tabs.Content>
 			<Tabs.Content value="code">
 				{#if code}
-					<Code lang="svelte" class="w-full" variant="inline" {code} />
+					<Code {lang} class="w-full" variant="inline" {code} />
 				{/if}
 			</Tabs.Content>
 		</Card>
