@@ -1,70 +1,103 @@
 {
-  "$schema": "https://next.shadcn-svelte.com/schema/registry.json",
-  "name": "deckweiss-components",
-  "homepage": "https://deckweiss.at",
-  "items": [
-    {
-      "name": "loading-image",
-      "type": "registry:component",
-      "title": "Loading Image",
-      "description": "A loading image component",
-      "registryDependencies": [],
-      "files": [
-        {
-          "path": "src/lib/registry/blocks/loading-image/loading-image.svelte",
-          "type": "registry:component"
-        }
-      ]
-    },
-    {
-      "name": "page-progress",
-      "type": "registry:component",
-      "title": "Page Progress",
-      "description": "A page loading progress bar.",
-      "registryDependencies": [
-        "progress"
-      ],
-      "files": [
-        {
-          "path": "src/lib/registry/blocks/page-progress/page-progress.svelte",
-          "type": "registry:component"
-        },
-        {
-          "path": "src/lib/registry/blocks/page-progress/page-progress-state.svelte.ts",
-          "type": "registry:hook"
-        },
-        {
-          "path": "src/lib/registry/blocks/page-progress/index.ts",
-          "type": "registry:file"
-        }
-      ]
-    },
-    {
-      "name": "toaster",
-      "type": "registry:component",
-      "title": "Custom Toast",
-      "description": "A toast component with custom look.",
-      "dependencies": [
-        "svelte-sonner",
-        "@lucide/svelte"
-      ],
-      "registryDependencies": [
-        "button"
-      ],
-      "files": [
-        {
-          "path": "src/lib/registry/blocks/toaster/toast.svelte",
-          "type": "registry:component"
-        },
-        {
-          "path": "src/lib/registry/blocks/toaster/toaster.ts",
-          "type": "registry:hook"
-        },
-        {
-          "path": "src/lib/registry/blocks/toaster/index.ts",
-          "type": "registry:file"
-        }
-      ]
-    }
-  ]
+	"$schema": "https://next.shadcn-svelte.com/schema/registry.json",
+	"name": "deckweiss-components",
+	"homepage": "https://deckweiss.at",
+	"items": [
+		{
+			"name": "loading-image",
+			"type": "registry:component",
+			"title": "Loading Image",
+			"description": "A loading image component",
+			"registryDependencies": [],
+			"files": [
+				{
+					"path": "src/lib/registry/blocks/loading-image/loading-image.svelte",
+					"type": "registry:component"
+				}
+			]
+		},
+		{
+			"name": "page-progress",
+			"type": "registry:component",
+			"title": "Page Progress",
+			"description": "A page loading progress bar.",
+			"registryDependencies": ["progress"],
+			"files": [
+				{
+					"path": "src/lib/registry/blocks/page-progress/page-progress.svelte",
+					"type": "registry:component"
+				},
+				{
+					"path": "src/lib/registry/blocks/page-progress/page-progress-state.svelte.ts",
+					"type": "registry:hook"
+				},
+				{
+					"path": "src/lib/registry/blocks/page-progress/index.ts",
+					"type": "registry:file"
+				}
+			]
+		},
+		{
+			"name": "toaster",
+			"type": "registry:component",
+			"title": "Custom Toast",
+			"description": "A toast component with custom look.",
+			"dependencies": ["svelte-sonner", "@lucide/svelte"],
+			"registryDependencies": ["button"],
+			"files": [
+				{
+					"path": "src/lib/registry/blocks/toaster/toast.svelte",
+					"type": "registry:component"
+				},
+				{
+					"path": "src/lib/registry/blocks/toaster/toaster.ts",
+					"type": "registry:hook"
+				},
+				{
+					"path": "src/lib/registry/blocks/toaster/index.ts",
+					"type": "registry:file"
+				}
+			]
+		},
+		{
+			"name": "data-table",
+			"type": "registry:block",
+			"title": "DataTable",
+			"description": "Fully functional data table with sort, filter, column toggle, row select and pagination",
+			"dependencies": ["@tanstack/table-core", "@lucide/svelte"],
+			"registryDependencies": [
+				"badge",
+				"button",
+				"checkbox",
+				"command",
+				"data-table",
+				"dropdown-menu",
+				"popover",
+				"select",
+				"table"
+			],
+			"files": [
+				{
+					"path": "src/lib/registry/blocks/data-table/index.ts",
+					"type": "registry:file"
+				},
+				{
+					"path": "src/lib/registry/blocks/data-table/data-table.svelte",
+					"type": "registry:component"
+				},
+				{
+					"path": "src/lib/registry/blocks/data-table/data-table-faceted-filter.svelte",
+					"type": "registry:component"
+				},
+				{
+					"path": "src/lib/registry/blocks/data-table/data-table-toolbar.svelte",
+					"type": "registry:component"
+				},
+				{
+					"path": "src/lib/registry/blocks/data-table/data-table-view-options.svelte",
+					"type": "registry:component"
+				}
+			]
+		}
+	]
 }

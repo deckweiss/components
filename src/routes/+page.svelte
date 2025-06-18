@@ -5,10 +5,17 @@
 	import { Button } from "$lib/components/ui/button";
 	import { toaster } from "$lib/registry/blocks/toaster";
 	import { Toaster } from "$lib/registry/ui/sonner";
+	import DataTable from "$lib/registry/blocks/data-table/data-table.svelte";
+	import type { ColumnDef, Row } from "@tanstack/table-core";
+	import { createRawSnippet } from "svelte";
+	import { renderSnippet } from "$lib/components/ui/data-table";
+	import { buttonVariants } from "$lib/registry/ui/button";
+	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
+	import { dataTableData, type Payment } from "./sample-data";
+	import DataTableUsage from "./data-table-example.txt?raw";
 
 	const code = {
-		"loading-image":
-			`<LoadingImage
+		"loading-image": `<LoadingImage
 \tsrc="https://picsum.photos/id/237/200/300"
 \talt="dog" />
 
@@ -27,8 +34,70 @@
 		"page-progress": `<div class="fixed top-0 z-[99] w-full">
 \t<PageProgress />
 </div>`,
-		"toaster": `toaster.pushToast({message: 'Test', type: 'success'});`,
+		toaster: `toaster.pushToast({message: 'Test', type: 'success'});`,
+		dataTable: DataTableUsage,
 	};
+
+	const columns: ColumnDef<Payment>[] = [
+		{
+			accessorKey: "status",
+			header: "Status",
+			cell: ({ row }) => {
+				const statusSnippet = createRawSnippet<[string]>((getStatus) => {
+					const status = getStatus();
+					return {
+						render: () => `<div class="capitalize">${status}</div>`,
+					};
+				});
+				return renderSnippet(statusSnippet, row.getValue("status"));
+			},
+			enableColumnFilter: true,
+			enableHiding: true,
+		},
+		{
+			accessorKey: "email",
+			header: "E-Mail",
+			cell: ({ row }) => {
+				const emailSnippet = createRawSnippet<[string]>((getEmail) => {
+					const email = getEmail();
+					return {
+						render: () => `<div class="lowercase">${email}</div>`,
+					};
+				});
+
+				return renderSnippet(emailSnippet, row.getValue("email"));
+			},
+			enableSorting: true,
+		},
+		{
+			id: "amount",
+			accessorKey: "amount",
+			header: "Amount",
+			cell: ({ row }) => {
+				const amountCellSnippet = createRawSnippet<[string]>((getAmount) => {
+					const amount = getAmount();
+					return {
+						render: () => `<div class="text-right font-medium">${amount}</div>`,
+					};
+				});
+				const formatter = new Intl.NumberFormat("en-US", {
+					style: "currency",
+					currency: "USD",
+				});
+
+				return renderSnippet(
+					amountCellSnippet,
+					formatter.format(Number.parseFloat(row.getValue("amount")))
+				);
+			},
+			enableSorting: true,
+		},
+		{
+			id: "actions",
+			enableHiding: false,
+			cell: ({ row }) => renderSnippet(dataTableActions, row.original),
+		},
+	];
 </script>
 
 <div class="mx-auto flex min-h-svh max-w-3xl flex-col gap-8 px-4 py-8">
@@ -38,10 +107,8 @@
 			A custom registry for distributing code using shadcn-svelte.
 		</p>
 		<br />
-		<p>
-			Use these first:
-		</p>
-		<ul class="list-disc ml-5">
+		<p>Use these first:</p>
+		<ul class="ml-5 list-disc">
 			<li>
 				<a href="https://next.shadcn-svelte.com">ShadCn Svelte</a>
 			</li>
@@ -55,16 +122,16 @@
 			name="Loading Image"
 			componentKey="loading-image"
 			description="A loading image component"
-			code={code["loading-image"]}>
-			<div class="relative flex flex-col min-h-[400px] items-center justify-center gap-4">
-				<LoadingImage
-					src="https://picsum.photos/id/237/200/300"
-					alt="dog" />
+			code={code["loading-image"]}
+		>
+			<div class="relative flex min-h-[400px] flex-col items-center justify-center gap-4">
+				<LoadingImage src="https://picsum.photos/id/237/200/300" alt="dog" />
 
 				<LoadingImage
 					src="https://deckweiss.at/non-existing-image.jpg"
 					class="w-30"
-					containerClass="h-50 bg-[#00ff00] text-center w-50">
+					containerClass="h-50 bg-[#00ff00] text-center w-50"
+				>
 					{#snippet loading()}
 						...
 					{/snippet}
@@ -80,18 +147,20 @@
 			name="Page Progress"
 			componentKey="page-progress"
 			description="A page loading progress bar."
-			code={code["page-progress"]}>
+			code={code["page-progress"]}
+		>
 			<div class="flex flex-col gap-2">
 				<PageProgress />
 
 				<Button
 					onclick={() => {
-							pageLoading.invocers = ["test"];
+						pageLoading.invocers = ["test"];
 
-							setTimeout(() => {
-								pageLoading.invocers = [];
-							}, 1000);
-					}}>
+						setTimeout(() => {
+							pageLoading.invocers = [];
+						}, 1000);
+					}}
+				>
 					Test
 				</Button>
 			</div>
@@ -102,17 +171,58 @@
 			componentKey="toaster"
 			description="A toast component with customized look."
 			code={code["toaster"]}
-			codeLang="typescript">
+			codeLang="typescript"
+		>
 			<div class="flex flex-col gap-2">
 				<Toaster position="bottom-left" offset="20px" />
 
 				<Button
 					onclick={() => {
-							toaster.pushToast({message: 'Test', type: 'success'});
-					}}>
+						toaster.pushToast({ message: "Test", type: "success" });
+					}}
+				>
 					Test
 				</Button>
 			</div>
 		</ComponentShowcase>
+
+		<ComponentShowcase
+			name="DataTable"
+			componentKey="data-table"
+			description="Fully functional data table: sort, filter, column toggle, row selection, row expansion and pagination"
+			code={code["dataTable"]}
+			codeLang="svelte"
+		>
+			<DataTable
+				enableRowSelection
+				enablePagination
+				{columns}
+				data={dataTableData}
+				enableExpanding
+				onRowClick={(row) => row.toggleExpanded()}
+			>
+				{#snippet expandedRow(row)}
+					<pre>{JSON.stringify(row.original, null, 4)}</pre>
+				{/snippet}
+			</DataTable>
+		</ComponentShowcase>
 	</main>
 </div>
+
+{#snippet dataTableActions(row: Row<Payment>)}
+	<DropdownMenu.Root>
+		<DropdownMenu.Trigger class={buttonVariants({ variant: "ghost", size: "icon" })}>
+			...
+		</DropdownMenu.Trigger>
+		<DropdownMenu.Content>
+			<DropdownMenu.Group>
+				<DropdownMenu.Label>Actions</DropdownMenu.Label>
+				<DropdownMenu.Separator />
+				<DropdownMenu.Item>Edit</DropdownMenu.Item>
+				<DropdownMenu.Item>Delete</DropdownMenu.Item>
+				<DropdownMenu.Separator />
+				<DropdownMenu.Item>Send Confirmation Email</DropdownMenu.Item>
+			</DropdownMenu.Group>
+		</DropdownMenu.Content>
+	</DropdownMenu.Root>
+{/snippet}
