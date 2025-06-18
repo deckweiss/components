@@ -79,23 +79,28 @@
 			"files": [
 				{
 					"path": "src/lib/registry/blocks/data-table/index.ts",
-					"type": "registry:file"
+					"type": "registry:file",
+					"target": "blocks/data-table/index.ts"
 				},
 				{
 					"path": "src/lib/registry/blocks/data-table/data-table.svelte",
-					"type": "registry:component"
+					"type": "registry:component",
+					"target": "blocks/data-table/data-table.svelte"
 				},
 				{
 					"path": "src/lib/registry/blocks/data-table/data-table-faceted-filter.svelte",
-					"type": "registry:component"
+					"type": "registry:component",
+					"target": "blocks/data-table/data-table-faceted-filter.svelte"
 				},
 				{
 					"path": "src/lib/registry/blocks/data-table/data-table-toolbar.svelte",
-					"type": "registry:component"
+					"type": "registry:component",
+					"target": "blocks/data-table/data-table-toolbar.svelte"
 				},
 				{
 					"path": "src/lib/registry/blocks/data-table/data-table-view-options.svelte",
-					"type": "registry:component"
+					"type": "registry:component",
+					"target": "blocks/data-table/data-table-view-options.svelte"
 				}
 			]
 		}
