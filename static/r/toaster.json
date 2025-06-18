@@ -1,5 +1,5 @@
 {
-	"$schema": "https://next.shadcn-svelte.com/schema/registry-item.json",
+	"$schema": "https://shadcn-svelte.com/schema/registry-item.json",
 	"name": "toaster",
 	"title": "Custom Toast",
 	"type": "registry:component",
@@ -9,14 +9,14 @@
 		"@lucide/svelte"
 	],
 	"devDependencies": [
-		"@lucide/svelte@^0.511.0"
+		"@lucide/svelte@^0.515.0"
 	],
 	"registryDependencies": [
 		"button"
 	],
 	"files": [
 		{
-			"content": "<script lang=\"ts\">\r\n\timport { createEventDispatcher } from \"svelte\";\r\n\timport { XIcon } from \"@lucide/svelte\";\r\n\timport { Button } from \"$UI$/button\";\r\n\timport type { Toast as ToastType } from \"./toaster.ts\";\r\n\r\n\tlet { type, message, action }: ToastType = $props();\r\n\r\n\tconst dispatch = createEventDispatcher();\r\n\r\n\tlet typeClasses = {\r\n\t\tdefault: \"bg-primary\",\r\n\t\tsuccess: \"bg-[#275E2E]\",\r\n\t\terror: \"bg-[#841106]\",\r\n\t};\r\n\r\n\tlet typeOverline = {\r\n\t\tdefault: \"Info\",\r\n\t\tsuccess: \"Erfolg\",\r\n\t\terror: \"Fehler\",\r\n\t};\r\n</script>\r\n\r\n<div\r\n\tclass={['flex min-w-[250px] flex-col gap-4 rounded-lg p-5 md:max-w-[350px]', typeClasses[type]]}\r\n>\r\n\t<span class=\"text-micro-md font-bold uppercase text-cool-grey-600\">\r\n\t\t{typeOverline[type]}\r\n\t</span>\r\n\t<p class=\"max-w-[250px] text-sm\">\r\n\t\t{message}\r\n\t</p>\r\n\t<div class=\"flex gap-2\">\r\n\t\t{#if action}\r\n\t\t\t<Button onclick={action.callback}>{action.text}</Button>\r\n\t\t{/if}\r\n\t\t<Button onclick={() => dispatch('closeToast')}>Discard</Button>\r\n\t</div>\r\n\t<button\r\n\t\tonclick={() => dispatch('closeToast')}\r\n\t\tclass=\"absolute right-4 top-4 h-6 w-6 rounded-lg bg-white/10 p-1 text-white\"\r\n\t>\r\n\t\t<XIcon size=\"16\" />\r\n\t</button>\r\n</div>\r\n",
+			"content": "<script lang=\"ts\">\n\timport { createEventDispatcher } from \"svelte\";\n\timport { XIcon } from \"@lucide/svelte\";\n\timport { Button } from \"$UI$/button\";\n\timport type { Toast as ToastType } from \"./toaster.ts\";\n\n\tlet { type, message, action }: ToastType = $props();\n\n\tconst dispatch = createEventDispatcher();\n\n\tlet typeClasses = {\n\t\tdefault: \"bg-primary\",\n\t\tsuccess: \"bg-[#275E2E]\",\n\t\terror: \"bg-[#841106]\",\n\t};\n\n\tlet typeOverline = {\n\t\tdefault: \"Info\",\n\t\tsuccess: \"Erfolg\",\n\t\terror: \"Fehler\",\n\t};\n</script>\n\n<div\n\tclass={['flex min-w-[250px] flex-col gap-4 rounded-lg p-5 md:max-w-[350px]', typeClasses[type]]}\n>\n\t<span class=\"text-micro-md font-bold uppercase text-cool-grey-600\">\n\t\t{typeOverline[type]}\n\t</span>\n\t<p class=\"max-w-[250px] text-sm\">\n\t\t{message}\n\t</p>\n\t<div class=\"flex gap-2\">\n\t\t{#if action}\n\t\t\t<Button onclick={action.callback}>{action.text}</Button>\n\t\t{/if}\n\t\t<Button onclick={() => dispatch('closeToast')}>Discard</Button>\n\t</div>\n\t<button\n\t\tonclick={() => dispatch('closeToast')}\n\t\tclass=\"absolute right-4 top-4 h-6 w-6 rounded-lg bg-white/10 p-1 text-white\"\n\t>\n\t\t<XIcon size=\"16\" />\n\t</button>\n</div>\n",
 			"type": "registry:component",
 			"target": "toast.svelte"
 		},

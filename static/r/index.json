@@ -30,5 +30,27 @@
 			"button"
 		],
 		"relativeUrl": "toaster.json"
+	},
+	{
+		"name": "data-table",
+		"title": "DataTable",
+		"type": "registry:block",
+		"description": "Fully functional data table with sort, filter, column toggle, row select and pagination",
+		"dependencies": [
+			"@tanstack/table-core",
+			"@lucide/svelte"
+		],
+		"registryDependencies": [
+			"badge",
+			"button",
+			"checkbox",
+			"command",
+			"data-table",
+			"dropdown-menu",
+			"popover",
+			"select",
+			"table"
+		],
+		"relativeUrl": "data-table.json"
 	}
 ]

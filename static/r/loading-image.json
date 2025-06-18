@@ -1,12 +1,12 @@
 {
-	"$schema": "https://next.shadcn-svelte.com/schema/registry-item.json",
+	"$schema": "https://shadcn-svelte.com/schema/registry-item.json",
 	"name": "loading-image",
 	"title": "Loading Image",
 	"type": "registry:component",
 	"description": "A loading image component",
 	"files": [
 		{
-			"content": "<script lang=\"ts\">\r\n\timport { type Snippet } from 'svelte';\r\n\timport { cn } from '$UTILS$';\r\n\r\n\ttype Props = {\r\n\t\tcontainerClass?: string;\r\n\t\tloading?: Snippet;\r\n\t\terror?: Snippet;\r\n\t};\r\n\r\n\tlet {\r\n\t\tcontainerClass: containerClassName,\r\n\t\tloading: loadingChildren,\r\n\t\terror: errorChildren,\r\n\t\t...props\r\n\t}: Props & HTMLImageElement = $props();\r\n\r\n\tlet status = $state<'loading' | 'error' | 'loaded'>('loading');\r\n</script>\r\n\r\n<div class={containerClassName}>\r\n\t{#if status === 'loading'}\r\n\t\t{#if loadingChildren}\r\n\t\t\t{@render loadingChildren()}\r\n\t\t{:else}\r\n\t\t\tloading\r\n\t\t{/if}\r\n\t{:else if status === 'error'}\r\n\t\t{#if errorChildren}\r\n\t\t\t{@render errorChildren()}\r\n\t\t{:else}\r\n\t\t\terror\r\n\t\t{/if}\r\n\t{/if}\r\n\r\n\t{#if status !== 'error'}\r\n\t\t<img\r\n\t\t\t{...props}\r\n\t\t\tonload={() => (status = 'loaded')}\r\n\t\t\tonerror={() => (status = 'error')}\r\n\t\t\tclass={cn(props['class'], status !== 'loaded' ? 'hidden' : '')} />\r\n\t{/if}\r\n</div>\r\n",
+			"content": "<script lang=\"ts\">\n\timport { type Snippet } from 'svelte';\n\timport { cn } from '$UTILS$';\n\n\ttype Props = {\n\t\tcontainerClass?: string;\n\t\tloading?: Snippet;\n\t\terror?: Snippet;\n\t};\n\n\tlet {\n\t\tcontainerClass: containerClassName,\n\t\tloading: loadingChildren,\n\t\terror: errorChildren,\n\t\t...props\n\t}: Props & HTMLImageElement = $props();\n\n\tlet status = $state<'loading' | 'error' | 'loaded'>('loading');\n</script>\n\n<div class={containerClassName}>\n\t{#if status === 'loading'}\n\t\t{#if loadingChildren}\n\t\t\t{@render loadingChildren()}\n\t\t{:else}\n\t\t\tloading\n\t\t{/if}\n\t{:else if status === 'error'}\n\t\t{#if errorChildren}\n\t\t\t{@render errorChildren()}\n\t\t{:else}\n\t\t\terror\n\t\t{/if}\n\t{/if}\n\n\t{#if status !== 'error'}\n\t\t<img\n\t\t\t{...props}\n\t\t\tonload={() => (status = 'loaded')}\n\t\t\tonerror={() => (status = 'error')}\n\t\t\tclass={cn(props['class'], status !== 'loaded' ? 'hidden' : '')} />\n\t{/if}\n</div>\n",
 			"type": "registry:component",
 			"target": "loading-image.svelte"
 		}
