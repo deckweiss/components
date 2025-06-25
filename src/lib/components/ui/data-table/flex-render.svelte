@@ -12,7 +12,7 @@
 				? ColumnDefTemplate<CellContext<TData, TValue>>
 				: never;
 		/** The result of the `getContext()` function of the header or cell */
-		context: TContext;
+		context?: TContext;
 	};
 
 	let { content, context }: Props = $props();

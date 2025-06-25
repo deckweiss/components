@@ -13,6 +13,7 @@
 	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
 	import { dataTableData, type Payment } from "./sample-data";
 	import DataTableUsage from "./data-table-example.txt?raw";
+	import Input from "$lib/components/ui/input/input.svelte";
 
 	const code = {
 		"loading-image": `<LoadingImage
@@ -37,6 +38,8 @@
 		toaster: `toaster.pushToast({message: 'Test', type: 'success'});`,
 		dataTable: DataTableUsage,
 	};
+	let locale = $state("de");
+	let emailHeader = $derived(locale === "de" ? "E-Mail" : "Email");
 
 	const columns: ColumnDef<Payment>[] = [
 		{
@@ -51,12 +54,15 @@
 				});
 				return renderSnippet(statusSnippet, row.getValue("status"));
 			},
+			filterLabel(value: unknown) {
+				return "Label: " + value;
+			},
 			enableColumnFilter: true,
 			enableHiding: true,
 		},
 		{
 			accessorKey: "email",
-			header: "E-Mail",
+			header: () => emailHeader,
 			cell: ({ row }) => {
 				const emailSnippet = createRawSnippet<[string]>((getEmail) => {
 					const email = getEmail();
@@ -68,6 +74,7 @@
 				return renderSnippet(emailSnippet, row.getValue("email"));
 			},
 			enableSorting: true,
+			enableHiding: true,
 		},
 		{
 			id: "amount",
@@ -193,16 +200,32 @@
 			code={code["dataTable"]}
 			codeLang="svelte"
 		>
+			<Button onclick={() => (locale = locale === "de" ? "en" : "de")}
+				>Set locale to {locale === "de" ? "en" : "de"}</Button
+			>
+
 			<DataTable
-				enableRowSelection
-				enablePagination
 				{columns}
 				data={dataTableData}
 				enableExpanding
+				enablePagination
+				enableRowSelection
 				onRowClick={(row) => row.toggleExpanded()}
 			>
 				{#snippet expandedRow(row)}
 					<pre>{JSON.stringify(row.original, null, 4)}</pre>
+				{/snippet}
+
+				{#snippet customFilters(table)}
+					<div class="bg-watermelon px-2 py-2">
+						<Input
+							placeholder="E-Mail"
+							oninput={(event) => {
+								const text = event.target.value;
+								table.getColumn("email")?.setFilterValue(text);
+							}}
+						/>
+					</div>
 				{/snippet}
 			</DataTable>
 		</ComponentShowcase>

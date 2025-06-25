@@ -18,13 +18,19 @@
 		type InitialTableState,
 		type ExpandedState,
 		getExpandedRowModel,
+		type HeaderContext,
 	} from "@tanstack/table-core";
 	import DataTableToolbar from "./data-table-toolbar.svelte";
 	import { createSvelteTable } from "$lib/components/ui/data-table/data-table.svelte";
 	import FlexRender from "$lib/components/ui/data-table/flex-render.svelte";
 	import * as Table from "$lib/components/ui/table";
 	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
-	import { renderComponent, renderSnippet } from "$lib/components/ui/data-table/render-helpers";
+	import {
+		renderComponent,
+		RenderComponentConfig,
+		renderSnippet,
+		RenderSnippetConfig,
+	} from "$lib/components/ui/data-table/render-helpers";
 	import { Button, buttonVariants } from "$lib/components/ui/button";
 	import ChevronRightIcon from "@lucide/svelte/icons/chevron-right";
 	import ChevronLeftIcon from "@lucide/svelte/icons/chevron-left";
@@ -52,6 +58,7 @@
 		expandedRow,
 		enablePagination,
 		cellClasses = "py-2",
+		customFilters,
 	}: {
 		data: TData[];
 		columns: ColumnDef<TData>[];
@@ -64,6 +71,7 @@
 		expandedRow?: Snippet<[Row<TData>]>;
 		enablePagination?: boolean;
 		cellClasses?: string;
+		customFilters?: Snippet<[TableType<TData>]>;
 	} = $props();
 
 	let columnVisibility = $state<VisibilityState>({});
@@ -256,13 +264,13 @@
 
 {#snippet ColumnHeader({
 	column,
-	title,
+	context,
 	class: className,
 	...restProps
-}: { column: Column<TData>; title: string } & HTMLAttributes<HTMLDivElement>)}
+}: { column: Column<TData>; context: HeaderContext<TData, any> } & HTMLAttributes<HTMLDivElement>)}
 	{#if !((column.columnDef.enableSorting && column?.getCanSort()) || (column.getCanHide() && column.columnDef.enableHiding))}
 		<div class={className} {...restProps}>
-			{title}
+			<FlexRender content={column.columnDef.header} {context} />
 		</div>
 	{:else}
 		<div class={cn("flex items-center", className)} {...restProps}>
@@ -270,7 +278,7 @@
 				<DropdownMenu.Trigger class={buttonVariants({ size: "sm", variant: "ghost" })}
 					>{#snippet children()}
 						<span>
-							{title}
+							<FlexRender content={column.columnDef.header} {context} />
 						</span>
 						{#if column.getIsSorted() === "desc"}
 							<ArrowDownIcon />
@@ -310,7 +318,13 @@
 {/snippet}
 
 <div class="flex flex-col space-y-4">
-	<DataTableToolbar {table} />
+	<DataTableToolbar {table}>
+		{#snippet custom(table)}
+			{#if customFilters}
+				{@render customFilters(table)}
+			{/if}
+		{/snippet}
+	</DataTableToolbar>
 	<div class="overflow-x-auto rounded-md border">
 		<Table.Root>
 			<Table.Header>
@@ -319,7 +333,7 @@
 						{#each headerGroup.headers as header (header.id)}
 							<Table.Head colspan={header.colSpan}>
 								{#if !header.isPlaceholder}
-									{#if header.column.columnDef.header instanceof Function}
+									{#if header.column.columnDef.header instanceof Function && header.column.columnDef.meta?.overrideDefaultHeaderUI}
 										<FlexRender
 											content={header.column.columnDef.header}
 											context={header.getContext()}
@@ -329,7 +343,7 @@
 											content={() =>
 												renderSnippet(ColumnHeader, {
 													column: header.column,
-													title: header.column.columnDef.header as string,
+													context: header.getContext(),
 												})}
 											context={header.getContext()}
 										/>
