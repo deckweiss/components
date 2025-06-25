@@ -54,9 +54,6 @@
 				});
 				return renderSnippet(statusSnippet, row.getValue("status"));
 			},
-			filterLabel(value: unknown) {
-				return "Label: " + value;
-			},
 			enableColumnFilter: true,
 			enableHiding: true,
 		},
