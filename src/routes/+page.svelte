@@ -37,6 +37,51 @@
 </div>`,
 		toaster: `toaster.pushToast({message: 'Test', type: 'success'});`,
 		dataTable: DataTableUsage,
+		posthog: `// hooks.client.ts
+import { posthog } from 'posthog-js';
+
+posthog.init('YOUR_PROJECT_API_KEY', {
+\tapi_host: 'https://us.i.posthog.com',
+});
+
+
+// $lib/analytics/index.ts
+import { browser } from '$app/environment';
+import type { PostHog } from 'posthog-js';
+
+/**
+ * Execute a callback with the PostHog instance.
+ * @param callback - The callback to execute.
+ * @example
+ * \`\`\`ts
+ * withPosthog((posthog) => {
+ *     posthog.identify('user@example.com');
+ * });
+ * \`\`\`
+ */
+export async function withPosthog(callback: (posthog: PostHog) => void): Promise<void> {
+    if (browser) {
+        await import('posthog-js')
+            .then(({ default: posthog }) => {
+                try {
+                    callback(posthog);
+                } catch (error) {
+                    console.log('Failed to execute analytics callback:', error);
+                }
+            })
+            .catch((error) => {
+                console.log('Failed to load PostHog:', error);
+            });
+    }
+}
+
+export function captureEvent(eventName: string, properties?: Record<string, any>) {
+    // Only capture events on the client side
+    withPosthog((posthog) => {
+        posthog.capture(eventName, properties);
+    });
+}
+`,
 	};
 	let locale = $state("de");
 	let emailHeader = $derived(locale === "de" ? "E-Mail" : "Email");
@@ -226,6 +271,15 @@
 				{/snippet}
 			</DataTable>
 		</ComponentShowcase>
+
+		<ComponentShowcase
+			name="Posthog"
+			componentKey="posthog"
+			description="Dynamically load posthog into browser environments"
+			code={code["posthog"]}
+			codeLang="typescript"
+			hideInstallation
+		></ComponentShowcase>
 	</main>
 </div>
 
