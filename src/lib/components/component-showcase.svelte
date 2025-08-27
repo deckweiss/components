@@ -28,7 +28,7 @@
 
 <div class="relative flex min-h-[450px] flex-col gap-4 rounded-lg border p-4">
 	<div class="flex flex-col sm:pl-3">
-		<h2 class="text-2xl font-semibold">{name}</h2>
+		<h2 class="text-2xl font-semibold" id={componentKey}>{name}</h2>
 		{#if description}
 			<p class="text-muted-foreground text-sm">{description}</p>
 		{/if}
