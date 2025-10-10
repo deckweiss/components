@@ -4,6 +4,19 @@
 	"homepage": "https://deckweiss.at",
 	"items": [
 		{
+			"name": "slider",
+			"type": "registry:component",
+			"title": "Slider",
+			"description": "A slider component",
+			"registryDependencies": [],
+			"files": [
+				{
+					"path": "src/lib/registry/blocks/slider/slider.svelte",
+					"type": "registry:component"
+				}
+			]
+		},
+		{
 			"name": "loading-image",
 			"type": "registry:component",
 			"title": "Loading Image",
@@ -21,7 +34,9 @@
 			"type": "registry:component",
 			"title": "Page Progress",
 			"description": "A page loading progress bar.",
-			"registryDependencies": ["progress"],
+			"registryDependencies": [
+				"progress"
+			],
 			"files": [
 				{
 					"path": "src/lib/registry/blocks/page-progress/page-progress.svelte",
@@ -42,8 +57,13 @@
 			"type": "registry:component",
 			"title": "Custom Toast",
 			"description": "A toast component with custom look.",
-			"dependencies": ["svelte-sonner", "@lucide/svelte"],
-			"registryDependencies": ["button"],
+			"dependencies": [
+				"svelte-sonner",
+				"@lucide/svelte"
+			],
+			"registryDependencies": [
+				"button"
+			],
 			"files": [
 				{
 					"path": "src/lib/registry/blocks/toaster/toast.svelte",
@@ -64,7 +84,10 @@
 			"type": "registry:block",
 			"title": "DataTable",
 			"description": "Fully functional data table with sort, filter, column toggle, row select and pagination",
-			"dependencies": ["@tanstack/table-core", "@lucide/svelte"],
+			"dependencies": [
+				"@tanstack/table-core",
+				"@lucide/svelte"
+			],
 			"registryDependencies": [
 				"badge",
 				"button",

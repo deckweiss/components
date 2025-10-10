@@ -14,8 +14,10 @@
 	import { dataTableData, type Payment } from "./sample-data";
 	import DataTableUsage from "./data-table-example.txt?raw";
 	import Input from "$lib/components/ui/input/input.svelte";
+	import Slider from "$lib/registry/blocks/slider/slider.svelte";
 
 	const code = {
+		slider: `<Slider value={[0]} min={0} max={10} step={1} class="w-full" />`,
 		"loading-image": `<LoadingImage
 \tsrc="https://picsum.photos/id/237/200/300"
 \talt="dog" />
@@ -167,6 +169,14 @@ export function captureEvent(eventName: string, properties?: Record<string, any>
 		</ul>
 	</header>
 	<main class="flex flex-1 flex-col gap-8">
+		<ComponentShowcase
+			name="Slider"
+			componentKey="slider"
+			description="A slider component"
+			code={code["slider"]}
+		>
+			<Slider value={[0]} min={0} max={10} step={1} class="w-full" />
+		</ComponentShowcase>
 		<ComponentShowcase
 			name="Loading Image"
 			componentKey="loading-image"
