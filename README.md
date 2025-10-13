@@ -9,9 +9,11 @@ pnpm dlx shadcn-svelte@next add https://components.deckweiss.at/r/<component>.js
 ```
 
 ## Components
+
 | Name            | Description                                     |
-|-----------------|-------------------------------------------------|
+| --------------- | ----------------------------------------------- |
 | `loading-image` | Display placeholders while an image is loading. |
+| `slider` .      | A slider, what else..?                          |
 
 ## Getting Started
 
