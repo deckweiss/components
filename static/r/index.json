@@ -1,5 +1,13 @@
 [
 	{
+		"name": "slider",
+		"title": "Slider",
+		"type": "registry:component",
+		"description": "A slider component",
+		"registryDependencies": [],
+		"relativeUrl": "slider.json"
+	},
+	{
 		"name": "loading-image",
 		"title": "Loading Image",
 		"type": "registry:component",
@@ -38,7 +46,8 @@
 		"description": "Fully functional data table with sort, filter, column toggle, row select and pagination",
 		"dependencies": [
 			"@tanstack/table-core",
-			"@lucide/svelte"
+			"@lucide/svelte",
+			"runed"
 		],
 		"registryDependencies": [
 			"badge",

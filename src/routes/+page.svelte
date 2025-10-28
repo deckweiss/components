@@ -263,6 +263,7 @@ export function captureEvent(eventName: string, properties?: Record<string, any>
 				enablePagination
 				enableRowSelection
 				onRowClick={(row) => row.toggleExpanded()}
+				enableResizing
 			>
 				{#snippet expandedRow(row)}
 					<pre>{JSON.stringify(row.original, null, 4)}</pre>

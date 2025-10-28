@@ -1,7 +1,7 @@
 <script lang="ts" generics="TData, TValue">
 	import CirclePlusIcon from "@lucide/svelte/icons/circle-plus";
 	import CheckIcon from "@lucide/svelte/icons/check";
-	import type { Column, HeaderContext } from "@tanstack/table-core";
+	import type { Column } from "@tanstack/table-core";
 	import { SvelteSet } from "svelte/reactivity";
 	import * as Command from "$lib/components/ui/command";
 	import * as Popover from "$lib/components/ui/popover";
@@ -9,23 +9,22 @@
 	import { cn } from "$lib/utils.js";
 	import { Separator } from "$lib/components/ui/separator";
 	import { Badge } from "$lib/components/ui/badge";
-	import type { Component } from "svelte";
-	import { FlexRender } from "$lib/components/ui/data-table";
+	import type { Component, Snippet } from "svelte";
 
 	let {
 		column,
 		title,
-		context,
 		options,
+		iconSnippet,
 	}: {
 		column: Column<TData, TValue>;
-		title: string | Function;
-		context: HeaderContext<TData, TValue>;
+		title: string;
 		options: {
 			label: string;
 			value: string;
 			icon?: Component;
 		}[];
+		iconSnippet?: Snippet<[{ column: Column<TData, TValue> }]>;
 	} = $props();
 
 	const facets = $derived(column?.getFacetedUniqueValues());
@@ -37,7 +36,10 @@
 		{#snippet child({ props })}
 			<Button {...props} variant="outline" size="sm" class="h-8 border-dashed">
 				<CirclePlusIcon />
-				<FlexRender {context} content={title} />
+				{title}
+				{#if iconSnippet}
+					{@render iconSnippet({ column })}
+				{/if}
 				{#if selectedValues.size > 0}
 					<Separator orientation="vertical" class="mx-2 h-4" />
 					<Badge variant="secondary" class="rounded-sm px-1 font-normal lg:hidden">
@@ -60,9 +62,9 @@
 			</Button>
 		{/snippet}
 	</Popover.Trigger>
-	<Popover.Content class="w-[fit-content] p-0" align="start">
+	<Popover.Content class="w-fit p-0" align="start">
 		<Command.Root>
-			<Command.Input placeholder={typeof title === "string" ? title : ""} />
+			<Command.Input placeholder={title} />
 			<Command.List>
 				<Command.Empty>Keine Ergebnisse</Command.Empty>
 				<Command.Group>
@@ -76,7 +78,6 @@
 									selectedValues.add(option.value);
 								}
 								const filterValues = Array.from(selectedValues);
-								console.log(filterValues);
 								column?.setFilterValue(filterValues.length ? filterValues : undefined);
 							}}
 						>
@@ -93,7 +94,8 @@
 								<Icon class="text-muted-foreground" />
 							{/if}
 
-							{option.label}
+							<span>{option.label}</span>
+
 							{#if facets?.get(option.value)}
 								<span class="ml-auto flex size-4 items-center justify-center font-mono text-xs">
 									{facets.get(option.value)}

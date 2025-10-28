@@ -1,0 +1,18 @@
+{
+	"$schema": "https://shadcn-svelte.com/schema/registry-item.json",
+	"name": "slider",
+	"title": "Slider",
+	"type": "registry:component",
+	"description": "A slider component",
+	"devDependencies": [
+		"bits-ui@^2.11.4",
+		"@internationalized/date@^3.8.1"
+	],
+	"files": [
+		{
+			"content": "<script lang=\"ts\">\n\timport { Slider } from \"bits-ui\";\n\timport { cn } from \"$UTILS$.js\";\n\n\tlet { class: className, value = [0], min = 0, max = 10, step = 1, ...restProps } = $props();\n\n\t// Convert to state variables\n\tlet stateValue = $state(value);\n\tlet stateMin = $state(min);\n\tlet stateMax = $state(max);\n\tlet stateStep = $state(step);\n\n\t// Update state when props change\n\t$effect(() => {\n\t\tstateValue = value;\n\t\tstateMin = min;\n\t\tstateMax = max;\n\t\tstateStep = step;\n\t});\n\n\t// Generate ticks array\n\tlet ticks = $derived(() => {\n\t\tconst tickArray: number[] = [];\n\t\tfor (let i = stateMin; i <= stateMax; i += stateStep) {\n\t\t\ttickArray.push(i);\n\t\t}\n\t\treturn tickArray;\n\t});\n\n\t// Generate tick classes\n\tlet tickClasses = $derived(() => {\n\t\treturn ticks().map((tick) => {\n\t\t\treturn tick === stateMin || tick === stateMax ? \"bg-primary\" : \"bg-gray-400\";\n\t\t});\n\t});\n</script>\n\n<Slider.Root\n\tbind:value={stateValue}\n\tmin={stateMin}\n\tmax={stateMax}\n\tstep={stateStep}\n\ttype=\"multiple\"\n\ttrackPadding={0}\n\tclass={cn(\"relative flex w-full touch-none items-center select-none\", className)}\n\t{...restProps}\n>\n\t<span class=\"relative z-[2] h-[2px] w-full grow overflow-hidden rounded-full bg-gray-400\">\n\t\t<Slider.Range class=\"bg-primary absolute h-full\" />\n\t</span>\n\t{#each ticks() as tick, i}\n\t\t<Slider.Tick index={i} class={`absolute z-[1] h-2 w-0.5 ${tickClasses()[i]}`} />\n\t{/each}\n\n\t{#each stateValue as thumb, i}\n\t\t<Slider.Thumb\n\t\t\tindex={i}\n\t\t\tclass=\"border-primary z-[3] block h-4 w-4 rounded-full border-1 border-2 bg-white transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50\"\n\t\t/>\n\t{/each}\n</Slider.Root>\n",
+			"type": "registry:component",
+			"target": "slider.svelte"
+		}
+	]
+}

@@ -4,7 +4,6 @@
 		type ColumnFiltersState,
 		type PaginationState,
 		type Row,
-		type RowSelectionState,
 		type SortingState,
 		type VisibilityState,
 		type Table as TableType,
@@ -18,19 +17,15 @@
 		type InitialTableState,
 		type ExpandedState,
 		getExpandedRowModel,
-		type HeaderContext,
+		type ColumnSizingState,
+		type ColumnSizingInfoState,
 	} from "@tanstack/table-core";
 	import DataTableToolbar from "./data-table-toolbar.svelte";
 	import { createSvelteTable } from "$lib/components/ui/data-table/data-table.svelte";
 	import FlexRender from "$lib/components/ui/data-table/flex-render.svelte";
 	import * as Table from "$lib/components/ui/table";
 	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
-	import {
-		renderComponent,
-		RenderComponentConfig,
-		renderSnippet,
-		RenderSnippetConfig,
-	} from "$lib/components/ui/data-table/render-helpers";
+	import { renderComponent, renderSnippet } from "$lib/components/ui/data-table/render-helpers";
 	import { Button, buttonVariants } from "$lib/components/ui/button";
 	import ChevronRightIcon from "@lucide/svelte/icons/chevron-right";
 	import ChevronLeftIcon from "@lucide/svelte/icons/chevron-left";
@@ -44,7 +39,9 @@
 	import type { HTMLAttributes } from "svelte/elements";
 	import { cn } from "$lib/utils.js";
 	import Checkbox from "$lib/components/ui/checkbox/checkbox.svelte";
-	import type { Snippet } from "svelte";
+	import { onMount, untrack, type Snippet } from "svelte";
+	import { Input } from "$lib/components/ui/input";
+	import { PersistedState } from "runed";
 
 	let {
 		data,
@@ -56,9 +53,19 @@
 		enableExpanding = false,
 		expanded = $bindable({}),
 		expandedRow,
+		embeddedInParent = false,
+		enableResizing = false,
 		enablePagination,
+		pagination = $bindable({ pageIndex: 0, pageSize: 10 }),
+		enableSearch = false,
 		cellClasses = "py-2",
-		customFilters,
+		rowHighlight,
+		customElementsFirst: customElementsFirstSnippet,
+		customElementsMiddle: customElementsMiddleSnippet,
+		customElementsLast: customElementsLastSnippet,
+		getColumnIconSnippet,
+		getRowId,
+		storagePrefix = "data-table",
 	}: {
 		data: TData[];
 		columns: ColumnDef<TData>[];
@@ -69,26 +76,48 @@
 		enableExpanding?: boolean;
 		expanded?: ExpandedState;
 		expandedRow?: Snippet<[Row<TData>]>;
+		/**
+		 * Fits the table into the parent provided space
+		 */
+		embeddedInParent?: boolean;
+		enableResizing?: boolean;
 		enablePagination?: boolean;
+		pagination?: PaginationState;
+		enableSearch?: boolean;
 		cellClasses?: string;
-		customFilters?: Snippet<[TableType<TData>]>;
+		rowHighlight?: (row: Row<TData>) => string;
+		customElementsFirst?: Snippet<[TableType<TData>]>;
+		customElementsMiddle?: Snippet<[TableType<TData>]>;
+		customElementsLast?: Snippet<[TableType<TData>]>;
+		getColumnIconSnippet?: (column: any) => Snippet<[{ column: any }]> | undefined;
+		getRowId?: (originalRow: TData, index: number, parent?: Row<TData>) => string;
+		storagePrefix?: string;
 	} = $props();
 
-	let columnVisibility = $state<VisibilityState>({});
+	let columnVisibility = new PersistedState<VisibilityState>(
+		`${storagePrefix}.columnVisibility`,
+		{}
+	);
 	let columnFilters = $state<ColumnFiltersState>([]);
 	let sorting = $state<SortingState>(initialState?.sorting ?? []);
-	let pagination = $state<PaginationState>({ pageIndex: 0, pageSize: 10 });
+	let globalFilter = $state<any>(null);
+	let columnSizing = new PersistedState<ColumnSizingState>(`${storagePrefix}.columnSizing`, {});
+	let columnSizingInfo = $state<ColumnSizingInfoState>({});
+	let tableContainerRef = $state<HTMLDivElement | null>(null);
 
 	const table = createSvelteTable({
 		get data() {
 			return data;
 		},
 		state: {
+			get globalFilter() {
+				return globalFilter;
+			},
 			get sorting() {
 				return sorting;
 			},
 			get columnVisibility() {
-				return columnVisibility;
+				return columnVisibility.current;
 			},
 			get rowSelection() {
 				return rowSelection;
@@ -102,9 +131,25 @@
 			get expanded() {
 				return expanded;
 			},
+			get columnSizing() {
+				return columnSizing.current;
+			},
+			get columnSizingInfo() {
+				return columnSizingInfo;
+			},
 		},
+		getRowId,
+		columnResizeMode: "onChange",
 		initialState,
 		enableExpanding,
+		globalFilterFn: "includesString",
+		onGlobalFilterChange: (updater) => {
+			if (typeof updater === "function") {
+				globalFilter = updater(globalFilter);
+			} else {
+				globalFilter = updater;
+			}
+		},
 		columns: enableRowSelection
 			? [
 					{
@@ -163,9 +208,9 @@
 		},
 		onColumnVisibilityChange: (updater) => {
 			if (typeof updater === "function") {
-				columnVisibility = updater(columnVisibility);
+				columnVisibility.current = updater(columnVisibility.current);
 			} else {
-				columnVisibility = updater;
+				columnVisibility.current = updater;
 			}
 		},
 		onPaginationChange: (updater) => {
@@ -175,6 +220,21 @@
 				pagination = updater;
 			}
 		},
+		onColumnSizingChange: (updater) => {
+			if (typeof updater === "function") {
+				columnSizing.current = updater(columnSizing.current);
+			} else {
+				columnSizing.current = updater;
+			}
+		},
+		onColumnSizingInfoChange: (updater) => {
+			if (typeof updater === "function") {
+				columnSizingInfo = updater(columnSizingInfo);
+			} else {
+				columnSizingInfo = updater;
+			}
+		},
+		autoResetPageIndex: false,
 		getCoreRowModel: getCoreRowModel(),
 		getFilteredRowModel: getFilteredRowModel(),
 		getPaginationRowModel: enablePagination ? getPaginationRowModel() : undefined,
@@ -182,6 +242,72 @@
 		getFacetedRowModel: getFacetedRowModel(),
 		getFacetedUniqueValues: getFacetedUniqueValues(),
 		getExpandedRowModel: getExpandedRowModel(),
+		// Performance optimizations
+		enableColumnResizing: enableResizing,
+		enableMultiSort: false,
+	});
+	let columnSizeVars = $derived.by(() => {
+		const headers = untrack(() => table.getFlatHeaders());
+		const sizingInfo = columnSizingInfo;
+		const sizing = columnSizing.current;
+		const colSizes: { [key: string]: number } = {};
+		for (let i = 0; i < headers.length; i++) {
+			const header = headers[i]!;
+			colSizes[`--header-${header.id}-size`] = header.getSize();
+			colSizes[`--col-${header.column.id}-size`] = header.column.getSize();
+		}
+		return Object.entries(colSizes)
+			.map(([key, value]) => `${key}: ${value};`)
+			.join(" ");
+	});
+
+	//reset page when filters change
+	let previousFilterState = $state<string>("");
+	$effect(() => {
+		const currentFilterState = JSON.stringify({ globalFilter, columnFilters });
+		if (previousFilterState && previousFilterState !== currentFilterState) {
+			pagination = { ...pagination, pageIndex: 0 };
+		}
+		previousFilterState = currentFilterState;
+	});
+
+	const rows = $derived(table.getRowModel().rows);
+	const headerGroups = $derived(table.getHeaderGroups());
+
+	//progressive rendering: render rows in batches
+	let visibleRowsCount = $state(0);
+	const BATCH_SIZE = 3;
+
+	$effect(() => {
+		visibleRowsCount = Math.min(BATCH_SIZE, rows.length);
+	});
+
+	$effect(() => {
+		if (visibleRowsCount < rows.length) {
+			const timer = setTimeout(() => {
+				visibleRowsCount = Math.min(visibleRowsCount + BATCH_SIZE, rows.length);
+			}, 0);
+			return () => clearTimeout(timer);
+		}
+	});
+
+	const visibleRows = $derived(rows.slice(0, visibleRowsCount));
+
+	onMount(() => {
+		// if enableResizing, set the last column size to the remaining width of the container
+		if (enableResizing && table.getAllColumns().length > 0) {
+			const containerRect = tableContainerRef?.getBoundingClientRect();
+			if (containerRect && containerRect.width > table.getCenterTotalSize()) {
+				const lastColumnId = table.getAllColumns()[table.getAllColumns().length - 1].id;
+				table.setColumnSizing({
+					...columnSizing,
+					[lastColumnId]:
+						containerRect.width -
+						table.getCenterTotalSize() +
+						table.getColumn(lastColumnId).getSize(),
+				});
+			}
+		}
 	});
 </script>
 
@@ -216,7 +342,7 @@
 					</Select.Content>
 				</Select.Root>
 			</div>
-			<div class="flex w-[100px] items-center justify-center text-sm font-medium">
+			<div class="flex w-[100px] items-center justify-center text-sm font-medium whitespace-nowrap">
 				Seite {table.getState().pagination.pageIndex + 1} von
 				{table.getPageCount()}
 			</div>
@@ -264,13 +390,13 @@
 
 {#snippet ColumnHeader({
 	column,
-	context,
+	title,
 	class: className,
 	...restProps
-}: { column: Column<TData>; context: HeaderContext<TData, any> } & HTMLAttributes<HTMLDivElement>)}
+}: { column: Column<TData>; title: string } & HTMLAttributes<HTMLDivElement>)}
 	{#if !((column.columnDef.enableSorting && column?.getCanSort()) || (column.getCanHide() && column.columnDef.enableHiding))}
 		<div class={className} {...restProps}>
-			<FlexRender content={column.columnDef.header} {context} />
+			{title}
 		</div>
 	{:else}
 		<div class={cn("flex items-center", className)} {...restProps}>
@@ -278,7 +404,7 @@
 				<DropdownMenu.Trigger class={buttonVariants({ size: "sm", variant: "ghost" })}
 					>{#snippet children()}
 						<span>
-							<FlexRender content={column.columnDef.header} {context} />
+							{title}
 						</span>
 						{#if column.getIsSorted() === "desc"}
 							<ArrowDownIcon />
@@ -317,78 +443,186 @@
 	{/if}
 {/snippet}
 
-<div class="flex flex-col space-y-4">
-	<DataTableToolbar {table}>
-		{#snippet custom(table)}
-			{#if customFilters}
-				{@render customFilters(table)}
+<div
+	class={cn("space-y-4", embeddedInParent ? "flex h-full flex-col" : "")}
+	bind:this={tableContainerRef}
+>
+	<DataTableToolbar {table} {getColumnIconSnippet}>
+		{#snippet customElementsFirst(table)}
+			{#if customElementsFirstSnippet}
+				{@render customElementsFirstSnippet?.(table)}
+			{/if}
+		{/snippet}
+		{#snippet customElementsMiddle(table)}
+			{#if customElementsMiddleSnippet}
+				{@render customElementsMiddleSnippet?.(table)}
+			{/if}
+		{/snippet}
+		{#snippet customElementsLast(table)}
+			{#if enableSearch}
+				<div class="w-full max-w-sm">
+					<Input
+						placeholder="Suche..."
+						oninput={(e) => table.setGlobalFilter(e.currentTarget.value)}
+						onchange={(e) => {
+							table.setGlobalFilter(e.currentTarget.value);
+						}}
+						class="h-[32px]"
+					/>
+				</div>
 			{/if}
 		{/snippet}
 	</DataTableToolbar>
-	<div class="overflow-x-auto rounded-md border">
-		<Table.Root>
-			<Table.Header>
-				{#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
-					<Table.Row>
-						{#each headerGroup.headers as header (header.id)}
-							<Table.Head colspan={header.colSpan}>
-								{#if !header.isPlaceholder}
-									{#if header.column.columnDef.header instanceof Function && header.column.columnDef.meta?.overrideDefaultHeaderUI}
-										<FlexRender
-											content={header.column.columnDef.header}
-											context={header.getContext()}
-										/>
-									{:else}
-										<FlexRender
-											content={() =>
-												renderSnippet(ColumnHeader, {
-													column: header.column,
-													context: header.getContext(),
-												})}
-											context={header.getContext()}
-										/>
-									{/if}
-								{/if}
-							</Table.Head>
-						{/each}
-					</Table.Row>
-				{/each}
-			</Table.Header>
-			<Table.Body>
-				{#each table.getRowModel().rows as row (row.id)}
-					<Table.Row
-						class={onRowClick ? "cursor-pointer" : ""}
-						onclick={() => {
-							onRowClick?.(row);
-						}}
-						data-state={row.getIsSelected() && "selected"}
-					>
-						{#each row.getVisibleCells() as cell (cell.id)}
-							<Table.Cell class={cellClasses}>
-								<FlexRender content={cell.column.columnDef.cell} context={cell.getContext()} />
-							</Table.Cell>
-						{/each}
-					</Table.Row>
 
-					{#if row.getIsExpanded()}
+	<div class={cn("rounded-md border", embeddedInParent ? "relative flex-1 overflow-hidden" : "")}>
+		<div class={cn("overflow-x-auto", embeddedInParent ? "absolute inset-0 overflow-y-auto" : "")}>
+			<Table.Root
+				class={cn(enableResizing ? "table-fixed" : "")}
+				style={enableResizing ? columnSizeVars + `width: ${table.getCenterTotalSize()}px;` : ""}
+			>
+				<Table.Header class={cn("bg-background", embeddedInParent ? "sticky top-0 z-10" : "")}>
+					{#each headerGroups as headerGroup (headerGroup.id)}
+						{@const visibleHeaders = headerGroup.headers.filter(
+							(header) => !header.column.columnDef.meta?.hidden
+						)}
 						<Table.Row>
-							<Table.Cell colspan={row.getAllCells().length}>
-								{@render expandedRow?.(row)}
+							{#each visibleHeaders as header (header.id)}
+								<Table.Head
+									colspan={header.colSpan}
+									class={cn("", enableResizing ? "relative border-l first:border-l-0" : "")}
+									style={enableResizing
+										? `width: calc(var(--header-${header.id}-size) * 1px);`
+										: ""}
+								>
+									{#if !header.isPlaceholder}
+										{#if header.column.columnDef.header instanceof Function}
+											<FlexRender
+												content={header.column.columnDef.header}
+												context={header.getContext()}
+											/>
+										{:else}
+											<FlexRender
+												content={() =>
+													renderSnippet(ColumnHeader, {
+														column: header.column,
+														title: header.column.columnDef.header as string,
+													})}
+												context={header.getContext()}
+											/>
+										{/if}
+										{#if enableResizing}
+											<button
+												ondblclick={() => header.column.resetSize()}
+												onmousedown={header.getResizeHandler()}
+												ontouchstart={header.getResizeHandler()}
+												class={`resizer ${
+													table.options.columnResizeDirection
+												} ${header.column.getIsResizing() ? "isResizing" : ""}`}
+											>
+												<span class="sr-only">Resize column</span>
+											</button>
+										{/if}
+									{/if}
+								</Table.Head>
+							{/each}
+						</Table.Row>
+					{/each}
+				</Table.Header>
+				<Table.Body>
+					{#each visibleRows as row (row.id)}
+						{@const visibleCells = row
+							.getVisibleCells()
+							.filter((cell) => !cell.column.columnDef.meta?.hidden)}
+						<Table.Row
+							class={cn(onRowClick ? "cursor-pointer" : "", rowHighlight?.(row) || "")}
+							onclick={() => {
+								onRowClick?.(row);
+							}}
+							data-state={row.getIsSelected() && "selected"}
+						>
+							{#each visibleCells as cell (cell.id)}
+								<Table.Cell
+									class={cellClasses}
+									style={enableResizing
+										? `width: calc(var(--col-${cell.column.id}-size) * 1px);`
+										: ""}
+								>
+									<FlexRender content={cell.column.columnDef.cell} context={cell.getContext()} />
+								</Table.Cell>
+							{/each}
+						</Table.Row>
+
+						{#if row.getIsExpanded()}
+							<Table.Row>
+								<Table.Cell colspan={row.getAllCells().length}>
+									{@render expandedRow?.(row)}
+								</Table.Cell>
+							</Table.Row>
+						{/if}
+					{:else}
+						<Table.Row>
+							<Table.Cell colspan={columns.length} class="h-24 text-center">
+								Keine Daten gefunden
 							</Table.Cell>
 						</Table.Row>
+					{/each}
+
+					{#if visibleRowsCount < rows.length}
+						{#each Array(rows.length - visibleRowsCount) as _, i (i + visibleRowsCount)}
+							<Table.Row>
+								{#each headerGroups[0]?.headers.filter((h) => !h.column.columnDef.meta?.hidden) || [] as header}
+									<Table.Cell
+										class={cellClasses}
+										style={header.column.columnDef.size
+											? `width: ${header.column.columnDef.size}px; min-width: ${header.column.columnDef.size}px; max-width: ${header.column.columnDef.size}px;`
+											: ""}
+									>
+										<div class="bg-muted h-4 w-3/4 rounded"></div>
+									</Table.Cell>
+								{/each}
+							</Table.Row>
+						{/each}
 					{/if}
-				{:else}
-					<Table.Row>
-						<Table.Cell colspan={columns.length} class="h-24 text-center">
-							Keine Daten gefunden
-						</Table.Cell>
-					</Table.Row>
-				{/each}
-			</Table.Body>
-		</Table.Root>
+				</Table.Body>
+			</Table.Root>
+		</div>
 	</div>
 
 	{#if enablePagination}
 		{@render Pagination({ table })}
 	{/if}
 </div>
+
+<style>
+	.resizer {
+		position: absolute;
+		top: 0;
+		height: 100%;
+		width: 5px;
+		background: rgba(0, 0, 0, 0.5);
+		cursor: col-resize;
+		user-select: none;
+		touch-action: none;
+	}
+
+	.resizer.ltr {
+		right: 0;
+	}
+
+	.resizer.rtl {
+		left: 0;
+	}
+
+	.resizer.isResizing {
+		background: blue;
+		opacity: 1;
+	}
+
+	.resizer {
+		opacity: 0;
+	}
+
+	:global(*:hover > .resizer) {
+		opacity: 1;
+	}
+</style>
