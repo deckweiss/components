@@ -5,13 +5,26 @@
 	import { Button } from "$lib/components/ui/button";
 	import type { Snippet } from "svelte";
 
-	let { table, custom }: { table: Table<TData>; custom?: Snippet<[Table<TData>]> } = $props();
+	let {
+		table,
+		customElementsFirst,
+		customElementsLast,
+		customElementsMiddle,
+		getColumnIconSnippet,
+	}: {
+		table: Table<TData>;
+		customElementsFirst?: Snippet<[Table<TData>]>;
+		customElementsLast?: Snippet<[Table<TData>]>;
+		customElementsMiddle?: Snippet<[Table<TData>]>;
+		getColumnIconSnippet?: (column: any) => Snippet<[{ column: any }]> | undefined;
+	} = $props();
 
 	const isFiltered = $derived(table.getState().columnFilters.length > 0);
 	const filterableCols = $derived(
 		table
 			.getHeaderGroups()[0]
 			.headers.filter((h) => h.column.columnDef.enableColumnFilter && h.column.getCanFilter())
+			.map((h) => h.column)
 	);
 </script>
 
@@ -19,18 +32,18 @@
 	<div class="flex flex-1 items-center space-x-2">
 		{#each filterableCols as colFilter}
 			<DataTableFacetedFilter
-				column={colFilter.column}
-				title={colFilter.column.columnDef.header ?? colFilter.id}
-				context={colFilter.getContext()}
-				options={Array.from(colFilter.column.getFacetedUniqueValues().keys()).map((v) => ({
+				column={colFilter}
+				title={colFilter.columnDef.header ?? colFilter.id}
+				options={Array.from(colFilter.getFacetedUniqueValues().keys()).map((v) => ({
 					label: v,
 					value: v,
 				}))}
+				iconSnippet={getColumnIconSnippet?.(colFilter)}
 			/>
 		{/each}
 
-		{#if custom}
-			{@render custom(table)}
+		{#if customElementsMiddle}
+			{@render customElementsMiddle?.(table)}
 		{/if}
 
 		{#if isFiltered}
@@ -40,10 +53,13 @@
 			</Button>
 		{/if}
 	</div>
+	<div class="ml-2 flex flex-1 items-center justify-end gap-2">
+		{@render customElementsLast?.(table)}
 
-	{#if table
-		.getAllColumns()
-		.filter((col) => col.columnDef.enableHiding && col.getCanHide()).length > 0}
-		<DataTableViewOptions {table} />
-	{/if}
+		{#if table
+			.getAllColumns()
+			.filter((col) => col.columnDef.enableHiding && col.getCanHide()).length > 0}
+			<DataTableViewOptions {table} />
+		{/if}
+	</div>
 </div>
