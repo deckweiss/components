@@ -573,9 +573,7 @@
 								{#each headerGroups[0]?.headers.filter((h) => !h.column.columnDef.meta?.hidden) || [] as header}
 									<Table.Cell
 										class={cellClasses}
-										style={header.column.columnDef.size
-											? `width: ${header.column.columnDef.size}px; min-width: ${header.column.columnDef.size}px; max-width: ${header.column.columnDef.size}px;`
-											: ""}
+										style={enableResizing ? `width: calc(var(--col-${header.id}-size) * 1px);` : ""}
 									>
 										<div class="bg-muted h-4 w-3/4 rounded"></div>
 									</Table.Cell>
