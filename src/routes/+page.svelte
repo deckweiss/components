@@ -15,6 +15,9 @@
 	import DataTableUsage from "./data-table-example.txt?raw";
 	import Input from "$lib/components/ui/input/input.svelte";
 	import Slider from "$lib/registry/blocks/slider/slider.svelte";
+	import * as Navbar from "$lib/registry/blocks/navbar";
+	import { Bell, FileUser, UserIcon } from "@lucide/svelte";
+	import DropdownMenuCheckboxItem from "$lib/components/ui/dropdown-menu/dropdown-menu-checkbox-item.svelte";
 
 	const code = {
 		slider: `<Slider value={[0]} min={0} max={10} step={1} class="w-full" />`,
@@ -84,6 +87,58 @@ export function captureEvent(eventName: string, properties?: Record<string, any>
     });
 }
 `,
+		navbar: `<Navbar.Applications>
+	<Navbar.ApplicationLink href="/">HR-Manager</Navbar.ApplicationLink>
+	<Navbar.ApplicationLink href="#">Verrechnung</Navbar.ApplicationLink>
+	<Navbar.ApplicationLink href="#">Dienstplan</Navbar.ApplicationLink>
+	<Navbar.ApplicationLink href="#">Zeitaufzeichnung</Navbar.ApplicationLink>
+	<Navbar.ApplicationLink href="#">KI-Chatbot</Navbar.ApplicationLink>
+	<Navbar.ApplicationLink href="#">Zaunmontagen</Navbar.ApplicationLink>
+	<Navbar.ApplicationLink href="#">Terminplaner</Navbar.ApplicationLink>
+	<Navbar.ApplicationLink href="#">Bestellverwaltung</Navbar.ApplicationLink>
+
+	{#snippet right()}
+		<DropdownMenu.Root>
+			<DropdownMenu.Trigger class="flex cursor-pointer items-center gap-2">
+				<Navbar.ApplicationUser iconColorClass="bg-[#ff0000]">
+					Peter Arnold
+				</Navbar.ApplicationUser>
+			</DropdownMenu.Trigger>
+			<DropdownMenu.Content align="end">
+				<DropdownMenu.Group>
+					<DropdownMenu.Label>Peter Arnold</DropdownMenu.Label>
+					<DropdownMenu.Separator />
+					<DropdownMenu.Item>Einstellungen</DropdownMenu.Item>
+					<DropdownMenu.Separator />
+					<DropdownMenu.Item>Abmelden</DropdownMenu.Item>
+				</DropdownMenu.Group>
+			</DropdownMenu.Content>
+		</DropdownMenu.Root>
+	{/snippet}
+</Navbar.Applications>
+
+<Navbar.Layer1 appName="HR Manager">
+	{#snippet logo()}
+		<FileUser class="text-[#ff0044]" />
+	{/snippet}
+
+	<Navbar.Layer1Link href="/">Termine</Navbar.Layer1Link>
+	<Navbar.Layer1Link href="#" badge="99+">Bewerbungen</Navbar.Layer1Link>
+	<Navbar.Layer1Link href="#">Stellenausschreibungen</Navbar.Layer1Link>
+
+	{#snippet right()}
+		<Navbar.Layer1IconButton badge="2">
+			<Bell size={16} />
+		</Navbar.Layer1IconButton>
+	{/snippet}
+</Navbar.Layer1>
+
+<Navbar.Layer2>
+	<Navbar.Layer2Link href="/">Alle Bewerbungen</Navbar.Layer2Link>
+	<Navbar.Layer2Link href="#" badge="99+">Aufgaben</Navbar.Layer2Link>
+	<Navbar.Layer2Link href="#">Evidenz</Navbar.Layer2Link>
+	<Navbar.Layer2Link href="#">Archiv</Navbar.Layer2Link>
+</Navbar.Layer2>`,
 	};
 	let locale = $state("de");
 	let emailHeader = $derived(locale === "de" ? "E-Mail" : "Email");
@@ -281,6 +336,67 @@ export function captureEvent(eventName: string, properties?: Record<string, any>
 					</div>
 				{/snippet}
 			</DataTable>
+		</ComponentShowcase>
+
+		<ComponentShowcase
+			name="Navbar"
+			componentKey="navbar"
+			description="A navbar component"
+			code={code["navbar"] ?? ""}
+			codeLang="svelte"
+		>
+			<Navbar.Applications>
+				<Navbar.ApplicationLink href="/">HR-Manager</Navbar.ApplicationLink>
+				<Navbar.ApplicationLink href="#">Verrechnung</Navbar.ApplicationLink>
+				<Navbar.ApplicationLink href="#">Dienstplan</Navbar.ApplicationLink>
+				<Navbar.ApplicationLink href="#">Zeitaufzeichnung</Navbar.ApplicationLink>
+				<Navbar.ApplicationLink href="#">KI-Chatbot</Navbar.ApplicationLink>
+				<Navbar.ApplicationLink href="#">Zaunmontagen</Navbar.ApplicationLink>
+				<Navbar.ApplicationLink href="#">Terminplaner</Navbar.ApplicationLink>
+				<Navbar.ApplicationLink href="#">Bestellverwaltung</Navbar.ApplicationLink>
+
+				{#snippet right()}
+					<DropdownMenu.Root>
+						<DropdownMenu.Trigger class="flex cursor-pointer items-center gap-2">
+							<Navbar.ApplicationUser iconColorClass="bg-[#ff0000]">
+								Peter Arnold
+							</Navbar.ApplicationUser>
+						</DropdownMenu.Trigger>
+						<DropdownMenu.Content align="end">
+							<DropdownMenu.Group>
+								<DropdownMenu.Label>Peter Arnold</DropdownMenu.Label>
+								<DropdownMenu.Separator />
+								<DropdownMenu.Item>Einstellungen</DropdownMenu.Item>
+								<DropdownMenu.Separator />
+								<DropdownMenu.Item>Abmelden</DropdownMenu.Item>
+							</DropdownMenu.Group>
+						</DropdownMenu.Content>
+					</DropdownMenu.Root>
+				{/snippet}
+			</Navbar.Applications>
+
+			<Navbar.Layer1 appName="HR Manager">
+				{#snippet logo()}
+					<FileUser class="text-[#ff0044]" />
+				{/snippet}
+
+				<Navbar.Layer1Link href="/">Termine</Navbar.Layer1Link>
+				<Navbar.Layer1Link href="#" badge="99+">Bewerbungen</Navbar.Layer1Link>
+				<Navbar.Layer1Link href="#">Stellenausschreibungen</Navbar.Layer1Link>
+
+				{#snippet right()}
+					<Navbar.Layer1IconButton badge="2">
+						<Bell size={16} />
+					</Navbar.Layer1IconButton>
+				{/snippet}
+			</Navbar.Layer1>
+
+			<Navbar.Layer2>
+				<Navbar.Layer2Link href="/">Alle Bewerbungen</Navbar.Layer2Link>
+				<Navbar.Layer2Link href="#" badge="99+">Aufgaben</Navbar.Layer2Link>
+				<Navbar.Layer2Link href="#">Evidenz</Navbar.Layer2Link>
+				<Navbar.Layer2Link href="#">Archiv</Navbar.Layer2Link>
+			</Navbar.Layer2>
 		</ComponentShowcase>
 
 		<ComponentShowcase

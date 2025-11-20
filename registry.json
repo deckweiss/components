@@ -116,6 +116,61 @@
 					"target": "blocks/data-table/data-table-view-options.svelte"
 				}
 			]
+		},
+		{
+			"name": "navbar",
+			"type": "registry:block",
+			"title": "Navbar",
+			"description": "Mulit layer navbar",
+			"dependencies": ["@lucide/svelte"],
+			"registryDependencies": ["dropdown-menu"],
+			"files": [
+				{
+					"path": "src/lib/registry/blocks/navbar/index.ts",
+					"type": "registry:file",
+					"target": "blocks/navbar/index.ts"
+				},
+				{
+					"path": "src/lib/registry/blocks/navbar/navbar-application-link.svelte",
+					"type": "registry:component",
+					"target": "blocks/navbar/navbar-application-link.svelte"
+				},
+				{
+					"path": "src/lib/registry/blocks/navbar/navbar-application-user.svelte",
+					"type": "registry:component",
+					"target": "blocks/navbar/navbar-application-user.svelte"
+				},
+				{
+					"path": "src/lib/registry/blocks/navbar/navbar-applications.svelte",
+					"type": "registry:component",
+					"target": "blocks/navbar/navbar-applications.svelte"
+				},
+				{
+					"path": "src/lib/registry/blocks/navbar/navbar-layer1-icon-button.svelte",
+					"type": "registry:component",
+					"target": "blocks/navbar/navbar-layer1-icon-button.svelte"
+				},
+				{
+					"path": "src/lib/registry/blocks/navbar/navbar-layer1-link.svelte",
+					"type": "registry:component",
+					"target": "blocks/navbar/navbar-layer1-link"
+				},
+				{
+					"path": "src/lib/registry/blocks/navbar/navbar-layer1.svelte",
+					"type": "registry:component",
+					"target": "blocks/navbar/navbar-layer1.svelte"
+				},
+				{
+					"path": "src/lib/registry/blocks/navbar/navbar-layer2.svelte",
+					"type": "registry:component",
+					"target": "blocks/navbar/navbar-layer2.svelte"
+				},
+				{
+					"path": "src/lib/registry/blocks/navbar/navbar-layer2-link.svelte",
+					"type": "registry:component",
+					"target": "blocks/navbar/navbar-layer2-link.svelte"
+				}
+			]
 		}
 	]
 }
