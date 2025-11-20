@@ -61,5 +61,18 @@
 			"table"
 		],
 		"relativeUrl": "data-table.json"
+	},
+	{
+		"name": "navbar",
+		"title": "Navbar",
+		"type": "registry:block",
+		"description": "Mulit layer navbar",
+		"dependencies": [
+			"@lucide/svelte"
+		],
+		"registryDependencies": [
+			"dropdown-menu"
+		],
+		"relativeUrl": "navbar.json"
 	}
 ]
