@@ -23,6 +23,8 @@ This separation allows you to have extensive documentation, examples, and tests 
 | `page-progress` | A page loading progress bar.                                                     |
 | `toaster`       | A toast component with custom look.                                              |
 | `data-table`    | Fully functional data table with sort, filter, column toggle, row select and pagination |
+| `zaunkonfigurator-button` | A button component from the Zaunkonfigurator project |
+| `navbar`        | A navbar component |
 
 ## Development Workflow
 
