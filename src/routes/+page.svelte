@@ -18,6 +18,7 @@
 	import * as Navbar from "$lib/registry/blocks/navbar";
 	import { Bell, FileUser, UserIcon } from "@lucide/svelte";
 	import DropdownMenuCheckboxItem from "$lib/components/ui/dropdown-menu/dropdown-menu-checkbox-item.svelte";
+	import { Button as ZaunkonfiguratorButton } from "$lib/registry/blocks/zaunkonfigurator-button";
 
 	const code = {
 		slider: `<Slider value={[0]} min={0} max={10} step={1} class="w-full" />`,
@@ -139,6 +140,15 @@ export function captureEvent(eventName: string, properties?: Record<string, any>
 	<Navbar.Layer2Link href="#">Evidenz</Navbar.Layer2Link>
 	<Navbar.Layer2Link href="#">Archiv</Navbar.Layer2Link>
 </Navbar.Layer2>`,
+		"zaunkonfigurator-button": `<script lang="ts">
+	import { Button } from "$lib/registry/blocks/zaunkonfigurator-button";
+<\/script>
+<ZaunkonfiguratorButton variant="default">Base</ZaunkonfiguratorButton>
+<ZaunkonfiguratorButton variant="secondary">Secondary</ZaunkonfiguratorButton>
+<ZaunkonfiguratorButton variant="outline">Outline</ZaunkonfiguratorButton>
+<ZaunkonfiguratorButton variant="ghost">Ghost</ZaunkonfiguratorButton>
+<ZaunkonfiguratorButton variant="link">Link</ZaunkonfiguratorButton>
+<ZaunkonfiguratorButton variant="destructive">Destructive</ZaunkonfiguratorButton>`,
 	};
 	let locale = $state("de");
 	let emailHeader = $derived(locale === "de" ? "E-Mail" : "Email");
@@ -397,6 +407,23 @@ export function captureEvent(eventName: string, properties?: Record<string, any>
 				<Navbar.Layer2Link href="#">Evidenz</Navbar.Layer2Link>
 				<Navbar.Layer2Link href="#">Archiv</Navbar.Layer2Link>
 			</Navbar.Layer2>
+		</ComponentShowcase>
+
+		<ComponentShowcase
+			name="Zaunkonfigurator Button"
+			componentKey="zaunkonfigurator-button"
+			description="A button component from the Zaunkonfigurator project"
+			code={code["zaunkonfigurator-button"]}
+		>
+			<div class="flex flex-wrap gap-2">
+				<ZaunkonfiguratorButton variant="default">Base</ZaunkonfiguratorButton>
+				<ZaunkonfiguratorButton variant="secondary">Secondary</ZaunkonfiguratorButton>
+				<ZaunkonfiguratorButton variant="outline">Outline</ZaunkonfiguratorButton>
+				<ZaunkonfiguratorButton variant="ghost">Ghost</ZaunkonfiguratorButton>
+				<ZaunkonfiguratorButton variant="link">Link</ZaunkonfiguratorButton>
+				<ZaunkonfiguratorButton variant="destructive">Destructive</ZaunkonfiguratorButton>
+				<ZaunkonfiguratorButton variant="animated">Animated</ZaunkonfiguratorButton>
+			</div>
 		</ComponentShowcase>
 
 		<ComponentShowcase
