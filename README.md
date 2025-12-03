@@ -25,6 +25,7 @@ This separation allows you to have extensive documentation, examples, and tests 
 | `data-table`    | Fully functional data table with sort, filter, column toggle, row select and pagination |
 | `zaunkonfigurator-button` | A button component from the Zaunkonfigurator project |
 | `navbar`        | A navbar component |
+| `posthogfeedback` | A feedback button integrated with Posthog |
 
 ## Development Workflow
 

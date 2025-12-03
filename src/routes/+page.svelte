@@ -19,6 +19,7 @@
 	import { Bell, FileUser, UserIcon } from "@lucide/svelte";
 	import DropdownMenuCheckboxItem from "$lib/components/ui/dropdown-menu/dropdown-menu-checkbox-item.svelte";
 	import { Button as ZaunkonfiguratorButton } from "$lib/registry/blocks/zaunkonfigurator-button";
+	import { PosthogFeedbackButton } from "$lib/registry/blocks/posthogfeedback";
 
 	const code = {
 		slider: `<Slider value={[0]} min={0} max={10} step={1} class="w-full" />`,
@@ -149,6 +150,25 @@ export function captureEvent(eventName: string, properties?: Record<string, any>
 <ZaunkonfiguratorButton variant="ghost">Ghost</ZaunkonfiguratorButton>
 <ZaunkonfiguratorButton variant="link">Link</ZaunkonfiguratorButton>
 <ZaunkonfiguratorButton variant="destructive">Destructive</ZaunkonfiguratorButton>`,
+		"posthogfeedback-button": `<script lang="ts">
+	import { PosthogFeedbackButton } from "$lib/registry/blocks/posthogfeedback";
+<\/script>
+
+<PosthogFeedbackButton appName="example-app" />
+
+<!-- With custom position -->
+<PosthogFeedbackButton appName="example-app" position="bottom-left" />
+
+<!-- With custom feedback types -->
+<PosthogFeedbackButton
+	appName="example-app"
+	feedbackTypes={[
+		{ value: "bug", label: "Bug Report", emoji: "🐛" },
+		{ value: "feature", label: "Feature Request", emoji: "✨" },
+		{ value: "comment", label: "Comment", emoji: "💬" },
+		{ value: "question", label: "Question", emoji: "❓" }
+	]}
+/>`,
 	};
 	let locale = $state("de");
 	let emailHeader = $derived(locale === "de" ? "E-Mail" : "Email");
@@ -434,6 +454,21 @@ export function captureEvent(eventName: string, properties?: Record<string, any>
 			codeLang="typescript"
 			hideInstallation
 		></ComponentShowcase>
+
+		<ComponentShowcase
+			name="Posthog Feedback Button"
+			componentKey="posthogfeedback-button"
+			description="A feedback button with modal dialog integrated with Posthog"
+			code={code["posthogfeedback-button"]}
+			codeLang="svelte"
+		>
+			<div class="relative min-h-[400px] rounded-lg border border-dashed p-8">
+				<p class="text-muted-foreground mb-4 text-sm">
+					Click the button in the bottom-right corner to open the feedback modal.
+				</p>
+				<PosthogFeedbackButton appName="component-showcase" position="bottom-right" />
+			</div>
+		</ComponentShowcase>
 	</main>
 </div>
 

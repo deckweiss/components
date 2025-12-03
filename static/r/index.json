@@ -74,5 +74,22 @@
 			"dropdown-menu"
 		],
 		"relativeUrl": "navbar.json"
+	},
+	{
+		"name": "posthogfeedback",
+		"title": "Posthog Feedback Button",
+		"type": "registry:block",
+		"description": "A feedback button integrated with Posthog",
+		"dependencies": [
+			"posthog-js",
+			"lucide-svelte"
+		],
+		"registryDependencies": [
+			"button",
+			"dialog",
+			"label",
+			"select"
+		],
+		"relativeUrl": "posthogfeedback.json"
 	}
 ]
