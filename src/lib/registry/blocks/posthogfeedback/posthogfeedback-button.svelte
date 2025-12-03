@@ -112,7 +112,7 @@
 	<Button
 		type="button"
 		onclick={handleOpen}
-		class="group fixed {positionClasses[
+		class="group absolute {positionClasses[
 			position
 		]} z-50 flex h-12 min-w-12 items-center justify-center gap-0 overflow-hidden rounded-full bg-blue-600 p-0 text-white shadow-lg transition-[width,gap,padding] duration-300 ease-in-out hover:min-w-[120px] hover:justify-start hover:gap-2 hover:px-4"
 		aria-label="Feedback senden"
