@@ -34,29 +34,48 @@
 <Popover.Root>
 	<Popover.Trigger>
 		{#snippet child({ props })}
-			<Button {...props} variant="outline" size="sm" class="h-8 border-dashed">
-				<CirclePlusIcon />
+			<Button
+				{...props}
+				variant="ghost"
+				size="sm"
+				class="h-8 border border-gray-200 bg-white {selectedValues.size > 0
+					? 'text-primary border border-[rgba(0,0,0,0.05)] bg-[rgba(0,0,0,0.07)]'
+					: ''}"
+			>
+				{#if selectedValues.size === 0}
+					<CirclePlusIcon />
+				{/if}
 				{title}
 				{#if iconSnippet}
 					{@render iconSnippet({ column })}
 				{/if}
 				{#if selectedValues.size > 0}
-					<Separator orientation="vertical" class="mx-2 h-4" />
-					<Badge variant="secondary" class="rounded-sm px-1 font-normal lg:hidden">
-						{selectedValues.size}
-					</Badge>
-					<div class="hidden space-x-1 lg:flex">
-						{#if selectedValues.size > 2}
-							<Badge variant="secondary" class="rounded-sm px-1 font-normal">
-								{selectedValues.size} ausgewählt
-							</Badge>
-						{:else}
-							{#each options.filter((opt) => selectedValues.has(opt.value)) as option (option)}
-								<Badge variant="secondary" class="rounded-sm px-1 font-normal">
-									{option.label}
+					<div class="ml-1 flex items-center gap-1">
+						<Badge
+							variant="secondary"
+							class="rounded-sm bg-[rgba(0,0,0,0.8)] px-1 font-normal text-white lg:hidden"
+						>
+							{selectedValues.size}
+						</Badge>
+						<div class="hidden space-x-1 lg:flex">
+							{#if selectedValues.size > 2}
+								<Badge
+									variant="secondary"
+									class="rounded-sm bg-[rgba(0,0,0,0.8)] px-1 font-normal text-white"
+								>
+									{selectedValues.size} ausgewählt
 								</Badge>
-							{/each}
-						{/if}
+							{:else}
+								{#each options.filter((opt) => selectedValues.has(opt.value)) as option (option)}
+									<Badge
+										variant="secondary"
+										class="rounded-sm bg-[rgba(0,0,0,0.8)] px-1 font-normal text-white"
+									>
+										{option.label}
+									</Badge>
+								{/each}
+							{/if}
+						</div>
 					</div>
 				{/if}
 			</Button>
