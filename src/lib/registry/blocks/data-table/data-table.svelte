@@ -398,10 +398,16 @@
 		<div class={className} {...restProps}>
 			{title}
 		</div>
+		test
 	{:else}
-		<div class={cn("flex items-center", className)} {...restProps}>
+		<div class={cn("relative left-[-4px] flex items-center", className)} {...restProps}>
 			<DropdownMenu.Root>
-				<DropdownMenu.Trigger class={buttonVariants({ size: "sm", variant: "ghost" })}
+				<DropdownMenu.Trigger
+					class={cn(
+						buttonVariants({ size: "sm", variant: "ghost" }),
+						"h-7 rounded-md px-2 text-xs font-[600] tracking-wider text-[rgba(0,0,0,0.6)] uppercase hover:bg-[#00000010] has-[>svg]:px-2",
+						column.getIsSorted() ? "text-primary bg-[rgba(0,0,0,0.05)]" : ""
+					)}
 					>{#snippet children()}
 						<span>
 							{title}
@@ -474,13 +480,18 @@
 		{/snippet}
 	</DataTableToolbar>
 
-	<div class={cn("rounded-md border", embeddedInParent ? "relative flex-1 overflow-hidden" : "")}>
+	<div
+		class={cn(
+			"overflow-hidden rounded-md border",
+			embeddedInParent ? "relative flex-1 overflow-hidden" : ""
+		)}
+	>
 		<div class={cn("overflow-x-auto", embeddedInParent ? "absolute inset-0 overflow-y-auto" : "")}>
 			<Table.Root
-				class={cn(enableResizing ? "table-fixed" : "")}
+				class={cn(enableResizing ? "table-fixed bg-white" : "")}
 				style={enableResizing ? columnSizeVars + `width: ${table.getCenterTotalSize()}px;` : ""}
 			>
-				<Table.Header class={cn("bg-background", embeddedInParent ? "sticky top-0 z-10" : "")}>
+				<Table.Header class={cn("bg-gray-100", embeddedInParent ? "sticky top-0 z-10" : "")}>
 					{#each headerGroups as headerGroup (headerGroup.id)}
 						{@const visibleHeaders = headerGroup.headers.filter(
 							(header) => !header.column.columnDef.meta?.hidden
@@ -489,7 +500,10 @@
 							{#each visibleHeaders as header (header.id)}
 								<Table.Head
 									colspan={header.colSpan}
-									class={cn("", enableResizing ? "relative border-l first:border-l-0" : "")}
+									class={cn(
+										"text-xs font-[600] tracking-wider text-[rgba(0,0,0,0.6)] uppercase",
+										enableResizing ? "relative border-l first:border-l-0" : ""
+									)}
 									style={enableResizing
 										? `width: calc(var(--header-${header.id}-size) * 1px);`
 										: ""}
@@ -596,8 +610,8 @@
 		position: absolute;
 		top: 0;
 		height: 100%;
-		width: 5px;
-		background: rgba(0, 0, 0, 0.5);
+		width: 2px;
+		background: rgba(0, 0, 0, 0.2);
 		cursor: col-resize;
 		user-select: none;
 		touch-action: none;

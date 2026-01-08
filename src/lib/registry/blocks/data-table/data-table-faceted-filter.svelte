@@ -36,9 +36,9 @@
 		{#snippet child({ props })}
 			<Button
 				{...props}
-				variant="ghost"
+				variant="outline"
 				size="sm"
-				class="h-8 border border-gray-200 bg-white {selectedValues.size > 0
+				class="h-8 border {selectedValues.size > 0
 					? 'text-primary border border-[rgba(0,0,0,0.05)] bg-[rgba(0,0,0,0.07)]'
 					: ''}"
 			>
