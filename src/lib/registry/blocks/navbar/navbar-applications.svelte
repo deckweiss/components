@@ -4,7 +4,7 @@
 	import type { HTMLAttributes } from "svelte/elements";
 	import type { Snippet } from "svelte";
 	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
-	import { onMount, tick } from "svelte";
+	import { tick } from "svelte";
 	import { setContext } from "svelte";
 	import { NAVBAR_CONTEXT_KEY, type NavbarContext, type LinkInfo } from "./navbar-context.js";
 
@@ -16,7 +16,7 @@
 	}
 
 	let {
-		logoUrl = "https://www.figma.com/api/mcp/asset/1396d7fd-173f-4e3b-b6f5-97689dccc8ff",
+		logoUrl
 		children,
 		right,
 		class: className,

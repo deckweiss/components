@@ -4,7 +4,6 @@
 	import type { Snippet } from "svelte";
 
 	interface Props extends HTMLAttributes<HTMLDivElement> {
-		logoUrl?: string;
 		links?: Array<{ label: string; href?: string }>;
 		children?: Snippet;
 		appName?: string;
@@ -12,16 +11,8 @@
 		logo?: Snippet;
 	}
 
-	const imgLogoHr1 = "https://www.figma.com/api/mcp/asset/c9f17b18-fde1-4ad8-8249-d23fcea25ccf";
-
 	let {
-		logoUrl = imgLogoHr1,
-		links = [
-			{ label: "Termine", href: "#" },
-			{ label: "Bewerbungen", href: "#" },
-			{ label: "Stellenausschreibungen", href: "#" },
-			{ label: "Alle Skillchecks", href: "#" },
-		],
+		links = [],
 		class: className,
 		logo,
 		right,
