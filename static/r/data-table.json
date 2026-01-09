@@ -10,7 +10,7 @@
 		"runed"
 	],
 	"devDependencies": [
-		"@lucide/svelte@^0.515.0",
+		"@lucide/svelte@^0.561.0",
 		"runed@^0.35.1"
 	],
 	"registryDependencies": [

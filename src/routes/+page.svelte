@@ -20,6 +20,8 @@
 	import DropdownMenuCheckboxItem from "$lib/components/ui/dropdown-menu/dropdown-menu-checkbox-item.svelte";
 	import { Button as ZaunkonfiguratorButton } from "$lib/registry/blocks/zaunkonfigurator-button";
 	import { PosthogFeedbackButton } from "$lib/registry/blocks/posthogfeedback";
+	import { openAddOn } from "$lib/registry/blocks/add-on/routing";
+	import AddOnRenderer from "$lib/registry/blocks/add-on/add-on-renderer.svelte";
 
 	const code = {
 		slider: `<Slider value={[0]} min={0} max={10} step={1} class="w-full" />`,
@@ -169,6 +171,15 @@ export function captureEvent(eventName: string, properties?: Record<string, any>
 		{ value: "question", label: "Question", emoji: "❓" }
 	]}
 />`,
+		"add-on-renderer": `<!-- +page.svelte -->
+<AddOnRenderer>
+	<!-- All page content should be inside here, except navbar -->
+	<Button onclick={() => {
+		openAddOn("example-add-on", "123");
+	}}>
+		Open Add On
+	</Button>
+</AddOnRenderer>`,
 	};
 	let locale = $state("de");
 	let emailHeader = $derived(locale === "de" ? "E-Mail" : "Email");
@@ -236,241 +247,259 @@ export function captureEvent(eventName: string, properties?: Record<string, any>
 	];
 </script>
 
-<div class="mx-auto flex min-h-svh max-w-3xl flex-col gap-8 px-4 py-8">
-	<header class="flex flex-col gap-1">
-		<h1 class="text-3xl font-bold tracking-tight">Deckweiss Component Registry</h1>
-		<p class="text-muted-foreground">
-			A custom registry for distributing code using shadcn-svelte.
-		</p>
-		<br />
-		<p>Use these first:</p>
-		<ul class="ml-5 list-disc">
-			<li>
-				<a href="https://next.shadcn-svelte.com">ShadCn Svelte</a>
-			</li>
-			<li>
-				<a href="https://www.shadcn-svelte-extras.com">ShadCn Svelte Extras</a>
-			</li>
-		</ul>
-	</header>
-	<main class="flex flex-1 flex-col gap-8">
-		<ComponentShowcase
-			name="Slider"
-			componentKey="slider"
-			description="A slider component"
-			code={code["slider"]}
-		>
-			<Slider value={[0]} min={0} max={10} step={1} class="w-full" />
-		</ComponentShowcase>
-		<ComponentShowcase
-			name="Loading Image"
-			componentKey="loading-image"
-			description="A loading image component"
-			code={code["loading-image"]}
-		>
-			<div class="relative flex min-h-[400px] flex-col items-center justify-center gap-4">
-				<LoadingImage src="https://picsum.photos/id/237/200/300" alt="dog" />
+<AddOnRenderer>
+	<div class="mx-auto flex min-h-svh max-w-3xl flex-col gap-8 px-4 py-8">
+		<header class="flex flex-col gap-1">
+			<h1 class="text-3xl font-bold tracking-tight">Deckweiss Component Registry</h1>
+			<p class="text-muted-foreground">
+				A custom registry for distributing code using shadcn-svelte.
+			</p>
+			<br />
+			<p>Use these first:</p>
+			<ul class="ml-5 list-disc">
+				<li>
+					<a href="https://next.shadcn-svelte.com">ShadCn Svelte</a>
+				</li>
+				<li>
+					<a href="https://www.shadcn-svelte-extras.com">ShadCn Svelte Extras</a>
+				</li>
+			</ul>
+		</header>
+		<main class="flex flex-1 flex-col gap-8">
+			<ComponentShowcase
+				name="Slider"
+				componentKey="slider"
+				description="A slider component"
+				code={code["slider"]}
+			>
+				<Slider value={[0]} min={0} max={10} step={1} class="w-full" />
+			</ComponentShowcase>
+			<ComponentShowcase
+				name="Loading Image"
+				componentKey="loading-image"
+				description="A loading image component"
+				code={code["loading-image"]}
+			>
+				<div class="relative flex min-h-[400px] flex-col items-center justify-center gap-4">
+					<LoadingImage src="https://picsum.photos/id/237/200/300" alt="dog" />
 
-				<LoadingImage
-					src="https://deckweiss.at/non-existing-image.jpg"
-					class="w-30"
-					containerClass="h-50 bg-[#00ff00] text-center w-50"
+					<LoadingImage
+						src="https://deckweiss.at/non-existing-image.jpg"
+						class="w-30"
+						containerClass="h-50 bg-[#00ff00] text-center w-50"
+					>
+						{#snippet loading()}
+							...
+						{/snippet}
+
+						{#snippet error()}
+							:(
+						{/snippet}
+					</LoadingImage>
+				</div>
+			</ComponentShowcase>
+
+			<ComponentShowcase
+				name="Page Progress"
+				componentKey="page-progress"
+				description="A page loading progress bar."
+				code={code["page-progress"]}
+			>
+				<div class="flex flex-col gap-2">
+					<PageProgress />
+
+					<Button
+						onclick={() => {
+							pageLoading.invocers = ["test"];
+
+							setTimeout(() => {
+								pageLoading.invocers = [];
+							}, 1000);
+						}}
+					>
+						Test
+					</Button>
+				</div>
+			</ComponentShowcase>
+
+			<ComponentShowcase
+				name="Custom Toast"
+				componentKey="toaster"
+				description="A toast component with customized look."
+				code={code["toaster"]}
+				codeLang="typescript"
+			>
+				<div class="flex flex-col gap-2">
+					<Toaster position="bottom-left" offset="20px" />
+
+					<Button
+						onclick={() => {
+							toaster.pushToast({ message: "Test", type: "success" });
+						}}
+					>
+						Test
+					</Button>
+				</div>
+			</ComponentShowcase>
+
+			<ComponentShowcase
+				name="DataTable"
+				componentKey="data-table"
+				description="Fully functional data table: sort, filter, column toggle, row selection, row expansion and pagination"
+				code={code["dataTable"]}
+				codeLang="svelte"
+			>
+				<Button onclick={() => (locale = locale === "de" ? "en" : "de")}
+					>Set locale to {locale === "de" ? "en" : "de"}</Button
 				>
-					{#snippet loading()}
-						...
+
+				<DataTable
+					{columns}
+					data={dataTableData}
+					enableExpanding
+					enablePagination
+					enableRowSelection
+					onRowClick={(row) => row.toggleExpanded()}
+					enableResizing
+				>
+					{#snippet expandedRow(row)}
+						<pre>{JSON.stringify(row.original, null, 4)}</pre>
 					{/snippet}
 
-					{#snippet error()}
-						:(
+					{#snippet customFilters(table)}
+						<div class="bg-watermelon px-2 py-2">
+							<Input
+								placeholder="E-Mail"
+								oninput={(event) => {
+									const text = event.target.value;
+									table.getColumn("email")?.setFilterValue(text);
+								}}
+							/>
+						</div>
 					{/snippet}
-				</LoadingImage>
-			</div>
-		</ComponentShowcase>
+				</DataTable>
+			</ComponentShowcase>
 
-		<ComponentShowcase
-			name="Page Progress"
-			componentKey="page-progress"
-			description="A page loading progress bar."
-			code={code["page-progress"]}
-		>
-			<div class="flex flex-col gap-2">
-				<PageProgress />
+			<ComponentShowcase
+				name="Navbar"
+				componentKey="navbar"
+				description="A navbar component"
+				code={code["navbar"] ?? ""}
+				codeLang="svelte"
+			>
+				<Navbar.Applications>
+					<Navbar.ApplicationLink href="/">HR-Manager</Navbar.ApplicationLink>
+					<Navbar.ApplicationLink href="#">Verrechnung</Navbar.ApplicationLink>
+					<Navbar.ApplicationLink href="#">Dienstplan</Navbar.ApplicationLink>
+					<Navbar.ApplicationLink href="#">Zeitaufzeichnung</Navbar.ApplicationLink>
+					<Navbar.ApplicationLink href="#">KI-Chatbot</Navbar.ApplicationLink>
+					<Navbar.ApplicationLink href="#">Zaunmontagen</Navbar.ApplicationLink>
+					<Navbar.ApplicationLink href="#">Terminplaner</Navbar.ApplicationLink>
+					<Navbar.ApplicationLink href="#">Bestellverwaltung</Navbar.ApplicationLink>
 
+					{#snippet right()}
+						<DropdownMenu.Root>
+							<DropdownMenu.Trigger class="flex cursor-pointer items-center gap-2">
+								<Navbar.ApplicationUser iconColorClass="bg-[#ff0000]">
+									Peter Arnold
+								</Navbar.ApplicationUser>
+							</DropdownMenu.Trigger>
+							<DropdownMenu.Content align="end">
+								<DropdownMenu.Group>
+									<DropdownMenu.Label>Peter Arnold</DropdownMenu.Label>
+									<DropdownMenu.Separator />
+									<DropdownMenu.Item>Einstellungen</DropdownMenu.Item>
+									<DropdownMenu.Separator />
+									<DropdownMenu.Item>Abmelden</DropdownMenu.Item>
+								</DropdownMenu.Group>
+							</DropdownMenu.Content>
+						</DropdownMenu.Root>
+					{/snippet}
+				</Navbar.Applications>
+
+				<Navbar.Layer1 appName="HR Manager">
+					{#snippet logo()}
+						<FileUser class="text-[#ff0044]" />
+					{/snippet}
+
+					<Navbar.Layer1Link href="/">Termine</Navbar.Layer1Link>
+					<Navbar.Layer1Link href="#" badge="99+">Bewerbungen</Navbar.Layer1Link>
+					<Navbar.Layer1Link href="#">Stellenausschreibungen</Navbar.Layer1Link>
+
+					{#snippet right()}
+						<Navbar.Layer1IconButton badge="2">
+							<Bell size={16} />
+						</Navbar.Layer1IconButton>
+					{/snippet}
+				</Navbar.Layer1>
+
+				<Navbar.Layer2>
+					<Navbar.Layer2Link href="/">Alle Bewerbungen</Navbar.Layer2Link>
+					<Navbar.Layer2Link href="#" badge="99+">Aufgaben</Navbar.Layer2Link>
+					<Navbar.Layer2Link href="#">Evidenz</Navbar.Layer2Link>
+					<Navbar.Layer2Link href="#">Archiv</Navbar.Layer2Link>
+				</Navbar.Layer2>
+			</ComponentShowcase>
+
+			<ComponentShowcase
+				name="Zaunkonfigurator Button"
+				componentKey="zaunkonfigurator-button"
+				description="A button component from the Zaunkonfigurator project"
+				code={code["zaunkonfigurator-button"]}
+			>
+				<div class="flex flex-wrap gap-2">
+					<ZaunkonfiguratorButton variant="default">Base</ZaunkonfiguratorButton>
+					<ZaunkonfiguratorButton variant="secondary">Secondary</ZaunkonfiguratorButton>
+					<ZaunkonfiguratorButton variant="outline">Outline</ZaunkonfiguratorButton>
+					<ZaunkonfiguratorButton variant="ghost">Ghost</ZaunkonfiguratorButton>
+					<ZaunkonfiguratorButton variant="link">Link</ZaunkonfiguratorButton>
+					<ZaunkonfiguratorButton variant="destructive">Destructive</ZaunkonfiguratorButton>
+					<ZaunkonfiguratorButton variant="animated">Animated</ZaunkonfiguratorButton>
+				</div>
+			</ComponentShowcase>
+
+			<ComponentShowcase
+				name="Posthog"
+				componentKey="posthog"
+				description="Dynamically load posthog into browser environments"
+				code={code["posthog"]}
+				codeLang="typescript"
+				hideInstallation
+			></ComponentShowcase>
+
+			<ComponentShowcase
+				name="Posthog Feedback Button"
+				componentKey="posthogfeedback-button"
+				description="A feedback button with modal dialog integrated with Posthog"
+				code={code["posthogfeedback-button"]}
+				codeLang="svelte"
+			>
+				<div class="relative min-h-[400px] rounded-lg border border-dashed p-8">
+					<p class="text-muted-foreground mb-4 text-sm">
+						Click the button in the bottom-right corner to open the feedback modal.
+					</p>
+					<PosthogFeedbackButton appName="component-showcase" position="bottom-right" />
+				</div>
+			</ComponentShowcase>
+
+			<ComponentShowcase
+				name="Add On"
+				componentKey="add-on"
+				description="A renderer for add-ons"
+				code={code["add-on-renderer"]}
+				codeLang="svelte"
+			>
 				<Button
 					onclick={() => {
-						pageLoading.invocers = ["test"];
-
-						setTimeout(() => {
-							pageLoading.invocers = [];
-						}, 1000);
+						openAddOn("example-add-on", "123");
 					}}
 				>
-					Test
+					Open Add On
 				</Button>
-			</div>
-		</ComponentShowcase>
-
-		<ComponentShowcase
-			name="Custom Toast"
-			componentKey="toaster"
-			description="A toast component with customized look."
-			code={code["toaster"]}
-			codeLang="typescript"
-		>
-			<div class="flex flex-col gap-2">
-				<Toaster position="bottom-left" offset="20px" />
-
-				<Button
-					onclick={() => {
-						toaster.pushToast({ message: "Test", type: "success" });
-					}}
-				>
-					Test
-				</Button>
-			</div>
-		</ComponentShowcase>
-
-		<ComponentShowcase
-			name="DataTable"
-			componentKey="data-table"
-			description="Fully functional data table: sort, filter, column toggle, row selection, row expansion and pagination"
-			code={code["dataTable"]}
-			codeLang="svelte"
-		>
-			<Button onclick={() => (locale = locale === "de" ? "en" : "de")}
-				>Set locale to {locale === "de" ? "en" : "de"}</Button
-			>
-
-			<DataTable
-				{columns}
-				data={dataTableData}
-				enableExpanding
-				enablePagination
-				enableRowSelection
-				onRowClick={(row) => row.toggleExpanded()}
-				enableResizing
-			>
-				{#snippet expandedRow(row)}
-					<pre>{JSON.stringify(row.original, null, 4)}</pre>
-				{/snippet}
-
-				{#snippet customFilters(table)}
-					<div class="bg-watermelon px-2 py-2">
-						<Input
-							placeholder="E-Mail"
-							oninput={(event) => {
-								const text = event.target.value;
-								table.getColumn("email")?.setFilterValue(text);
-							}}
-						/>
-					</div>
-				{/snippet}
-			</DataTable>
-		</ComponentShowcase>
-
-		<ComponentShowcase
-			name="Navbar"
-			componentKey="navbar"
-			description="A navbar component"
-			code={code["navbar"] ?? ""}
-			codeLang="svelte"
-		>
-			<Navbar.Applications>
-				<Navbar.ApplicationLink href="/">HR-Manager</Navbar.ApplicationLink>
-				<Navbar.ApplicationLink href="#">Verrechnung</Navbar.ApplicationLink>
-				<Navbar.ApplicationLink href="#">Dienstplan</Navbar.ApplicationLink>
-				<Navbar.ApplicationLink href="#">Zeitaufzeichnung</Navbar.ApplicationLink>
-				<Navbar.ApplicationLink href="#">KI-Chatbot</Navbar.ApplicationLink>
-				<Navbar.ApplicationLink href="#">Zaunmontagen</Navbar.ApplicationLink>
-				<Navbar.ApplicationLink href="#">Terminplaner</Navbar.ApplicationLink>
-				<Navbar.ApplicationLink href="#">Bestellverwaltung</Navbar.ApplicationLink>
-
-				{#snippet right()}
-					<DropdownMenu.Root>
-						<DropdownMenu.Trigger class="flex cursor-pointer items-center gap-2">
-							<Navbar.ApplicationUser iconColorClass="bg-[#ff0000]">
-								Peter Arnold
-							</Navbar.ApplicationUser>
-						</DropdownMenu.Trigger>
-						<DropdownMenu.Content align="end">
-							<DropdownMenu.Group>
-								<DropdownMenu.Label>Peter Arnold</DropdownMenu.Label>
-								<DropdownMenu.Separator />
-								<DropdownMenu.Item>Einstellungen</DropdownMenu.Item>
-								<DropdownMenu.Separator />
-								<DropdownMenu.Item>Abmelden</DropdownMenu.Item>
-							</DropdownMenu.Group>
-						</DropdownMenu.Content>
-					</DropdownMenu.Root>
-				{/snippet}
-			</Navbar.Applications>
-
-			<Navbar.Layer1 appName="HR Manager">
-				{#snippet logo()}
-					<FileUser class="text-[#ff0044]" />
-				{/snippet}
-
-				<Navbar.Layer1Link href="/">Termine</Navbar.Layer1Link>
-				<Navbar.Layer1Link href="#" badge="99+">Bewerbungen</Navbar.Layer1Link>
-				<Navbar.Layer1Link href="#">Stellenausschreibungen</Navbar.Layer1Link>
-
-				{#snippet right()}
-					<Navbar.Layer1IconButton badge="2">
-						<Bell size={16} />
-					</Navbar.Layer1IconButton>
-				{/snippet}
-			</Navbar.Layer1>
-
-			<Navbar.Layer2>
-				<Navbar.Layer2Link href="/">Alle Bewerbungen</Navbar.Layer2Link>
-				<Navbar.Layer2Link href="#" badge="99+">Aufgaben</Navbar.Layer2Link>
-				<Navbar.Layer2Link href="#">Evidenz</Navbar.Layer2Link>
-				<Navbar.Layer2Link href="#">Archiv</Navbar.Layer2Link>
-			</Navbar.Layer2>
-		</ComponentShowcase>
-
-		<ComponentShowcase
-			name="Zaunkonfigurator Button"
-			componentKey="zaunkonfigurator-button"
-			description="A button component from the Zaunkonfigurator project"
-			code={code["zaunkonfigurator-button"]}
-		>
-			<div class="flex flex-wrap gap-2">
-				<ZaunkonfiguratorButton variant="default">Base</ZaunkonfiguratorButton>
-				<ZaunkonfiguratorButton variant="secondary">Secondary</ZaunkonfiguratorButton>
-				<ZaunkonfiguratorButton variant="outline">Outline</ZaunkonfiguratorButton>
-				<ZaunkonfiguratorButton variant="ghost">Ghost</ZaunkonfiguratorButton>
-				<ZaunkonfiguratorButton variant="link">Link</ZaunkonfiguratorButton>
-				<ZaunkonfiguratorButton variant="destructive">Destructive</ZaunkonfiguratorButton>
-				<ZaunkonfiguratorButton variant="animated">Animated</ZaunkonfiguratorButton>
-			</div>
-		</ComponentShowcase>
-
-		<ComponentShowcase
-			name="Posthog"
-			componentKey="posthog"
-			description="Dynamically load posthog into browser environments"
-			code={code["posthog"]}
-			codeLang="typescript"
-			hideInstallation
-		></ComponentShowcase>
-
-		<ComponentShowcase
-			name="Posthog Feedback Button"
-			componentKey="posthogfeedback-button"
-			description="A feedback button with modal dialog integrated with Posthog"
-			code={code["posthogfeedback-button"]}
-			codeLang="svelte"
-		>
-			<div class="relative min-h-[400px] rounded-lg border border-dashed p-8">
-				<p class="text-muted-foreground mb-4 text-sm">
-					Click the button in the bottom-right corner to open the feedback modal.
-				</p>
-				<PosthogFeedbackButton appName="component-showcase" position="bottom-right" />
-			</div>
-		</ComponentShowcase>
-	</main>
-</div>
+			</ComponentShowcase>
+		</main>
+	</div>
+</AddOnRenderer>
 
 {#snippet dataTableActions(row: Row<Payment>)}
 	<DropdownMenu.Root>

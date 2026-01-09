@@ -34,9 +34,7 @@
 			"type": "registry:component",
 			"title": "Page Progress",
 			"description": "A page loading progress bar.",
-			"registryDependencies": [
-				"progress"
-			],
+			"registryDependencies": ["progress"],
 			"files": [
 				{
 					"path": "src/lib/registry/blocks/page-progress/page-progress.svelte",
@@ -57,13 +55,8 @@
 			"type": "registry:component",
 			"title": "Custom Toast",
 			"description": "A toast component with custom look.",
-			"dependencies": [
-				"svelte-sonner",
-				"@lucide/svelte"
-			],
-			"registryDependencies": [
-				"button"
-			],
+			"dependencies": ["svelte-sonner", "@lucide/svelte"],
+			"registryDependencies": ["button"],
 			"files": [
 				{
 					"path": "src/lib/registry/blocks/toaster/toast.svelte",
@@ -84,11 +77,7 @@
 			"type": "registry:block",
 			"title": "DataTable",
 			"description": "Fully functional data table with sort, filter, column toggle, row select and pagination",
-			"dependencies": [
-				"@tanstack/table-core",
-				"@lucide/svelte",
-				"runed"
-			],
+			"dependencies": ["@tanstack/table-core", "@lucide/svelte", "runed"],
 			"registryDependencies": [
 				"badge",
 				"button",
@@ -133,12 +122,8 @@
 			"type": "registry:block",
 			"title": "Navbar",
 			"description": "Mulit layer navbar",
-			"dependencies": [
-				"@lucide/svelte"
-			],
-			"registryDependencies": [
-				"dropdown-menu"
-			],
+			"dependencies": ["@lucide/svelte"],
+			"registryDependencies": ["dropdown-menu"],
 			"files": [
 				{
 					"path": "src/lib/registry/blocks/navbar/index.ts",
@@ -192,16 +177,8 @@
 			"type": "registry:block",
 			"title": "Posthog Feedback Button",
 			"description": "A feedback button integrated with Posthog",
-			"dependencies": [
-				"posthog-js",
-				"lucide-svelte"
-			],
-			"registryDependencies": [
-				"button",
-				"dialog",
-				"label",
-				"select"
-			],
+			"dependencies": ["posthog-js", "lucide-svelte"],
+			"registryDependencies": ["button", "dialog", "label", "select"],
 			"files": [
 				{
 					"path": "src/lib/registry/blocks/posthogfeedback/index.ts",
@@ -217,6 +194,46 @@
 					"path": "src/lib/registry/blocks/posthogfeedback/posthogfeedback-button.svelte",
 					"type": "registry:component",
 					"target": "blocks/posthogfeedback/posthogfeedback-button.svelte"
+				}
+			]
+		},
+		{
+			"name": "add-on",
+			"type": "registry:block",
+			"title": "Add On",
+			"description": "A component to dynamically render add-ons",
+			"dependencies": ["@lucide/svelte", "runed"],
+			"registryDependencies": ["button", "resizable"],
+			"files": [
+				{
+					"path": "src/lib/registry/blocks/add-on/index.ts",
+					"type": "registry:file",
+					"target": "blocks/add-on/index.ts"
+				},
+				{
+					"path": "src/lib/registry/blocks/add-on/component-resolver.ts",
+					"type": "registry:file",
+					"target": "blocks/add-on/component-resolver.ts"
+				},
+				{
+					"path": "src/lib/registry/blocks/add-on/routing.ts",
+					"type": "registry:file",
+					"target": "blocks/add-on/routing.ts"
+				},
+				{
+					"path": "src/lib/registry/blocks/add-on/types.ts",
+					"type": "registry:file",
+					"target": "blocks/add-on/types.ts"
+				},
+				{
+					"path": "src/lib/registry/blocks/add-on/add-on-renderer.svelte",
+					"type": "registry:component",
+					"target": "blocks/add-on/add-on-renderer.svelte"
+				},
+				{
+					"path": "src/lib/registry/blocks/add-on/add-on-header.svelte",
+					"type": "registry:component",
+					"target": "blocks/add-on/add-on-header.svelte"
 				}
 			]
 		}

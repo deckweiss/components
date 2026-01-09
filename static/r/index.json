@@ -91,5 +91,20 @@
 			"select"
 		],
 		"relativeUrl": "posthogfeedback.json"
+	},
+	{
+		"name": "add-on",
+		"title": "Add On",
+		"type": "registry:block",
+		"description": "A component to dynamically render add-ons",
+		"dependencies": [
+			"@lucide/svelte",
+			"runed"
+		],
+		"registryDependencies": [
+			"button",
+			"resizable"
+		],
+		"relativeUrl": "add-on.json"
 	}
 ]

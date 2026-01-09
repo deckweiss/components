@@ -1,0 +1,51 @@
+{
+	"$schema": "https://shadcn-svelte.com/schema/registry-item.json",
+	"name": "add-on",
+	"title": "Add On",
+	"type": "registry:block",
+	"description": "A component to dynamically render add-ons",
+	"dependencies": [
+		"@lucide/svelte",
+		"runed"
+	],
+	"devDependencies": [
+		"runed@^0.35.1",
+		"@lucide/svelte@^0.561.0"
+	],
+	"registryDependencies": [
+		"button",
+		"resizable"
+	],
+	"files": [
+		{
+			"content": "export { default as AddOnRenderer } from \"./add-on-renderer.svelte\";\nexport { default as AddOnHeader } from \"./add-on-header.svelte\";\nexport { resolveComponent } from \"./component-resolver\";\nexport { openAddOn, closeAddOn } from \"./routing\";\nexport {\n\ttype AddOnComponentProps,\n\ttype AddOnEvents,\n\ttype AddOnGetParams,\n\ttype AddOnType,\n\ttype AddOnUIMode,\n} from \"./types\";\n",
+			"type": "registry:file",
+			"target": "blocks/add-on/index.ts"
+		},
+		{
+			"content": "import type { Component } from \"svelte\";\nimport type { AddOnComponentProps, AddOnType } from \"./types\";\n\nexport async function resolveComponent(\n\tcomponent: AddOnType\n): Promise<Component<AddOnComponentProps>> {\n\tswitch (component) {\n\t\t// TODO: replace with actual add-ons\n\t\tcase \"example-add-on\":\n\t\t\treturn (await import(\"$lib/components/example-add-on.svelte\")).default;\n\t\tdefault:\n\t\t\tthrow new Error(`Unknown add-on type: ${component}`);\n\t}\n}\n",
+			"type": "registry:file",
+			"target": "blocks/add-on/component-resolver.ts"
+		},
+		{
+			"content": "import { browser } from \"$app/environment\";\nimport { goto } from \"$app/navigation\";\nimport type { AddOnType } from \"./types\";\n\nexport function openAddOn(t: AddOnType, tid: string, hash: string = \"\") {\n\tif (browser) {\n\t\tconst url = new URL(location.href);\n\t\turl.searchParams.set(\"t\", t);\n\t\turl.searchParams.set(\"tid\", tid);\n\n\t\tif (hash) {\n\t\t\turl.hash = hash;\n\t\t}\n\t\tconst path = url.href.substring(url.origin.length);\n\t\tgoto(path);\n\t}\n}\n\nexport function closeAddOn() {\n\tif (browser) {\n\t\tconst url = new URL(location.href);\n\t\turl.searchParams.delete(\"t\");\n\t\turl.searchParams.delete(\"tid\");\n\t\turl.searchParams.delete(\"ui\");\n\t\turl.hash = \"\";\n\t\tgoto(url.href);\n\t}\n}\n",
+			"type": "registry:file",
+			"target": "blocks/add-on/routing.ts"
+		},
+		{
+			"content": "export type AddOnUIMode = \"drawer\";\n\n// NOTE: replace with actual add-on types e.g.\n// export type AddOnType = 'application' | 'jobPosting' | 'employee' | 'jobRequest'\nexport type AddOnType = \"example-add-on\";\n\nexport interface AddOnGetParams {\n\t/**\n\t * type of add on e.g. 'comment'\n\t */\n\tt: AddOnType;\n\t/**\n\t * id of 'comment'\n\t */\n\ttid: string;\n\t/**\n\t * UI Mode used to render 'comment'\n\t * @default 'drawer'\n\t */\n\tui?: AddOnUIMode;\n}\n\nexport interface AddOnEvents {\n\taddonedited: () => void;\n}\n\nexport interface AddOnComponentProps {\n\tid: string;\n\tevents: AddOnEvents;\n}\n",
+			"type": "registry:file",
+			"target": "blocks/add-on/types.ts"
+		},
+		{
+			"content": "<script lang=\"ts\">\n\timport * as Resizable from \"$lib/components/ui/resizable\";\n\timport { PersistedState } from \"runed\";\n\timport { page } from \"$app/state\";\n\timport { closeAddOn } from \"./routing\";\n\timport type { Component, Snippet } from \"svelte\";\n\timport { innerWidth } from \"svelte/reactivity/window\";\n\timport { resolveComponent } from \"./component-resolver\";\n\timport type { AddOnComponentProps, AddOnType } from \"./types\";\n\n\tlet { children }: { children: Snippet } = $props();\n\n\tlet paneSize = new PersistedState(\"pane-size\", 60);\n\tlet searchParams = $derived(page.url.searchParams);\n\tlet t = $derived(searchParams.get(\"t\"));\n\tlet tid = $derived(searchParams.get(\"tid\"));\n\tlet addOnParams = $derived(t && tid ? { t, tid } : null);\n\tlet showAddOn = $derived(Boolean(addOnParams).valueOf());\n\tlet minSize = $derived((500 / (innerWidth.current ?? 1920)) * 100); // 500px is the min size for the add-on\n\tlet maxSize = $derived((900 / (innerWidth.current ?? 1920)) * 100); // 900px is the max size for the add-on\n\tlet DynamicAddOnComponent: Component<AddOnComponentProps> | null = $state(null);\n\tlet error = $state<Error | null>(null);\n\n\tfunction handleAddOnEdited() {\n\t\twindow.dispatchEvent(new CustomEvent(\"addonedited\", { detail: { t, tid } }));\n\t}\n\n\t$effect(() => {\n\t\tif (addOnParams?.t && addOnParams?.tid) {\n\t\t\tloadComponent();\n\t\t}\n\t});\n\n\tfunction loadComponent() {\n\t\tif (addOnParams?.t && addOnParams?.tid) {\n\t\t\tresolveComponent(addOnParams.t as AddOnType)\n\t\t\t\t.then((c) => {\n\t\t\t\t\tDynamicAddOnComponent = c;\n\t\t\t\t})\n\t\t\t\t.catch((e) => {\n\t\t\t\t\tconsole.error(\"Failed to load add-on component\", e);\n\t\t\t\t\tDynamicAddOnComponent = null;\n\t\t\t\t\terror = e;\n\t\t\t\t});\n\t\t}\n\t}\n</script>\n\n<svelte:window\n\ton:keydown={(e) => {\n\t\tif (e.key === \"Escape\" && showAddOn) {\n\t\t\tshowAddOn = false;\n\t\t\tcloseAddOn();\n\t\t}\n\t}}\n/>\n<Resizable.PaneGroup direction=\"horizontal\">\n\t<Resizable.Pane\n\t\tdefaultSize={paneSize.current}\n\t\tonResize={(size) => {\n\t\t\t// NOTE: only store size if the add-on is shown\n\t\t\tif (showAddOn) {\n\t\t\t\tpaneSize.current = size;\n\t\t\t}\n\t\t}}\n\t>\n\t\t<div class=\"scrollbar relative h-screen overflow-y-auto\">\n\t\t\t<div class=\"container h-full py-6\">\n\t\t\t\t{@render children()}\n\t\t\t</div>\n\t\t</div>\n\t</Resizable.Pane>\n\n\t{#if showAddOn}\n\t\t<Resizable.Handle withHandle />\n\t\t<Resizable.Pane {minSize} {maxSize}>\n\t\t\t<div class=\"relative z-0 flex h-full flex-col bg-white\">\n\t\t\t\t{#if DynamicAddOnComponent && tid}\n\t\t\t\t\t<DynamicAddOnComponent id={tid} events={{ addonedited: handleAddOnEdited }} />\n\t\t\t\t{:else if error}\n\t\t\t\t\t<div class=\"p-4\">\n\t\t\t\t\t\t<p class=\"text-sm text-red-500\">{error.message}</p>\n\t\t\t\t\t</div>\n\t\t\t\t{/if}\n\t\t\t</div>\n\t\t</Resizable.Pane>\n\t{/if}\n</Resizable.PaneGroup>\n\n<style>\n\t.scrollbar {\n\t\tscrollbar-color: var(--color-grey-400) transparent;\n\t}\n</style>\n",
+			"type": "registry:component",
+			"target": "blocks/add-on/add-on-renderer.svelte"
+		},
+		{
+			"content": "<script lang=\"ts\">\n\timport { Button } from \"$lib/components/ui/button\";\n\timport { ArrowUp, ArrowDown, X } from \"@lucide/svelte\";\n\timport { closeAddOn, openAddOn } from \"./routing\";\n\timport { browser } from \"$app/environment\";\n\timport { page } from \"$app/state\";\n\timport type { Snippet } from \"svelte\";\n\n\ttype Props = {\n\t\tpageTitle?: string;\n\t\tactions?: Snippet;\n\t};\n\n\tlet { actions, pageTitle }: Props = $props();\n\n\tlet searchParams = $derived(page.url.searchParams);\n\tlet t = $derived(searchParams.get(\"t\"));\n\tlet tid = $derived(searchParams.get(\"tid\"));\n\tlet addOnParams = $derived(t && tid ? { t, tid } : null);\n\n\tconst previousItemInTable = $derived.by(() => {\n\t\tif (browser && addOnParams.tid) {\n\t\t\tconst currentId = addOnParams.tid;\n\t\t\tconst previousItem = document\n\t\t\t\t.getElementById(`table-link-${currentId}`)\n\t\t\t\t?.closest(\"tr\")\n\t\t\t\t?.previousElementSibling?.querySelector(\".table-link\") as HTMLButtonElement | null;\n\t\t\treturn previousItem?.id.replace(\"table-link-\", \"\");\n\t\t}\n\t\treturn null;\n\t});\n\n\tconst nextItemInTable = $derived.by(() => {\n\t\tif (browser && addOnParams.tid) {\n\t\t\tconst currentId = addOnParams.tid;\n\t\t\tconst nextItem = document\n\t\t\t\t.getElementById(`table-link-${currentId}`)\n\t\t\t\t?.closest(\"tr\")\n\t\t\t\t?.nextElementSibling?.querySelector(\".table-link\") as HTMLButtonElement | null;\n\t\t\treturn nextItem?.id.replace(\"table-link-\", \"\");\n\t\t}\n\t\treturn null;\n\t});\n\n\tasync function navigateToAdjacentItem(id: string) {\n\t\topenAddOn(addOnParams.t, id);\n\t}\n</script>\n\n<div class=\"flex h-16 flex-shrink-0 items-center justify-start gap-3 border-b px-4\">\n\t<div class=\"flex flex-row items-center gap-1\">\n\t\t<Button\n\t\t\tclass=\"h-[24px] w-[24px]\"\n\t\t\tvariant=\"outline\"\n\t\t\tsize=\"icon\"\n\t\t\tonclick={() => {\n\t\t\t\tcloseAddOn();\n\t\t\t}}\n\t\t>\n\t\t\t<X />\n\t\t</Button>\n\t\t<Button\n\t\t\tdisabled={!previousItemInTable}\n\t\t\tsize=\"icon\"\n\t\t\tvariant=\"outline\"\n\t\t\tclass=\"h-[24px] w-[24px]\"\n\t\t\tonclick={() => navigateToAdjacentItem(previousItemInTable)}\n\t\t>\n\t\t\t<ArrowUp />\n\t\t</Button>\n\t\t<Button\n\t\t\tdisabled={!nextItemInTable}\n\t\t\tsize=\"icon\"\n\t\t\tvariant=\"outline\"\n\t\t\tclass=\"h-[24px] w-[24px]\"\n\t\t\tonclick={() => navigateToAdjacentItem(nextItemInTable)}\n\t\t>\n\t\t\t<ArrowDown />\n\t\t</Button>\n\t</div>\n\t{#if pageTitle}\n\t\t<p class=\"overflow-hidden text-sm font-semibold text-ellipsis whitespace-nowrap\">\n\t\t\t{pageTitle}\n\t\t</p>\n\t{/if}\n\t{#if actions}\n\t\t<div class=\"flex flex-grow flex-row items-center justify-end gap-2\">\n\t\t\t{@render actions()}\n\t\t</div>\n\t{/if}\n</div>\n",
+			"type": "registry:component",
+			"target": "blocks/add-on/add-on-header.svelte"
+		}
+	]
+}

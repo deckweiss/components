@@ -15,13 +15,7 @@
 		right?: Snippet;
 	}
 
-	let {
-		logoUrl
-		children,
-		right,
-		class: className,
-		...restProps
-	}: Props = $props();
+	let { logoUrl, children, right, class: className, ...restProps }: Props = $props();
 
 	let containerRef: HTMLDivElement;
 	let overflowLinks: Array<LinkInfo> = $state([]);
