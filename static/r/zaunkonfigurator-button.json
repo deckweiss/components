@@ -1,0 +1,25 @@
+{
+	"$schema": "https://shadcn-svelte.com/schema/registry-item.json",
+	"name": "zaunkonfigurator-button",
+	"title": "Zaunkonfigurator Button",
+	"type": "registry:block",
+	"description": "The button component for the Zaunkonfigurator with multiple variants.",
+	"dependencies": [
+		"tailwind-variants"
+	],
+	"devDependencies": [
+		"tailwind-variants@^1.0.0"
+	],
+	"files": [
+		{
+			"content": "import Button from \"./button.svelte\";\nexport { buttonVariants } from \"./button.svelte\";\n\nexport { Button, Button as Root };\n",
+			"type": "registry:file",
+			"target": "blocks/zaunkonfigurator-button/index.ts"
+		},
+		{
+			"content": "<script lang=\"ts\" module>\n\timport { tv, type VariantProps } from \"tailwind-variants\";\n\n\texport const buttonVariants = tv({\n\t\tbase: \"relative overflow-hidden ring-offset-background focus-visible:ring-ring inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50\",\n\t\tvariants: {\n\t\t\tvariant: {\n\t\t\t\tdefault: \"bg-red-500 text-primary-foreground hover:bg-primary/90\",\n\t\t\t\tdark: \"bg-primary/80 text-primary-foreground hover:bg-primary border border-primary\",\n\t\t\t\tdestructive:\n\t\t\t\t\t\"bg-red-500/10 text-red-500 hover:bg-red-500/20 border-red-500/20 hover:border-red-500/50 border\",\n\t\t\t\toutline:\n\t\t\t\t\t\"border-gray-300 bg-white hover:border-muted-foreground/70 hover:bg-secondary text-black border\",\n\t\t\t\tsecondary: \"bg-white text-secondary-foreground hover:bg-secondary/80\",\n\t\t\t\tghost: \"hover:bg-accent hover:text-accent-foreground\",\n\t\t\t\tlink: \"text-primary underline-offset-4 hover:underline\",\n\t\t\t\tanimated:\n\t\t\t\t\t'bg-red-500 hover:bg-primary text-primary-foreground after:absolute after:bg-white after:content-[\"\"] after:h-[200%] after:left-[-50%] after:rotate-[35deg] after:opacity-60 after:w-[30px] after:z-10 after:animate-flash animate-pulseGlow',\n\t\t\t\tgrey: \"bg-gray-100 text-black hover:bg-gray-300 border-gray-200 hover:border-gray-300 border\",\n\t\t\t\tsoft: \"text-gray-400 rounded-xl hover:text-black hover:bg-gray-200 focus:outline-none border-0\",\n\t\t\t\tdropDown:\n\t\t\t\t\t\"rounded-sm bg-transparent hover:text-black hover:bg-gray-100 border border-transparent hover:border-gray-400\",\n\t\t\t\tsoftOutlined:\n\t\t\t\t\t\"border border-gray-200 bg-white hover:bg-gray-100 hover:border-gray-300 text-gray-600 hover:text-black\",\n\t\t\t},\n\t\t\tsize: {\n\t\t\t\tdefault: \"h-10 px-4 py-2\",\n\t\t\t\tsm: \"h-9 rounded-md px-3\",\n\t\t\t\tlg: \"h-11 rounded-md px-8\",\n\t\t\t\ticon: \"h-10 w-10\",\n\t\t\t\tmini: \"h-6 w-fit rounded-md p-1\",\n\t\t\t\tmacro: \"h-3 w-fit rounded-md p-2\",\n\t\t\t\tdropDown: \"h-6 w-fit rounded-md p-2 py-3\",\n\t\t\t},\n\t\t},\n\t\tdefaultVariants: {\n\t\t\tvariant: \"default\",\n\t\t\tsize: \"default\",\n\t\t},\n\t});\n</script>\n\n<script lang=\"ts\">\n\timport { cn } from \"$UTILS$.js\";\n\timport type { HTMLButtonAttributes } from \"svelte/elements\";\n\timport type { Snippet } from \"svelte\";\n\n\tlet {\n\t\tref = $bindable(null),\n\t\tvariant,\n\t\tsize,\n\t\tchild,\n\t\tchildren,\n\t\tclass: className,\n\t\t...restProps\n\t}: HTMLButtonAttributes &\n\t\tVariantProps<typeof buttonVariants> & {\n\t\t\tchild?: Snippet<[{ props: Record<string, unknown> }]>;\n\t\t\tref?: HTMLElement | null;\n\t\t} = $props();\n\n\tconst mergedProps = $derived({\n\t\t...restProps,\n\t\tclass: cn(buttonVariants({ variant, size }), className),\n\t\t\"data-slot\": \"button\",\n\t});\n</script>\n\n{#if child}\n\t{@render child({ props: mergedProps })}\n{:else if children}\n\t<button {...mergedProps} bind:this={ref}>\n\t\t{@render children?.()}\n\t</button>\n{/if}\n",
+			"type": "registry:component",
+			"target": "blocks/zaunkonfigurator-button/button.svelte"
+		}
+	]
+}

@@ -106,5 +106,16 @@
 			"resizable"
 		],
 		"relativeUrl": "add-on.json"
+	},
+	{
+		"name": "zaunkonfigurator-button",
+		"title": "Zaunkonfigurator Button",
+		"type": "registry:block",
+		"description": "The button component for the Zaunkonfigurator with multiple variants.",
+		"dependencies": [
+			"tailwind-variants"
+		],
+		"registryDependencies": [],
+		"relativeUrl": "zaunkonfigurator-button.json"
 	}
 ]
