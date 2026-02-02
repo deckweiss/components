@@ -1,0 +1,13 @@
+<script lang="ts">
+  import { Toaster } from "$lib/registry/ui/sonner";
+  import { toaster } from "$lib/registry/blocks/custom-toast";
+</script>
+
+**<Toaster position="top-right" />
+
+<button onclick={() => toaster.pushToast({ 
+  message: "Toast opened at top right", 
+  variant: "success" 
+})}>
+  Open top right
+</button>

@@ -1,7 +1,7 @@
 <script lang="ts" generics="TData">
 	import XIcon from "@lucide/svelte/icons/x";
 	import type { Table } from "@tanstack/table-core";
-	import { DataTableFacetedFilter, DataTableViewOptions } from ".";
+	import { DataTableFacetedFilter, DataTableViewOptions, getColumnHeaderValue } from ".";
 	import { Button } from "$lib/components/ui/button";
 	import type { Snippet } from "svelte";
 
@@ -33,7 +33,7 @@
 		{#each filterableCols as colFilter}
 			<DataTableFacetedFilter
 				column={colFilter}
-				title={colFilter.columnDef.header ?? colFilter.id}
+				title={getColumnHeaderValue(colFilter, table)}
 				options={Array.from(colFilter.getFacetedUniqueValues().keys()).map((v) => ({
 					label: v,
 					value: v,

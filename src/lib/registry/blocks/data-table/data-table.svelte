@@ -24,8 +24,8 @@
 	import { createSvelteTable } from "$lib/components/ui/data-table/data-table.svelte";
 	import FlexRender from "$lib/components/ui/data-table/flex-render.svelte";
 	import * as Table from "$lib/components/ui/table";
-	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
 	import { renderComponent, renderSnippet } from "$lib/components/ui/data-table/render-helpers";
+	import { getColumnHeaderValue } from "./utils.js";
 	import { Button, buttonVariants } from "$lib/components/ui/button";
 	import ChevronRightIcon from "@lucide/svelte/icons/chevron-right";
 	import ChevronLeftIcon from "@lucide/svelte/icons/chevron-left";
@@ -34,7 +34,6 @@
 	import ArrowUpIcon from "@lucide/svelte/icons/arrow-up";
 	import ArrowDownIcon from "@lucide/svelte/icons/arrow-down";
 	import ChevronsUpDownIcon from "@lucide/svelte/icons/chevrons-up-down";
-	import EyeOffIcon from "@lucide/svelte/icons/eye-off";
 	import * as Select from "$lib/components/ui/select";
 	import type { HTMLAttributes } from "svelte/elements";
 	import { cn } from "$lib/utils.js";
@@ -57,7 +56,7 @@
 		enableResizing = false,
 		enablePagination,
 		pagination = $bindable({ pageIndex: 0, pageSize: 10 }),
-		enableSearch = false,
+		enableSearch = true,
 		cellClasses = "py-2",
 		rowHighlight,
 		customElementsFirst: customElementsFirstSnippet,
@@ -143,6 +142,12 @@
 		initialState,
 		enableExpanding,
 		globalFilterFn: "includesString",
+		defaultColumn: {
+			filterFn: "arrIncludesSome",
+			...(enableResizing && {
+				minSize: 100,
+			}),
+		},
 		onGlobalFilterChange: (updater) => {
 			if (typeof updater === "function") {
 				globalFilter = updater(globalFilter);
@@ -173,6 +178,11 @@
 							}),
 						enableSorting: false,
 						enableHiding: false,
+						...(enableResizing && {
+							minSize: 35,
+							size: 35,
+							maxSize: 35,
+						}),
 					},
 					...columns,
 				]
@@ -394,57 +404,41 @@
 	class: className,
 	...restProps
 }: { column: Column<TData>; title: string } & HTMLAttributes<HTMLDivElement>)}
-	{#if !((column.columnDef.enableSorting && column?.getCanSort()) || (column.getCanHide() && column.columnDef.enableHiding))}
-		<div class={className} {...restProps}>
-			{title}
+	{@const canSort = column.columnDef.enableSorting && column?.getCanSort()}
+	{@const currentSort = column.getIsSorted()}
+	{#if !canSort}
+		<div class={cn("truncate", className)} {...restProps}>
+			<span class="truncate">{title}</span>
 		</div>
-		test
 	{:else}
-		<div class={cn("relative left-[-4px] flex items-center", className)} {...restProps}>
-			<DropdownMenu.Root>
-				<DropdownMenu.Trigger
-					class={cn(
-						buttonVariants({ size: "sm", variant: "ghost" }),
-						"h-7 rounded-md px-2 text-xs font-[600] tracking-wider text-[rgba(0,0,0,0.6)] uppercase hover:bg-[#00000010] has-[>svg]:px-2",
-						column.getIsSorted() ? "text-primary bg-[rgba(0,0,0,0.05)]" : ""
-					)}
-					>{#snippet children()}
-						<span>
-							{title}
-						</span>
-						{#if column.getIsSorted() === "desc"}
-							<ArrowDownIcon />
-						{:else if column.getIsSorted() === "asc"}
-							<ArrowUpIcon />
-						{:else}
-							<ChevronsUpDownIcon />
-						{/if}
-					{/snippet}
-				</DropdownMenu.Trigger>
-				<DropdownMenu.Content align="start">
-					{#if column.columnDef.enableSorting && column.getCanSort()}
-						<DropdownMenu.Item onclick={() => column.toggleSorting(false)}>
-							<ArrowUpIcon class="text-muted-foreground/70 mr-2 size-3.5" />
-							Aufsteigend
-						</DropdownMenu.Item>
-						<DropdownMenu.Item onclick={() => column.toggleSorting(true)}>
-							<ArrowDownIcon class="text-muted-foreground/70 mr-2 size-3.5" />
-							Absteigend
-						</DropdownMenu.Item>
-					{/if}
-
-					{#if column.columnDef.enableSorting && column.getCanSort() && column.columnDef.enableHiding && column.getCanHide()}
-						<DropdownMenu.Separator />
-					{/if}
-
-					{#if column.columnDef.enableHiding && column.getCanHide()}
-						<DropdownMenu.Item onclick={() => column.toggleVisibility(false)}>
-							<EyeOffIcon class="text-muted-foreground/70 mr-2 size-3.5" />
-							Ausblenden
-						</DropdownMenu.Item>
-					{/if}
-				</DropdownMenu.Content>
-			</DropdownMenu.Root>
+		<div class={cn("relative left-[-4px] flex min-w-0 items-center", className)} {...restProps}>
+			<button
+				type="button"
+				class={cn(
+					buttonVariants({ size: "sm", variant: "ghost" }),
+					"h-7 max-w-full min-w-0 rounded-md px-2 text-xs font-[600] tracking-wider text-[rgba(0,0,0,0.6)] uppercase hover:bg-[#00000010] has-[>svg]:px-2",
+					currentSort ? "text-primary bg-[rgba(0,0,0,0.05)]" : ""
+				)}
+				onclick={() => {
+					// Cycle through: no sort -> ASC -> DESC -> no sort
+					if (!currentSort) {
+						column.toggleSorting(false); // ASC
+					} else if (currentSort === "asc") {
+						column.toggleSorting(true); // DESC
+					} else {
+						column.clearSorting(); // Clear sorting
+					}
+				}}
+			>
+				{#if currentSort === "desc"}
+					<ArrowDownIcon class="shrink-0" />
+				{:else if currentSort === "asc"}
+					<ArrowUpIcon class="shrink-0" />
+				{:else}
+					<ChevronsUpDownIcon class="shrink-0" />
+				{/if}
+				<span class="truncate">{title}</span>
+			</button>
 		</div>
 	{/if}
 {/snippet}
@@ -504,12 +498,12 @@
 										"text-xs font-[600] tracking-wider text-[rgba(0,0,0,0.6)] uppercase",
 										enableResizing ? "relative border-l first:border-l-0" : ""
 									)}
-									style={enableResizing
-										? `width: calc(var(--header-${header.id}-size) * 1px);`
-										: ""}
+									style={`${
+										enableResizing ? ` width: calc(var(--header-${header.id}-size) * 1px);` : ""
+									}`}
 								>
 									{#if !header.isPlaceholder}
-										{#if header.column.columnDef.header instanceof Function}
+										{#if header.column.columnDef.header instanceof Function && header.column.id === "select"}
 											<FlexRender
 												content={header.column.columnDef.header}
 												context={header.getContext()}
@@ -519,7 +513,7 @@
 												content={() =>
 													renderSnippet(ColumnHeader, {
 														column: header.column,
-														title: header.column.columnDef.header as string,
+														title: getColumnHeaderValue(header.column, table),
 													})}
 												context={header.getContext()}
 											/>
@@ -556,10 +550,10 @@
 						>
 							{#each visibleCells as cell (cell.id)}
 								<Table.Cell
-									class={cellClasses}
-									style={enableResizing
-										? `width: calc(var(--col-${cell.column.id}-size) * 1px);`
-										: ""}
+									class={cn("overflow-hidden", cellClasses)}
+									style={`${
+										enableResizing ? ` width: calc(var(--col-${cell.column.id}-size) * 1px);` : ""
+									}`}
 								>
 									<FlexRender content={cell.column.columnDef.cell} context={cell.getContext()} />
 								</Table.Cell>
@@ -587,7 +581,9 @@
 								{#each headerGroups[0]?.headers.filter((h) => !h.column.columnDef.meta?.hidden) || [] as header}
 									<Table.Cell
 										class={cellClasses}
-										style={enableResizing ? `width: calc(var(--col-${header.id}-size) * 1px);` : ""}
+										style={`${
+											enableResizing ? ` width: calc(var(--col-${header.id}-size) * 1px);` : ""
+										}`}
 									>
 										<div class="bg-muted h-4 w-3/4 rounded"></div>
 									</Table.Cell>

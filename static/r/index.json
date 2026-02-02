@@ -26,7 +26,7 @@
 		"relativeUrl": "page-progress.json"
 	},
 	{
-		"name": "toaster",
+		"name": "custom-toast",
 		"title": "Custom Toast",
 		"type": "registry:component",
 		"description": "A toast component with custom look.",
@@ -37,13 +37,13 @@
 		"registryDependencies": [
 			"button"
 		],
-		"relativeUrl": "toaster.json"
+		"relativeUrl": "custom-toast.json"
 	},
 	{
 		"name": "data-table",
-		"title": "DataTable",
+		"title": "Data Table",
 		"type": "registry:block",
-		"description": "Fully functional data table with sort, filter, column toggle, row select and pagination",
+		"description": "Fully functional data table with sort, filter, column toggle, row select, pagination and expandable rows. Based on Tanstack Table and Shadcn Svelte.",
 		"dependencies": [
 			"@tanstack/table-core",
 			"@lucide/svelte",
@@ -76,8 +76,8 @@
 		"relativeUrl": "navbar.json"
 	},
 	{
-		"name": "posthogfeedback",
-		"title": "Posthog Feedback Button",
+		"name": "posthog-feedback",
+		"title": "Posthog Feedback",
 		"type": "registry:block",
 		"description": "A feedback button integrated with Posthog",
 		"dependencies": [
@@ -90,7 +90,7 @@
 			"label",
 			"select"
 		],
-		"relativeUrl": "posthogfeedback.json"
+		"relativeUrl": "posthog-feedback.json"
 	},
 	{
 		"name": "add-on",
@@ -117,5 +117,25 @@
 		],
 		"registryDependencies": [],
 		"relativeUrl": "zaunkonfigurator-button.json"
+	},
+	{
+		"name": "dropdown-card",
+		"title": "Dropdown Card",
+		"type": "registry:block",
+		"description": "A card component for dropdowns.",
+		"dependencies": [],
+		"registryDependencies": [
+			"card"
+		],
+		"relativeUrl": "dropdown-card.json"
+	},
+	{
+		"name": "format-measurement-value",
+		"title": "formatMeasurementValue",
+		"type": "registry:file",
+		"description": "A utility function to format measurement values.",
+		"dependencies": [],
+		"registryDependencies": [],
+		"relativeUrl": "format-measurement-value.json"
 	}
 ]

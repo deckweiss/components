@@ -3,7 +3,7 @@
 	import { tv, type VariantProps } from "tailwind-variants";
 	import type { Agent, Command } from "package-manager-detector";
 	import { resolveCommand } from "package-manager-detector/commands";
-	import { ClipboardIcon } from "@lucide/svelte";
+	import { CopyIcon } from "@lucide/svelte";
 	import { CopyButton } from "$lib/components/ui/copy-button";
 
 	const style = tv({
@@ -48,8 +48,8 @@
 				<button
 					type="button"
 					class={{
-						'-mb-0.5 border-b-2 border-transparent p-1 font-mono text-sm': true,
-						'border-b-primary': agent === pm
+						"-mb-0.5 border-b-2 border-transparent p-1 font-mono text-sm": true,
+						"border-b-primary": agent === pm,
 					}}
 					onclick={() => (agent = pm)}
 				>
@@ -59,7 +59,7 @@
 		</div>
 		<CopyButton text={commandText} class="mb-1 size-6 [&_svg]:size-3">
 			{#snippet icon()}
-				<ClipboardIcon />
+				<CopyIcon />
 			{/snippet}
 		</CopyButton>
 	</div>
@@ -71,8 +71,8 @@
 </div>
 
 <style lang="postcss">
-  :global(.no-scrollbar) {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
-  }
+	:global(.no-scrollbar) {
+		-ms-overflow-style: none; /* IE and Edge */
+		scrollbar-width: none; /* Firefox */
+	}
 </style>

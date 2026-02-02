@@ -1,0 +1,11 @@
+<script lang="ts">
+  import { Button } from "$lib/registry/blocks/zaunkonfigurator-button";
+</script>
+
+<Button variant="default">Click me</Button>
+<Button variant="secondary">Secondary</Button>
+<Button variant="outline">Outline</Button>
+<Button variant="ghost">Ghost</Button>
+<Button variant="link">Link</Button>
+<Button variant="destructive">Delete</Button>
+<Button variant="animated">Animated</Button>

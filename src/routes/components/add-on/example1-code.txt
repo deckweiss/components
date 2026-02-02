@@ -1,0 +1,11 @@
+<script lang="ts">
+  import { openAddOn } from "$lib/registry/blocks/add-on/routing";
+  import AddOnRenderer from "$lib/registry/blocks/add-on/add-on-renderer.svelte";
+</script>
+
+<AddOnRenderer>
+  <!-- Your page content -->
+  <button onclick={() => openAddOn("my-addon", "data-id")}>
+    Open Add On
+  </button>
+</AddOnRenderer>

@@ -1,0 +1,11 @@
+{
+	"$schema": "https://shadcn-svelte.com/schema/registry-item.json",
+	"name": "dropdown-card",
+	"title": "Dropdown Card",
+	"type": "registry:block",
+	"description": "A card component for dropdowns.",
+	"registryDependencies": [
+		"card"
+	],
+	"files": []
+}

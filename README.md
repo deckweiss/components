@@ -14,19 +14,6 @@ It's essential to understand the two main directories for components:
 
 This separation allows you to have extensive documentation, examples, and tests for your internal components without bloating the code that gets shipped to the consumer.
 
-## Available Components
-
-| Name            | Description                                                                      |
-| --------------- | -------------------------------------------------------------------------------- |
-| `slider`        | A slider component                                                               |
-| `loading-image` | A loading image component                                                        |
-| `page-progress` | A page loading progress bar.                                                     |
-| `toaster`       | A toast component with custom look.                                              |
-| `data-table`    | Fully functional data table with sort, filter, column toggle, row select and pagination |
-| `zaunkonfigurator-button` | A button component from the Zaunkonfigurator project |
-| `navbar`        | A navbar component |
-| `posthogfeedback` | A feedback button integrated with Posthog |
-
 ## Development Workflow
 
 ### 1. Install Dependencies
@@ -102,5 +89,5 @@ pnpm build:registry
 Once the registry is built and the project is hosted, users can add your components to their projects with the CLI:
 
 ```bash
-pnpm dlx shadcn-svelte@next add https://<your-registry-url>/r/<component-name>.json
+pnpm dlx shadcn-svelte@next add https://components.deckweiss.at/r/<component-name>.json
 ```

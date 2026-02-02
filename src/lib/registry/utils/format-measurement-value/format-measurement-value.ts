@@ -1,0 +1,40 @@
+export type MeasurementUnit = 'mm' | 'cm' | 'm';
+
+export function formatMeasurementValue(
+    valueInMM: number,
+    forceUnit?: MeasurementUnit,
+    withUnit: boolean = true
+): string {
+    let unit = forceUnit;
+
+    if (!forceUnit) {
+        if (valueInMM / 1000 >= 1) {
+            unit = 'm';
+        } else if (valueInMM / 10 >= 1) {
+            unit = 'cm';
+        } else {
+            unit = 'mm';
+        }
+    }
+
+    let valueInUnit: number;
+
+    if (unit === 'm') {
+        valueInUnit = valueInMM / 1000;
+    } else if (unit === 'cm') {
+        valueInUnit = valueInMM / 10;
+    } else {
+        valueInUnit = valueInMM;
+    }
+
+    // German number formatting with specific rules per unit
+    const formatter = new Intl.NumberFormat('de-DE', {
+        minimumFractionDigits: unit === 'm' ? 2 : 0, // Always 2 decimals for meters
+        maximumFractionDigits: unit === 'mm' ? 0 : unit === 'm' ? 2 : 1, // 0 for mm, 2 for m, 1 for cm
+        useGrouping: true // Enable thousands separator
+    });
+
+    const formattedValue = formatter.format(valueInUnit);
+
+    return withUnit ? `${formattedValue}\u00A0${unit}` : formattedValue;
+}

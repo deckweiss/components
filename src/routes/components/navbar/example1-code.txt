@@ -1,0 +1,21 @@
+<script lang="ts">
+  import * as Navbar from "$lib/registry/blocks/navbar";
+</script>
+
+<!-- Applications layer -->
+<Navbar.Applications>
+  <Navbar.ApplicationLink href="/">App 1</Navbar.ApplicationLink>
+  <Navbar.ApplicationLink href="#">App 2</Navbar.ApplicationLink>
+</Navbar.Applications>
+
+<!-- Main app layer -->
+<Navbar.Layer1 appName="My App">
+  <Navbar.Layer1Link href="/">Home</Navbar.Layer1Link>
+  <Navbar.Layer1Link href="#" badge="5">Messages</Navbar.Layer1Link>
+</Navbar.Layer1>
+
+<!-- Sub-navigation layer -->
+<Navbar.Layer2>
+  <Navbar.Layer2Link href="/">Overview</Navbar.Layer2Link>
+  <Navbar.Layer2Link href="#">Details</Navbar.Layer2Link>
+</Navbar.Layer2>

@@ -1,0 +1,24 @@
+<script lang="ts">
+  import LoadingImage from "$lib/registry/blocks/loading-image/loading-image.svelte";
+</script>
+
+<!-- Basic usage -->
+<LoadingImage 
+  src="https://example.com/image.jpg" 
+  alt="Description" 
+/>
+
+<!-- With custom loading and error states -->
+<LoadingImage
+  src="https://example.com/image.jpg"
+  alt="Description"
+  containerClass="h-50 w-50"
+>
+  {#snippet loading()}
+    <p>Loading...</p>
+  {/snippet}
+
+  {#snippet error()}
+    <p>Failed to load image</p>
+  {/snippet}
+</LoadingImage>

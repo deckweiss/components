@@ -1,0 +1,17 @@
+<script lang="ts">
+  import { PageProgress, pageLoading } from "$lib/registry/blocks/page-progress";
+</script>
+
+<!-- Place at the top of your layout -->
+<div class="fixed top-0 z-[99] w-full">
+  <PageProgress />
+</div>
+
+<!-- Trigger loading programmatically -->
+<button onclick={() => {
+  pageLoading.invocers = ["my-action"];
+  // Do some work...
+  pageLoading.invocers = [];
+}}>
+  Load Data
+</button>

@@ -1,0 +1,11 @@
+<script lang="ts">
+  import Slider from "$lib/registry/blocks/slider/slider.svelte";
+</script>
+
+<Slider 
+  value={[5]} 
+  min={0} 
+  max={10} 
+  step={1} 
+  class="w-full" 
+/>

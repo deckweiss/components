@@ -1,0 +1,19 @@
+{
+	"$schema": "https://shadcn-svelte.com/schema/registry-item.json",
+	"name": "format-measurement-value",
+	"title": "formatMeasurementValue",
+	"type": "registry:file",
+	"description": "A utility function to format measurement values.",
+	"files": [
+		{
+			"content": "export type MeasurementUnit = 'mm' | 'cm' | 'm';\n\nexport function formatMeasurementValue(\n    valueInMM: number,\n    forceUnit?: MeasurementUnit,\n    withUnit: boolean = true\n): string {\n    let unit = forceUnit;\n\n    if (!forceUnit) {\n        if (valueInMM / 1000 >= 1) {\n            unit = 'm';\n        } else if (valueInMM / 10 >= 1) {\n            unit = 'cm';\n        } else {\n            unit = 'mm';\n        }\n    }\n\n    let valueInUnit: number;\n\n    if (unit === 'm') {\n        valueInUnit = valueInMM / 1000;\n    } else if (unit === 'cm') {\n        valueInUnit = valueInMM / 10;\n    } else {\n        valueInUnit = valueInMM;\n    }\n\n    // German number formatting with specific rules per unit\n    const formatter = new Intl.NumberFormat('de-DE', {\n        minimumFractionDigits: unit === 'm' ? 2 : 0, // Always 2 decimals for meters\n        maximumFractionDigits: unit === 'mm' ? 0 : unit === 'm' ? 2 : 1, // 0 for mm, 2 for m, 1 for cm\n        useGrouping: true // Enable thousands separator\n    });\n\n    const formattedValue = formatter.format(valueInUnit);\n\n    return withUnit ? `${formattedValue}\\u00A0${unit}` : formattedValue;\n}",
+			"type": "registry:file",
+			"target": "utils/format-measurement-value/format-measurement-value.ts"
+		},
+		{
+			"content": "export { formatMeasurementValue, type MeasurementUnit } from \"./format-measurement-value\";\n",
+			"type": "registry:file",
+			"target": "utils/format-measurement-value/index.ts"
+		}
+	]
+}

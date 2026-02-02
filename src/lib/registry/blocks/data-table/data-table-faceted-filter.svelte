@@ -58,7 +58,7 @@
 							{selectedValues.size}
 						</Badge>
 						<div class="hidden space-x-1 lg:flex">
-							{#if selectedValues.size > 2}
+							{#if selectedValues.size > 1}
 								<Badge
 									variant="secondary"
 									class="rounded-sm bg-[rgba(0,0,0,0.8)] px-1 font-normal text-white"
@@ -106,7 +106,7 @@
 									isSelected ? "bg-primary text-primary-foreground" : "opacity-50 [&_svg]:invisible"
 								)}
 							>
-								<CheckIcon class="size-4" />
+								<CheckIcon class="size-3 text-white" />
 							</div>
 							{#if option.icon}
 								{@const Icon = option.icon}

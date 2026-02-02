@@ -1,520 +1,242 @@
 <script lang="ts">
-	import LoadingImage from "$lib/registry/blocks/loading-image/loading-image.svelte";
-	import ComponentShowcase from "$lib/components/component-showcase.svelte";
-	import { pageLoading, PageProgress } from "$lib/registry/blocks/page-progress";
 	import { Button } from "$lib/components/ui/button";
-	import { toaster } from "$lib/registry/blocks/toaster";
-	import { Toaster } from "$lib/registry/ui/sonner";
-	import DataTable from "$lib/registry/blocks/data-table/data-table.svelte";
-	import type { ColumnDef, Row } from "@tanstack/table-core";
-	import { createRawSnippet } from "svelte";
-	import { renderSnippet } from "$lib/components/ui/data-table";
-	import { buttonVariants } from "$lib/registry/ui/button";
-	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
-	import { dataTableData, type Payment } from "./sample-data";
-	import DataTableUsage from "./data-table-example.txt?raw";
-	import Input from "$lib/components/ui/input/input.svelte";
-	import Slider from "$lib/registry/blocks/slider/slider.svelte";
-	import * as Navbar from "$lib/registry/blocks/navbar";
-	import { Bell, FileUser, UserIcon } from "@lucide/svelte";
-	import DropdownMenuCheckboxItem from "$lib/components/ui/dropdown-menu/dropdown-menu-checkbox-item.svelte";
-	import { Button as ZaunkonfiguratorButton } from "$lib/registry/blocks/zaunkonfigurator-button";
-	import { PosthogFeedbackButton } from "$lib/registry/blocks/posthogfeedback";
-	import { openAddOn } from "$lib/registry/blocks/add-on/routing";
-	import AddOnRenderer from "$lib/registry/blocks/add-on/add-on-renderer.svelte";
+	import { Badge } from "$lib/components/ui/badge";
+	import { components, utils } from "$lib/registry";
+	import { getLatestVersion } from "$lib/version-manager";
+	import {
+		Boxes,
+		ArrowRight,
+		Sparkles,
+		Code2,
+		Wrench,
+		Zap,
+		Palette,
+		Github,
+		Construction,
+	} from "@lucide/svelte";
+	import { goto } from "$app/navigation";
+	import DeckweissLogo from "$lib/assets/deckweiss-logo.svg";
+	import { Separator } from "$lib/components/ui/separator";
 
-	const code = {
-		slider: `<Slider value={[0]} min={0} max={10} step={1} class="w-full" />`,
-		"loading-image": `<LoadingImage
-\tsrc="https://picsum.photos/id/237/200/300"
-\talt="dog" />
-
-<LoadingImage
-\tsrc="https://deckweiss.at/non-existing-image.jpg"
-\tclass="w-30"
-\tcontainerClass="h-50 bg-[#00ff00] text-center w-50">
-\t{#snippet loading()}
-\t\t...
-\t{/snippet}
-
-\t{#snippet error()}
-\t\t:(
-\t{/snippet}
-</LoadingImage>`,
-		"page-progress": `<div class="fixed top-0 z-[99] w-full">
-\t<PageProgress />
-</div>`,
-		toaster: `toaster.pushToast({message: 'Test', type: 'success'});`,
-		dataTable: DataTableUsage,
-		posthog: `// hooks.client.ts
-import { posthog } from 'posthog-js';
-
-posthog.init('YOUR_PROJECT_API_KEY', {
-\tapi_host: 'https://us.i.posthog.com',
-});
-
-
-// $lib/analytics/index.ts
-import { browser } from '$app/environment';
-import type { PostHog } from 'posthog-js';
-
-/**
- * Execute a callback with the PostHog instance.
- * @param callback - The callback to execute.
- * @example
- * \`\`\`ts
- * withPosthog((posthog) => {
- *     posthog.identify('user@example.com');
- * });
- * \`\`\`
- */
-export async function withPosthog(callback: (posthog: PostHog) => void): Promise<void> {
-    if (browser) {
-        await import('posthog-js')
-            .then(({ default: posthog }) => {
-                try {
-                    callback(posthog);
-                } catch (error) {
-                    console.log('Failed to execute analytics callback:', error);
-                }
-            })
-            .catch((error) => {
-                console.log('Failed to load PostHog:', error);
-            });
-    }
-}
-
-export function captureEvent(eventName: string, properties?: Record<string, any>) {
-    // Only capture events on the client side
-    withPosthog((posthog) => {
-        posthog.capture(eventName, properties);
-    });
-}
-`,
-		navbar: `<Navbar.Applications>
-	<Navbar.ApplicationLink href="/">HR-Manager</Navbar.ApplicationLink>
-	<Navbar.ApplicationLink href="#">Verrechnung</Navbar.ApplicationLink>
-	<Navbar.ApplicationLink href="#">Dienstplan</Navbar.ApplicationLink>
-	<Navbar.ApplicationLink href="#">Zeitaufzeichnung</Navbar.ApplicationLink>
-	<Navbar.ApplicationLink href="#">KI-Chatbot</Navbar.ApplicationLink>
-	<Navbar.ApplicationLink href="#">Zaunmontagen</Navbar.ApplicationLink>
-	<Navbar.ApplicationLink href="#">Terminplaner</Navbar.ApplicationLink>
-	<Navbar.ApplicationLink href="#">Bestellverwaltung</Navbar.ApplicationLink>
-
-	{#snippet right()}
-		<DropdownMenu.Root>
-			<DropdownMenu.Trigger class="flex cursor-pointer items-center gap-2">
-				<Navbar.ApplicationUser iconColorClass="bg-[#ff0000]">
-					Peter Arnold
-				</Navbar.ApplicationUser>
-			</DropdownMenu.Trigger>
-			<DropdownMenu.Content align="end">
-				<DropdownMenu.Group>
-					<DropdownMenu.Label>Peter Arnold</DropdownMenu.Label>
-					<DropdownMenu.Separator />
-					<DropdownMenu.Item>Einstellungen</DropdownMenu.Item>
-					<DropdownMenu.Separator />
-					<DropdownMenu.Item>Abmelden</DropdownMenu.Item>
-				</DropdownMenu.Group>
-			</DropdownMenu.Content>
-		</DropdownMenu.Root>
-	{/snippet}
-</Navbar.Applications>
-
-<Navbar.Layer1 appName="HR Manager">
-	{#snippet logo()}
-		<FileUser class="text-[#ff0044]" />
-	{/snippet}
-
-	<Navbar.Layer1Link href="/">Termine</Navbar.Layer1Link>
-	<Navbar.Layer1Link href="#" badge="99+">Bewerbungen</Navbar.Layer1Link>
-	<Navbar.Layer1Link href="#">Stellenausschreibungen</Navbar.Layer1Link>
-
-	{#snippet right()}
-		<Navbar.Layer1IconButton badge="2">
-			<Bell size={16} />
-		</Navbar.Layer1IconButton>
-	{/snippet}
-</Navbar.Layer1>
-
-<Navbar.Layer2>
-	<Navbar.Layer2Link href="/">Alle Bewerbungen</Navbar.Layer2Link>
-	<Navbar.Layer2Link href="#" badge="99+">Aufgaben</Navbar.Layer2Link>
-	<Navbar.Layer2Link href="#">Evidenz</Navbar.Layer2Link>
-	<Navbar.Layer2Link href="#">Archiv</Navbar.Layer2Link>
-</Navbar.Layer2>`,
-		"zaunkonfigurator-button": `<script lang="ts">
-	import { Button } from "$lib/registry/blocks/zaunkonfigurator-button";
-<\/script>
-<ZaunkonfiguratorButton variant="default">Base</ZaunkonfiguratorButton>
-<ZaunkonfiguratorButton variant="secondary">Secondary</ZaunkonfiguratorButton>
-<ZaunkonfiguratorButton variant="outline">Outline</ZaunkonfiguratorButton>
-<ZaunkonfiguratorButton variant="ghost">Ghost</ZaunkonfiguratorButton>
-<ZaunkonfiguratorButton variant="link">Link</ZaunkonfiguratorButton>
-<ZaunkonfiguratorButton variant="destructive">Destructive</ZaunkonfiguratorButton>`,
-		"posthogfeedback-button": `<script lang="ts">
-	import { PosthogFeedbackButton } from "$lib/registry/blocks/posthogfeedback";
-<\/script>
-
-<PosthogFeedbackButton appName="example-app" />
-
-<!-- With custom position -->
-<PosthogFeedbackButton appName="example-app" position="bottom-left" />
-
-<!-- With custom feedback types -->
-<PosthogFeedbackButton
-	appName="example-app"
-	feedbackTypes={[
-		{ value: "bug", label: "Bug Report", emoji: "🐛" },
-		{ value: "feature", label: "Feature Request", emoji: "✨" },
-		{ value: "comment", label: "Comment", emoji: "💬" },
-		{ value: "question", label: "Question", emoji: "❓" }
-	]}
-/>`,
-		"add-on-renderer": `<!-- +page.svelte -->
-<AddOnRenderer>
-	<!-- All page content should be inside here, except navbar -->
-	<Button onclick={() => {
-		openAddOn("example-add-on", "123");
-	}}>
-		Open Add On
-	</Button>
-</AddOnRenderer>`,
-	};
-	let locale = $state("de");
-	let emailHeader = $derived(locale === "de" ? "E-Mail" : "Email");
-
-	const columns: ColumnDef<Payment>[] = [
-		{
-			accessorKey: "status",
-			header: "Status",
-			cell: ({ row }) => {
-				const statusSnippet = createRawSnippet<[string]>((getStatus) => {
-					const status = getStatus();
-					return {
-						render: () => `<div class="capitalize">${status}</div>`,
-					};
-				});
-				return renderSnippet(statusSnippet, row.getValue("status"));
-			},
-			enableColumnFilter: true,
-			enableHiding: true,
-		},
-		{
-			accessorKey: "email",
-			header: () => emailHeader,
-			cell: ({ row }) => {
-				const emailSnippet = createRawSnippet<[string]>((getEmail) => {
-					const email = getEmail();
-					return {
-						render: () => `<div class="lowercase">${email}</div>`,
-					};
-				});
-
-				return renderSnippet(emailSnippet, row.getValue("email"));
-			},
-			enableSorting: true,
-			enableHiding: true,
-		},
-		{
-			id: "amount",
-			accessorKey: "amount",
-			header: "Amount",
-			cell: ({ row }) => {
-				const amountCellSnippet = createRawSnippet<[string]>((getAmount) => {
-					const amount = getAmount();
-					return {
-						render: () => `<div class="text-right font-medium">${amount}</div>`,
-					};
-				});
-				const formatter = new Intl.NumberFormat("en-US", {
-					style: "currency",
-					currency: "USD",
-				});
-
-				return renderSnippet(
-					amountCellSnippet,
-					formatter.format(Number.parseFloat(row.getValue("amount")))
-				);
-			},
-			enableSorting: true,
-		},
-		{
-			id: "actions",
-			enableHiding: false,
-			cell: ({ row }) => renderSnippet(dataTableActions, row.original),
-		},
-	];
+	const previewComponents = components.filter((c) => c.isWip);
+	const previewUtils = utils.filter((u) => u.isWip);
+	const totalPreview = previewComponents.length + previewUtils.length;
 </script>
 
-<AddOnRenderer>
-	<div class="mx-auto flex min-h-svh max-w-3xl flex-col gap-8 px-4 py-8">
-		<header class="flex flex-col gap-1">
-			<h1 class="text-3xl font-bold tracking-tight">Deckweiss Component Registry</h1>
-			<p class="text-muted-foreground">
-				A custom registry for distributing code using shadcn-svelte.
-			</p>
-			<br />
-			<p>Use these first:</p>
-			<ul class="ml-5 list-disc">
-				<li>
-					<a href="https://next.shadcn-svelte.com">ShadCn Svelte</a>
-				</li>
-				<li>
-					<a href="https://www.shadcn-svelte-extras.com">ShadCn Svelte Extras</a>
-				</li>
-			</ul>
-		</header>
-		<main class="flex flex-1 flex-col gap-8">
-			<ComponentShowcase
-				name="Slider"
-				componentKey="slider"
-				description="A slider component"
-				code={code["slider"]}
+<svelte:head>
+	<title>Deckweiss Components</title>
+</svelte:head>
+
+<div class="relative flex min-h-screen flex-col">
+	<!-- Hero Section -->
+	<main class="relative flex flex-1 flex-col items-center justify-center px-6 pt-24 pb-12">
+		<div class="flex flex-col items-center justify-center gap-1">
+			<img src={DeckweissLogo} alt="Deckweiss" class="w-48 lg:w-76" />
+			<h1
+				class="mb-6 bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text p-2 text-center text-5xl font-bold tracking-tight text-transparent sm:text-6xl lg:text-7xl"
 			>
-				<Slider value={[0]} min={0} max={10} step={1} class="w-full" />
-			</ComponentShowcase>
-			<ComponentShowcase
-				name="Loading Image"
-				componentKey="loading-image"
-				description="A loading image component"
-				code={code["loading-image"]}
+				Components Registry
+			</h1>
+		</div>
+
+		<!-- Subtext -->
+		<p class="text-muted-foreground mb-10 max-w-2xl text-center text-lg sm:text-xl">
+			A curated collection of beautifully crafted, production-ready components built with
+			<span class="text-foreground font-medium">SvelteKit</span>
+			and
+			<span class="text-foreground font-medium">Tailwind CSS</span>. Powered by shadcn-svelte.
+		</p>
+
+		<!-- CTA Buttons -->
+		<div class="flex flex-col gap-3 sm:flex-row">
+			<Button
+				size="lg"
+				onclick={() => goto("/get-started")}
+				class="group gap-2 px-8 hover:cursor-pointer">Get Started</Button
 			>
-				<div class="relative flex min-h-[400px] flex-col items-center justify-center gap-4">
-					<LoadingImage src="https://picsum.photos/id/237/200/300" alt="dog" />
-
-					<LoadingImage
-						src="https://deckweiss.at/non-existing-image.jpg"
-						class="w-30"
-						containerClass="h-50 bg-[#00ff00] text-center w-50"
-					>
-						{#snippet loading()}
-							...
-						{/snippet}
-
-						{#snippet error()}
-							:(
-						{/snippet}
-					</LoadingImage>
-				</div>
-			</ComponentShowcase>
-
-			<ComponentShowcase
-				name="Page Progress"
-				componentKey="page-progress"
-				description="A page loading progress bar."
-				code={code["page-progress"]}
+			<Button
+				size="lg"
+				variant="outline"
+				onclick={() => goto("/components")}
+				class="gap-2 px-8 hover:cursor-pointer"
 			>
-				<div class="flex flex-col gap-2">
-					<PageProgress />
+				View Components
+			</Button>
+		</div>
 
-					<Button
-						onclick={() => {
-							pageLoading.invocers = ["test"];
-
-							setTimeout(() => {
-								pageLoading.invocers = [];
-							}, 1000);
-						}}
-					>
-						Test
-					</Button>
-				</div>
-			</ComponentShowcase>
-
-			<ComponentShowcase
-				name="Custom Toast"
-				componentKey="toaster"
-				description="A toast component with customized look."
-				code={code["toaster"]}
-				codeLang="typescript"
-			>
-				<div class="flex flex-col gap-2">
-					<Toaster position="bottom-left" offset="20px" />
-
-					<Button
-						onclick={() => {
-							toaster.pushToast({ message: "Test", type: "success" });
-						}}
-					>
-						Test
-					</Button>
-				</div>
-			</ComponentShowcase>
-
-			<ComponentShowcase
-				name="DataTable"
-				componentKey="data-table"
-				description="Fully functional data table: sort, filter, column toggle, row selection, row expansion and pagination"
-				code={code["dataTable"]}
-				codeLang="svelte"
-			>
-				<Button onclick={() => (locale = locale === "de" ? "en" : "de")}
-					>Set locale to {locale === "de" ? "en" : "de"}</Button
+		<!-- Stats -->
+		<div class="mt-20 w-full max-w-3xl">
+			<div class="grid gap-6 sm:grid-cols-3">
+				<!-- Version Stat -->
+				<button
+					onclick={() => goto("/changelog")}
+					class="group border-border/50 relative flex cursor-pointer flex-col items-center justify-center rounded-2xl border bg-gradient-to-br from-orange-500/5 to-orange-500/0 p-6 backdrop-blur-sm transition-all hover:border-orange-500/50 hover:shadow-lg"
 				>
+					<div
+						class="mb-3 flex size-14 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-500/10 text-orange-500 transition-transform group-hover:scale-110"
+					>
+						<Sparkles class="size-6" />
+					</div>
+					<span
+						class="mb-2 bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-2xl font-bold text-transparent"
+					>
+						v{getLatestVersion()}
+					</span>
+					<span class="text-muted-foreground text-xs font-medium tracking-wider uppercase">
+						Latest Version
+					</span>
+				</button>
 
-				<DataTable
-					{columns}
-					data={dataTableData}
-					enableExpanding
-					enablePagination
-					enableRowSelection
-					onRowClick={(row) => row.toggleExpanded()}
-					enableResizing
+				<!-- Components Stat -->
+				<button
+					onclick={() => goto("/components")}
+					class="group border-border/50 relative flex cursor-pointer flex-col items-center justify-center rounded-2xl border bg-gradient-to-br from-orange-500/5 to-orange-500/0 p-6 backdrop-blur-sm transition-all hover:border-orange-500/50 hover:shadow-lg"
 				>
-					{#snippet expandedRow(row)}
-						<pre>{JSON.stringify(row.original, null, 4)}</pre>
-					{/snippet}
+					<div
+						class="mb-3 flex size-14 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-500/10 text-orange-500 transition-transform group-hover:scale-110"
+					>
+						<Boxes class="size-6" />
+					</div>
+					<span
+						class="mb-2 bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-2xl font-bold text-transparent"
+					>
+						{components.filter((c) => !c.isOutsourced).length}
+					</span>
+					<span class="text-muted-foreground text-xs font-medium tracking-wider uppercase">
+						Components
+					</span>
+				</button>
 
-					{#snippet customFilters(table)}
-						<div class="bg-watermelon px-2 py-2">
-							<Input
-								placeholder="E-Mail"
-								oninput={(event) => {
-									const text = event.target.value;
-									table.getColumn("email")?.setFilterValue(text);
-								}}
-							/>
-						</div>
-					{/snippet}
-				</DataTable>
-			</ComponentShowcase>
-
-			<ComponentShowcase
-				name="Navbar"
-				componentKey="navbar"
-				description="A navbar component"
-				code={code["navbar"] ?? ""}
-				codeLang="svelte"
-			>
-				<Navbar.Applications>
-					<Navbar.ApplicationLink href="/">HR-Manager</Navbar.ApplicationLink>
-					<Navbar.ApplicationLink href="#">Verrechnung</Navbar.ApplicationLink>
-					<Navbar.ApplicationLink href="#">Dienstplan</Navbar.ApplicationLink>
-					<Navbar.ApplicationLink href="#">Zeitaufzeichnung</Navbar.ApplicationLink>
-					<Navbar.ApplicationLink href="#">KI-Chatbot</Navbar.ApplicationLink>
-					<Navbar.ApplicationLink href="#">Zaunmontagen</Navbar.ApplicationLink>
-					<Navbar.ApplicationLink href="#">Terminplaner</Navbar.ApplicationLink>
-					<Navbar.ApplicationLink href="#">Bestellverwaltung</Navbar.ApplicationLink>
-
-					{#snippet right()}
-						<DropdownMenu.Root>
-							<DropdownMenu.Trigger class="flex cursor-pointer items-center gap-2">
-								<Navbar.ApplicationUser iconColorClass="bg-[#ff0000]">
-									Peter Arnold
-								</Navbar.ApplicationUser>
-							</DropdownMenu.Trigger>
-							<DropdownMenu.Content align="end">
-								<DropdownMenu.Group>
-									<DropdownMenu.Label>Peter Arnold</DropdownMenu.Label>
-									<DropdownMenu.Separator />
-									<DropdownMenu.Item>Einstellungen</DropdownMenu.Item>
-									<DropdownMenu.Separator />
-									<DropdownMenu.Item>Abmelden</DropdownMenu.Item>
-								</DropdownMenu.Group>
-							</DropdownMenu.Content>
-						</DropdownMenu.Root>
-					{/snippet}
-				</Navbar.Applications>
-
-				<Navbar.Layer1 appName="HR Manager">
-					{#snippet logo()}
-						<FileUser class="text-[#ff0044]" />
-					{/snippet}
-
-					<Navbar.Layer1Link href="/">Termine</Navbar.Layer1Link>
-					<Navbar.Layer1Link href="#" badge="99+">Bewerbungen</Navbar.Layer1Link>
-					<Navbar.Layer1Link href="#">Stellenausschreibungen</Navbar.Layer1Link>
-
-					{#snippet right()}
-						<Navbar.Layer1IconButton badge="2">
-							<Bell size={16} />
-						</Navbar.Layer1IconButton>
-					{/snippet}
-				</Navbar.Layer1>
-
-				<Navbar.Layer2>
-					<Navbar.Layer2Link href="/">Alle Bewerbungen</Navbar.Layer2Link>
-					<Navbar.Layer2Link href="#" badge="99+">Aufgaben</Navbar.Layer2Link>
-					<Navbar.Layer2Link href="#">Evidenz</Navbar.Layer2Link>
-					<Navbar.Layer2Link href="#">Archiv</Navbar.Layer2Link>
-				</Navbar.Layer2>
-			</ComponentShowcase>
-
-			<ComponentShowcase
-				name="Zaunkonfigurator Button"
-				componentKey="zaunkonfigurator-button"
-				description="A button component from the Zaunkonfigurator project"
-				code={code["zaunkonfigurator-button"]}
-			>
-				<div class="flex flex-wrap gap-2">
-					<ZaunkonfiguratorButton variant="default">Base</ZaunkonfiguratorButton>
-					<ZaunkonfiguratorButton variant="secondary">Secondary</ZaunkonfiguratorButton>
-					<ZaunkonfiguratorButton variant="outline">Outline</ZaunkonfiguratorButton>
-					<ZaunkonfiguratorButton variant="ghost">Ghost</ZaunkonfiguratorButton>
-					<ZaunkonfiguratorButton variant="link">Link</ZaunkonfiguratorButton>
-					<ZaunkonfiguratorButton variant="destructive">Destructive</ZaunkonfiguratorButton>
-					<ZaunkonfiguratorButton variant="animated">Animated</ZaunkonfiguratorButton>
-				</div>
-			</ComponentShowcase>
-
-			<ComponentShowcase
-				name="Posthog"
-				componentKey="posthog"
-				description="Dynamically load posthog into browser environments"
-				code={code["posthog"]}
-				codeLang="typescript"
-				hideInstallation
-			></ComponentShowcase>
-
-			<ComponentShowcase
-				name="Posthog Feedback Button"
-				componentKey="posthogfeedback-button"
-				description="A feedback button with modal dialog integrated with Posthog"
-				code={code["posthogfeedback-button"]}
-				codeLang="svelte"
-			>
-				<div class="relative min-h-[400px] rounded-lg border border-dashed p-8">
-					<p class="text-muted-foreground mb-4 text-sm">
-						Click the button in the bottom-right corner to open the feedback modal.
-					</p>
-					<PosthogFeedbackButton appName="component-showcase" position="bottom-right" />
-				</div>
-			</ComponentShowcase>
-
-			<ComponentShowcase
-				name="Add On"
-				componentKey="add-on"
-				description="A renderer for add-ons"
-				code={code["add-on-renderer"]}
-				codeLang="svelte"
-			>
-				<Button
-					onclick={() => {
-						openAddOn("example-add-on", "123");
-					}}
+				<!-- Utils Stat -->
+				<button
+					onclick={() => goto("/utils")}
+					class="group border-border/50 relative flex cursor-pointer flex-col items-center justify-center rounded-2xl border bg-gradient-to-br from-orange-500/5 to-orange-500/0 p-6 backdrop-blur-sm transition-all hover:border-orange-500/50 hover:shadow-lg"
 				>
-					Open Add On
-				</Button>
-			</ComponentShowcase>
-		</main>
+					<div
+						class="mb-3 flex size-14 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-500/10 text-orange-500 transition-transform group-hover:scale-110"
+					>
+						<Wrench class="size-6" />
+					</div>
+					<span
+						class="mb-2 bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-2xl font-bold text-transparent"
+					>
+						{utils.length}
+					</span>
+					<span class="text-muted-foreground text-xs font-medium tracking-wider uppercase">
+						Utilities
+					</span>
+				</button>
+			</div>
+		</div>
+	</main>
+
+	<div class="px-18">
+		<Separator />
 	</div>
-</AddOnRenderer>
 
-{#snippet dataTableActions(row: Row<Payment>)}
-	<DropdownMenu.Root>
-		<DropdownMenu.Trigger class={buttonVariants({ variant: "ghost", size: "icon" })}>
-			...
-		</DropdownMenu.Trigger>
-		<DropdownMenu.Content>
-			<DropdownMenu.Group>
-				<DropdownMenu.Label>Actions</DropdownMenu.Label>
-				<DropdownMenu.Separator />
-				<DropdownMenu.Item>Edit</DropdownMenu.Item>
-				<DropdownMenu.Item>Delete</DropdownMenu.Item>
-				<DropdownMenu.Separator />
-				<DropdownMenu.Item>Send Confirmation Email</DropdownMenu.Item>
-			</DropdownMenu.Group>
-		</DropdownMenu.Content>
-	</DropdownMenu.Root>
-{/snippet}
+	<!-- Coming Soon Preview -->
+	{#if totalPreview > 0}
+		<section class="relative px-6 py-12">
+			<div class="mx-auto max-w-5xl">
+				<div class="mb-12 text-center">
+					<Badge variant="outline" class="mb-4 gap-1.5">
+						<Construction class="size-3" />
+						Coming Soon
+					</Badge>
+					<h2 class="text-foreground mb-4 text-3xl font-bold tracking-tight">What's Next</h2>
+					<p class="text-muted-foreground mx-auto max-w-2xl">
+						We're constantly working on new components and utilities. Here's a preview of what's
+						coming.
+					</p>
+				</div>
+
+				<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+					{#each previewComponents as component}
+						<div
+							class="group bg-muted/30 hover:bg-muted/50 relative overflow-hidden rounded-xl border border-dashed border-gray-300 p-6 transition-all hover:border-gray-500"
+						>
+							<div
+								class="from-primary/5 group-hover:from-primary/10 absolute -top-4 -right-4 size-24 rounded-full bg-gradient-to-br to-transparent blur-2xl transition-all"
+							></div>
+							<Badge variant="outline" class="mb-3 bg-white text-[10px]"
+								><Boxes class="mr-0.5 size-3" /> Component</Badge
+							>
+							<h3 class="text-foreground mb-1 font-semibold">{component.name}</h3>
+							<p class="text-muted-foreground text-sm">{component.description}</p>
+						</div>
+					{/each}
+					{#each previewUtils as util}
+						<div
+							class="group bg-muted/30 hover:bg-muted/50 relative overflow-hidden rounded-xl border border-dashed border-gray-300 p-6 transition-all hover:border-gray-500"
+						>
+							<div
+								class="absolute -top-4 -right-4 size-24 rounded-full bg-gradient-to-br from-cyan-500/5 to-transparent blur-2xl transition-all group-hover:from-cyan-500/10"
+							></div>
+							<Badge variant="outline" class="mb-3 bg-white text-[10px]"
+								><Wrench class="mr-0.5 size-3" /> Utility</Badge
+							>
+							<h3 class="text-foreground mb-1 font-semibold">{util.name}</h3>
+							<p class="text-muted-foreground text-sm">{util.description}</p>
+						</div>
+					{/each}
+				</div>
+			</div>
+		</section>
+	{/if}
+
+	<!-- Footer CTA -->
+	<section class="relative px-6 py-20">
+		<div
+			class="border-border/50 from-card to-card/50 mx-auto max-w-3xl rounded-3xl border bg-gradient-to-br p-12 text-center shadow-xl"
+		>
+			<h2 class="text-foreground mb-4 text-2xl font-bold sm:text-3xl">
+				Ready to build something amazing?
+			</h2>
+			<p class="text-muted-foreground mb-8">Build, contribute, innovate. Together.</p>
+			<div class="flex flex-col justify-center gap-3 sm:flex-row">
+				<Button size="lg" onclick={() => goto("/get-started")} class="gap-2 hover:cursor-pointer"
+					>Get Started</Button
+				>
+				<a
+					href="https://github.com/deckweiss"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="gap-2"
+				>
+					<Button size="lg" variant="outline" class="gap-2 hover:cursor-pointer">
+						<Github class="size-4" />
+						GitHub
+					</Button>
+				</a>
+			</div>
+		</div>
+	</section>
+
+	<!-- Footer -->
+	<footer class="border-border/40 border-t px-6 py-8">
+		<div
+			class="text-muted-foreground mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 text-sm sm:flex-row"
+		>
+			<a
+				href="https://deckweiss.at"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="hover:text-foreground transition-colors"
+			>
+				<img src={DeckweissLogo} alt="Deckweiss" class="w-32" /></a
+			>
+			<div class="flex items-center gap-6">
+				<a href="/changelog" class="hover:text-foreground transition-colors">Changelog</a>
+				<a href="/contributing" class="hover:text-foreground transition-colors">Contributing</a>
+				<a
+					href="https://github.com/deckweiss"
+					class="hover:text-foreground transition-colors"
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					GitHub
+				</a>
+			</div>
+		</div>
+	</footer>
+</div>

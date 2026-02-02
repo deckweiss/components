@@ -1,0 +1,19 @@
+<script lang="ts">
+  import { PosthogFeedbackButton } from "$lib/registry/blocks/posthog-feedback";
+</script>
+
+<!-- Basic usage -->
+<PosthogFeedbackButton appName="my-app" />
+
+<!-- Custom position -->
+<PosthogFeedbackButton appName="my-app" position="bottom-left" />
+
+<!-- Custom feedback types -->
+<PosthogFeedbackButton
+  appName="my-app"
+  feedbackTypes={[
+    { value: "bug", label: "Bug Report", emoji: "🐛" },
+    { value: "feature", label: "Feature Request", emoji: "✨" },
+    { value: "other", label: "Other", emoji: "💬" }
+  ]}
+/>

@@ -53,7 +53,7 @@
 			]
 		},
 		{
-			"name": "toaster",
+			"name": "custom-toast",
 			"type": "registry:component",
 			"title": "Custom Toast",
 			"description": "A toast component with custom look.",
@@ -66,15 +66,15 @@
 			],
 			"files": [
 				{
-					"path": "src/lib/registry/blocks/toaster/toast.svelte",
+					"path": "src/lib/registry/blocks/custom-toast/toast.svelte",
 					"type": "registry:component"
 				},
 				{
-					"path": "src/lib/registry/blocks/toaster/toaster.ts",
+					"path": "src/lib/registry/blocks/custom-toast/custom-toast.ts",
 					"type": "registry:hook"
 				},
 				{
-					"path": "src/lib/registry/blocks/toaster/index.ts",
+					"path": "src/lib/registry/blocks/custom-toast/index.ts",
 					"type": "registry:file"
 				}
 			]
@@ -82,8 +82,8 @@
 		{
 			"name": "data-table",
 			"type": "registry:block",
-			"title": "DataTable",
-			"description": "Fully functional data table with sort, filter, column toggle, row select and pagination",
+			"title": "Data Table",
+			"description": "Fully functional data table with sort, filter, column toggle, row select, pagination and expandable rows. Based on Tanstack Table and Shadcn Svelte.",
 			"dependencies": [
 				"@tanstack/table-core",
 				"@lucide/svelte",
@@ -105,6 +105,11 @@
 					"path": "src/lib/registry/blocks/data-table/index.ts",
 					"type": "registry:file",
 					"target": "blocks/data-table/index.ts"
+				},
+				{
+					"path": "src/lib/registry/blocks/data-table/utils.ts",
+					"type": "registry:file",
+					"target": "blocks/data-table/utils.ts"
 				},
 				{
 					"path": "src/lib/registry/blocks/data-table/data-table.svelte",
@@ -188,9 +193,9 @@
 			]
 		},
 		{
-			"name": "posthogfeedback",
+			"name": "posthog-feedback",
 			"type": "registry:block",
-			"title": "Posthog Feedback Button",
+			"title": "Posthog Feedback",
 			"description": "A feedback button integrated with Posthog",
 			"dependencies": [
 				"posthog-js",
@@ -204,19 +209,19 @@
 			],
 			"files": [
 				{
-					"path": "src/lib/registry/blocks/posthogfeedback/index.ts",
+					"path": "src/lib/registry/blocks/posthog-feedback/index.ts",
 					"type": "registry:file",
-					"target": "blocks/posthogfeedback/index.ts"
+					"target": "blocks/posthog-feedback/index.ts"
 				},
 				{
-					"path": "src/lib/registry/blocks/posthogfeedback/analytics.ts",
+					"path": "src/lib/registry/blocks/posthog-feedback/analytics.ts",
 					"type": "registry:file",
-					"target": "blocks/posthogfeedback/analytics.ts"
+					"target": "blocks/posthog-feedback/analytics.ts"
 				},
 				{
-					"path": "src/lib/registry/blocks/posthogfeedback/posthogfeedback-button.svelte",
+					"path": "src/lib/registry/blocks/posthog-feedback/posthog-feedback-button.svelte",
 					"type": "registry:component",
-					"target": "blocks/posthogfeedback/posthogfeedback-button.svelte"
+					"target": "blocks/posthog-feedback/posthog-feedback-button.svelte"
 				}
 			]
 		},
@@ -285,6 +290,36 @@
 					"path": "src/lib/registry/blocks/zaunkonfigurator-button/button.svelte",
 					"type": "registry:component",
 					"target": "blocks/zaunkonfigurator-button/button.svelte"
+				}
+			]
+		},
+		{
+			"name": "dropdown-card",
+			"type": "registry:block",
+			"title": "Dropdown Card",
+			"description": "A card component for dropdowns.",
+			"dependencies": [],
+			"registryDependencies": ["card"],
+			"files": [
+			]
+		},
+		{
+			"name": "format-measurement-value",
+			"type": "registry:file",
+			"title": "formatMeasurementValue",
+			"description": "A utility function to format measurement values.",
+			"dependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"path": "src/lib/registry/utils/format-measurement-value/format-measurement-value.ts",
+					"type": "registry:file",
+					"target": "utils/format-measurement-value/format-measurement-value.ts"
+				},
+				{
+					"path": "src/lib/registry/utils/format-measurement-value/index.ts",
+					"type": "registry:file",
+					"target": "utils/format-measurement-value/index.ts"
 				}
 			]
 		}

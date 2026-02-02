@@ -1,0 +1,15 @@
+<script lang="ts">
+  import { Toaster } from "$lib/registry/ui/sonner";
+  import { toaster } from "$lib/registry/blocks/custom-toast";
+</script>
+
+<!-- Add to layout -->
+<Toaster position="bottom-left" />
+
+<!-- Show toast -->
+<button onclick={() => toaster.pushToast({ 
+  message: "Hello!", 
+  variant: "success" 
+})}>
+  Show Toast
+</button>
