@@ -13,12 +13,9 @@
 			isUpdated?: boolean;
 		};
 		code: Snippet;
-		installation?: Snippet;
-		apiReference?: Snippet;
-		wipContent?: Snippet;
 	}
 
-	let { util, code, installation, apiReference, wipContent }: Props = $props();
+	let { util, code }: Props = $props();
 
 	const installationUrl = `https://components.deckweiss.at/r/${util.slug}.json`;
 </script>
@@ -35,14 +32,8 @@
 	isNew={util.isNew}
 	isUpdated={util.isUpdated}
 	{code}
-	{apiReference}
-	{wipContent}
 >
 	{#snippet installation()}
-		{#if installation}
-			{@render installation()}
-		{:else}
-			<PMCommand command="execute" args={["shadcn-svelte@next", "add", installationUrl]} />
-		{/if}
+		<PMCommand command="execute" args={["shadcn-svelte@next", "add", installationUrl]} />
 	{/snippet}
 </UtilPageLayout>

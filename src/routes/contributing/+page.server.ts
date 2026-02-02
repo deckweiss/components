@@ -1,6 +1,5 @@
 import { readFileSync } from "fs";
 import { join } from "path";
-import { fileURLToPath } from "url";
 
 function escapeHtml(text: string): string {
 	return text
@@ -155,9 +154,8 @@ function markdownToHtml(markdown: string): string {
 }
 
 export async function load() {
-	const __filename = fileURLToPath(import.meta.url);
-	const __dirname = join(__filename, "..", "..", "..", "..");
-	const readmePath = join(__dirname, "README.md");
+	// Use process.cwd() to get the project root directory
+	const readmePath = join(process.cwd(), "README.md");
 	const readmeContent = readFileSync(readmePath, "utf-8");
 	const readmeHtml = markdownToHtml(readmeContent);
 
