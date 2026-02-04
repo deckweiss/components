@@ -29,7 +29,6 @@ export const changelog: ChangelogEntry[] = [
 		changes: [
 			
 			{ type: "added", category: "util", description: "Added formatMeasurementValue utility function", ref: "format-measurement-value" },
-			{ type: "updated", category: "component", description: "Updated Toast component", ref: "custom-toast" },
 			{ type: "updated", category: "component", description: "Updated Data Table component", ref: "data-table" },
 		],
 	}

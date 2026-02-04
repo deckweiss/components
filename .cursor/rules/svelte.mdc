@@ -1,0 +1,39 @@
+---
+description: Svelte / SvelteKit development guide
+globs: *.svelte,**/*.svelte,*.svelte.ts,**/*.svelte.ts
+alwaysApply: false
+---
+
+# Svelte / SvelteKit Development Guide
+
+## Svelte Version
+
+- **Svelte 5 is mandatory**: All code must target and use Svelte 5. Do not use older Svelte versions for any new development or refactoring.
+
+## Code Snippets
+
+- **Snippets are for small components only**:
+  - Use snippets exclusively for trivial or frequently reused UI fragments or micro-components.
+  - For anything larger or more complex, create a dedicated, clearly named Svelte component file instead.
+  - Avoid snippet-based patterns for logic-heavy components, pages, or layouts.
+
+## Component Library Use
+
+- **Shadcn usage is required wherever possible**:
+  - Use [shadcn/ui](https://ui.shadcn.com) components for all standard UI primitives (buttons, inputs, dialogs, etc.).
+  - Only create custom UI components if there isn't a suitable shadcn component.
+  - When using shadcn components, follow shadcn best practices for customization and theming.
+
+## Internationalization
+
+- **All texts must be translated using @deckweiss/internationalization**:
+  - Use the `@deckweiss/internationalization` package for all text translations in Svelte components.
+  - Never hardcode text strings directly in components - always use the internationalization package.
+  - Follow the package's API and best practices for translation keys and usage.
+
+## Data Loading
+
+- **Use SvelteKit remote functions when loading data**:
+  - Always use SvelteKit remote functions (server-side functions) for data loading operations.
+  - Prefer remote functions over direct API calls or client-side data fetching when possible.
+  - Follow SvelteKit best practices for remote function implementation and error handling.

@@ -9,16 +9,24 @@
 	import { dataTableData, type Payment } from "./sample-data";
 	import Input from "$lib/components/ui/input/input.svelte";
 	import { Ellipsis } from "@lucide/svelte";
+	import * as Dialog from "$lib/components/ui/dialog";
+	import PlusIcon from "@lucide/svelte/icons/plus";
 
 	let locale = $state("de");
+	let statusHeader = $derived(locale === "de" ? "Status" : "Status");
 	let emailHeader = $derived(locale === "de" ? "E-Mail" : "Email");
 	let amountHeader = $derived(locale === "de" ? "Betrag" : "Amount");
+	let startDateHeader = $derived(locale === "de" ? "Startdatum" : "Start Date");
+	let endDateHeader = $derived(locale === "de" ? "Enddatum" : "End Date");
+	let isActiveHeader = $derived(locale === "de" ? "Aktiv" : "Active");
+	let categoryHeader = $derived(locale === "de" ? "Kategorie" : "Category");
 	let actionsHeader = $derived(locale === "de" ? "Aktionen" : "Actions");
+	let insertDialogOpen = $state(false);
 
 	const columns: ColumnDef<Payment>[] = [
 		{
 			accessorKey: "status",
-			header: "Status",
+			header: () => statusHeader,
 			cell: ({ row }) => {
 				const statusSnippet = createRawSnippet<[string]>((getStatus) => {
 					const status = getStatus();
@@ -33,6 +41,9 @@
 			minSize: 50,
 			size: 100,
 			maxSize: 200,
+			meta: {
+				sticky: "left",
+			},
 		},
 		{
 			accessorKey: "email",
@@ -81,12 +92,103 @@
 			maxSize: 200,
 		},
 		{
+			accessorKey: "startDate",
+			header: () => startDateHeader,
+			cell: ({ row }) => {
+				const dateSnippet = createRawSnippet<[string]>((getDate) => {
+					const date = getDate();
+					return {
+						render: () => `<div>${date}</div>`,
+					};
+				});
+				const dateValue = row.getValue("startDate") as string;
+				const formattedDate = new Date(dateValue).toLocaleDateString("de-DE", {
+					year: "numeric",
+					month: "2-digit",
+					day: "2-digit",
+				});
+
+				return renderSnippet(dateSnippet, formattedDate);
+			},
+			enableColumnFilter: true,
+			enableSorting: true,
+			enableHiding: true,
+			minSize: 150,
+			size: 200,
+			maxSize: 300,
+		},
+		{
+			accessorKey: "endDate",
+			header: () => endDateHeader,
+			cell: ({ row }) => {
+				const dateSnippet = createRawSnippet<[string]>((getDate) => {
+					const date = getDate();
+					return {
+						render: () => `<div>${date}</div>`,
+					};
+				});
+				const dateValue = row.getValue("endDate") as string;
+				const formattedDate = new Date(dateValue).toLocaleDateString("de-DE", {
+					year: "numeric",
+					month: "2-digit",
+					day: "2-digit",
+				});
+
+				return renderSnippet(dateSnippet, formattedDate);
+			},
+			enableColumnFilter: true,
+			enableSorting: true,
+			enableHiding: true,
+			minSize: 150,
+			size: 200,
+			maxSize: 300,
+		},
+		{
+			accessorKey: "isActive",
+			header: () => isActiveHeader,
+			cell: ({ row }) => {
+				const boolSnippet = createRawSnippet<[boolean]>((getBool) => {
+					const value = getBool();
+					return {
+						render: () => `<div class="text-center">${value ? "✓" : "✗"}</div>`,
+					};
+				});
+				return renderSnippet(boolSnippet, row.getValue("isActive") as boolean);
+			},
+			enableColumnFilter: true,
+			enableSorting: true,
+			enableHiding: true,
+			minSize: 80,
+			size: 100,
+			maxSize: 120,
+		},
+		{
+			accessorKey: "category",
+			header: () => categoryHeader,
+			cell: ({ row }) => {
+				const categorySnippet = createRawSnippet<[string]>((getCategory) => {
+					const category = getCategory();
+					return {
+						render: () => `<div>${category}</div>`,
+					};
+				});
+				return renderSnippet(categorySnippet, row.getValue("category") as string);
+			},
+			enableColumnFilter: true,
+			enableSorting: true,
+			enableHiding: true,
+			minSize: 100,
+			size: 150,
+			maxSize: 200,
+		},
+		{
 			id: "actions",
 			enableHiding: false,
 			header: () => actionsHeader,
 			cell: ({ row }) => renderSnippet(dataTableActions, row),
 			minSize: 100,
 			size: 150,
+			maxSize: 300,
 		},
 	];
 </script>
@@ -104,6 +206,40 @@
 		onRowClick={(row) => row.toggleExpanded()}
 		enableResizing
 	>
+		{#snippet insertButton(table)}
+			<Dialog.Root bind:open={insertDialogOpen}>
+				<Button
+					variant="default"
+					size="sm"
+					class="h-8"
+					onclick={() => (insertDialogOpen = true)}
+				>
+					<PlusIcon class="size-4" />
+					<span class="hidden md:inline">Neu</span>
+				</Button>
+				<Dialog.Content>
+					<Dialog.Header>
+						<Dialog.Title>Anpassbarer Button</Dialog.Title>
+						<Dialog.Description>
+							Dieser Button kann vollständig angepasst werden. Sie können hier Ihre
+							eigene Logik implementieren.
+						</Dialog.Description>
+					</Dialog.Header>
+					<div class="py-4">
+						<p class="text-muted-foreground text-sm">
+							Der Button und seine Aktion können über das <code
+								class="bg-muted rounded px-1 py-0.5 text-xs">insertButton</code
+							> Snippet vollständig angepasst werden.
+						</p>
+					</div>
+					<Dialog.Footer>
+						<Button variant="outline" onclick={() => (insertDialogOpen = false)}
+							>Schließen</Button
+						>
+					</Dialog.Footer>
+				</Dialog.Content>
+			</Dialog.Root>
+		{/snippet}
 		{#snippet expandedRow(row)}
 			<pre class="text-xs">{JSON.stringify(row.original, null, 2)}</pre>
 		{/snippet}

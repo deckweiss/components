@@ -43,7 +43,7 @@
 		"name": "data-table",
 		"title": "Data Table",
 		"type": "registry:block",
-		"description": "Fully functional data table with sort, filter, column toggle, row select, pagination and expandable rows. Based on Tanstack Table and Shadcn Svelte.",
+		"description": "Fully functional data table with sorting, filtering with many filter operators including range filters, hideable columns, sticky columns, search with prioritized 'includesString' logic, toolbar snippets, truncate logic, row select, pagination, expandable rows. Based on Tanstack Table and Shadcn Svelte. Responsive apart from filter and sort popovers.",
 		"dependencies": [
 			"@tanstack/table-core",
 			"@lucide/svelte",
@@ -58,6 +58,7 @@
 			"dropdown-menu",
 			"popover",
 			"select",
+			"switch",
 			"table"
 		],
 		"relativeUrl": "data-table.json"
@@ -124,10 +125,17 @@
 		"type": "registry:block",
 		"description": "A card component for dropdowns.",
 		"dependencies": [],
-		"registryDependencies": [
-			"card"
-		],
+		"registryDependencies": [],
 		"relativeUrl": "dropdown-card.json"
+	},
+	{
+		"name": "dashboard-card",
+		"title": "Dashboard Card",
+		"type": "registry:block",
+		"description": "A card component for dashboards with multiple footer variants.",
+		"dependencies": [],
+		"registryDependencies": [],
+		"relativeUrl": "dashboard-card.json"
 	},
 	{
 		"name": "format-measurement-value",

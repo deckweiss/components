@@ -30,14 +30,39 @@
 			<BookOpen class="mr-1 size-3" />
 			Getting Started
 		</Badge>
-		<h1 class="text-foreground mb-4 text-4xl font-bold tracking-tight">Install Components</h1>
+		<h1 class="text-foreground mb-4 text-4xl font-bold tracking-tight">Get Started Guide</h1>
 		<p class="text-muted-foreground max-w-2xl text-lg">
 			Get up and running with Deckweiss Components in your SvelteKit project.
 		</p>
 	</div>
 
+	<section>
+		<div class="grid gap-4 sm:grid-cols-2">
+			<a
+				href="/components"
+				class="group hover:border-primary/50 rounded-lg border p-6 transition-all hover:shadow-md"
+			>
+				<Boxes class="text-primary mb-3 size-8" />
+				<h3 class="text-foreground mb-1 font-semibold">Browse Components</h3>
+				<p class="text-muted-foreground text-sm">
+					Explore all available components with live demos and code examples.
+				</p>
+			</a>
+			<a
+				href="/utils"
+				class="group hover:border-primary/50 rounded-lg border p-6 transition-all hover:shadow-md"
+			>
+				<Wrench class="text-primary mb-3 size-8" />
+				<h3 class="text-foreground mb-1 font-semibold">Explore Utils</h3>
+				<p class="text-muted-foreground text-sm">
+					Check out our utilities for common patterns and functionality.
+				</p>
+			</a>
+		</div>
+	</section>
+
 	<!-- Prerequisites -->
-	<section class="mb-12">
+	<section class="my-12">
 		<h2 class="text-foreground mb-4 text-2xl font-semibold">Prerequisites</h2>
 		<div class="bg-muted/30 rounded-lg border p-6">
 			<ul class="space-y-3">
@@ -166,32 +191,5 @@
 />`}
 			lang="svelte"
 		/>
-	</section>
-
-	<!-- What's Next -->
-	<section>
-		<h2 class="text-foreground mb-4 text-2xl font-semibold">What's Next?</h2>
-		<div class="grid gap-4 sm:grid-cols-2">
-			<a
-				href="/components"
-				class="group hover:border-primary/50 rounded-lg border p-6 transition-all hover:shadow-md"
-			>
-				<Boxes class="text-primary mb-3 size-8" />
-				<h3 class="text-foreground mb-1 font-semibold">Browse Components</h3>
-				<p class="text-muted-foreground text-sm">
-					Explore all available components with live demos and code examples.
-				</p>
-			</a>
-			<a
-				href="/utils"
-				class="group hover:border-primary/50 rounded-lg border p-6 transition-all hover:shadow-md"
-			>
-				<Wrench class="text-primary mb-3 size-8" />
-				<h3 class="text-foreground mb-1 font-semibold">Explore Utils</h3>
-				<p class="text-muted-foreground text-sm">
-					Check out our utilities for common patterns and functionality.
-				</p>
-			</a>
-		</div>
 	</section>
 </div>

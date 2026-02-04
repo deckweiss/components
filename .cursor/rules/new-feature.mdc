@@ -1,0 +1,42 @@
+---
+description: New feature/technology
+alwaysApply: false
+---
+
+# New Feature Rules
+
+## Check Notion Database Before Adding New Features/Technologies
+
+When adding a feature, technology, library, or dependency that doesn't currently exist in the project:
+
+1. **Always check the Notion database first**: Use the Notion MCP to search and fetch the "Cases / Features" database (ID: `1885942f-173d-8083-839c-fae33b082b44`) to see if:
+
+   - The feature/technology has already been documented or discussed
+   - There are existing solutions, patterns, or decisions related to it
+   - There are known issues, limitations, or considerations
+
+2. **Search the database**: Use `notion-search` with query_type "internal" to search for relevant keywords related to the new feature/technology.
+
+3. **Review existing entries**: If found, review the database entries to understand:
+
+   - Current status (Noch nicht begonnen, Wir experimentieren, Lösung im Einsatz)
+   - Priority level
+   - Any documented solutions or approaches
+   - Related keywords or tags
+
+4. **If no entry found, ask before searching the web**: If the feature/technology is not found in the database, ask the user if they would like you to search the web to research available options and provide recommendations. If the user agrees, when evaluating options, prioritize:
+
+   - **Ease of use**: How simple is it to implement and use? Look for clear documentation, simple APIs, minimal configuration requirements, and good developer experience.
+   - **Maintenance status**: Is the project actively maintained? Check for:
+     - Recent commits and releases
+     - Active issue resolution
+     - Community engagement
+     - Project health indicators (GitHub stars, contributors, etc.)
+   - **Popularity**: How widely adopted is it? Consider:
+     - Download/usage statistics (npm downloads, GitHub stars, etc.)
+     - Community size and support
+     - Industry adoption
+     - Stack Overflow questions/answers
+     - Blog posts and tutorials
+
+This ensures consistency, avoids duplicate work, and leverages existing knowledge and decisions documented in the team's Notion workspace.

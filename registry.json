@@ -65,25 +65,13 @@
 				"button"
 			],
 			"files": [
-				{
-					"path": "src/lib/registry/blocks/custom-toast/toast.svelte",
-					"type": "registry:component"
-				},
-				{
-					"path": "src/lib/registry/blocks/custom-toast/custom-toast.ts",
-					"type": "registry:hook"
-				},
-				{
-					"path": "src/lib/registry/blocks/custom-toast/index.ts",
-					"type": "registry:file"
-				}
 			]
 		},
 		{
 			"name": "data-table",
 			"type": "registry:block",
 			"title": "Data Table",
-			"description": "Fully functional data table with sort, filter, column toggle, row select, pagination and expandable rows. Based on Tanstack Table and Shadcn Svelte.",
+			"description": "Fully functional data table with sorting, filtering with many filter operators including range filters, hideable columns, sticky columns, search with prioritized 'includesString' logic, toolbar snippets, truncate logic, row select, pagination, expandable rows. Based on Tanstack Table and Shadcn Svelte. Responsive apart from filter and sort popovers.",
 			"dependencies": [
 				"@tanstack/table-core",
 				"@lucide/svelte",
@@ -98,39 +86,60 @@
 				"dropdown-menu",
 				"popover",
 				"select",
+				"switch",
 				"table"
 			],
 			"files": [
-				{
-					"path": "src/lib/registry/blocks/data-table/index.ts",
-					"type": "registry:file",
-					"target": "blocks/data-table/index.ts"
-				},
-				{
-					"path": "src/lib/registry/blocks/data-table/utils.ts",
-					"type": "registry:file",
-					"target": "blocks/data-table/utils.ts"
-				},
-				{
-					"path": "src/lib/registry/blocks/data-table/data-table.svelte",
-					"type": "registry:component",
-					"target": "blocks/data-table/data-table.svelte"
-				},
-				{
-					"path": "src/lib/registry/blocks/data-table/data-table-faceted-filter.svelte",
-					"type": "registry:component",
-					"target": "blocks/data-table/data-table-faceted-filter.svelte"
-				},
-				{
-					"path": "src/lib/registry/blocks/data-table/data-table-toolbar.svelte",
-					"type": "registry:component",
-					"target": "blocks/data-table/data-table-toolbar.svelte"
-				},
-				{
-					"path": "src/lib/registry/blocks/data-table/data-table-view-options.svelte",
-					"type": "registry:component",
-					"target": "blocks/data-table/data-table-view-options.svelte"
-				}
+			{
+				"path": "src/lib/registry/blocks/data-table/index.ts",
+				"type": "registry:file",
+				"target": "blocks/data-table/index.ts"
+			},
+			{
+				"path": "src/lib/registry/blocks/data-table/utils.ts",
+				"type": "registry:file",
+				"target": "blocks/data-table/utils.ts"
+			},
+			{
+				"path": "src/lib/registry/blocks/data-table/filter-operators.ts",
+				"type": "registry:file",
+				"target": "blocks/data-table/filter-operators.ts"
+			},
+			{
+				"path": "src/lib/registry/blocks/data-table/data-table.svelte",
+				"type": "registry:component",
+				"target": "blocks/data-table/data-table.svelte"
+			},
+			{
+				"path": "src/lib/registry/blocks/data-table/data-table-toolbar.svelte",
+				"type": "registry:component",
+				"target": "blocks/data-table/data-table-toolbar.svelte"
+			},
+			{
+				"path": "src/lib/registry/blocks/data-table/data-table-view-options.svelte",
+				"type": "registry:component",
+				"target": "blocks/data-table/data-table-view-options.svelte"
+			},
+			{
+				"path": "src/lib/registry/blocks/data-table/data-table-filter-popover.svelte",
+				"type": "registry:component",
+				"target": "blocks/data-table/data-table-filter-popover.svelte"
+			},
+			{
+				"path": "src/lib/registry/blocks/data-table/data-table-column-filter.svelte",
+				"type": "registry:component",
+				"target": "blocks/data-table/data-table-column-filter.svelte"
+			},
+			{
+				"path": "src/lib/registry/blocks/data-table/data-table-sort-popover.svelte",
+				"type": "registry:component",
+				"target": "blocks/data-table/data-table-sort-popover.svelte"
+			},
+			{
+				"path": "src/lib/registry/blocks/data-table/data-table-pagination-menu.svelte",
+				"type": "registry:component",
+				"target": "blocks/data-table/data-table-pagination-menu.svelte"
+			}
 			]
 		},
 		{
@@ -299,7 +308,17 @@
 			"title": "Dropdown Card",
 			"description": "A card component for dropdowns.",
 			"dependencies": [],
-			"registryDependencies": ["card"],
+			"registryDependencies": [],
+			"files": [
+			]
+		},
+		{
+			"name": "dashboard-card",
+			"type": "registry:block",
+			"title": "Dashboard Card",
+			"description": "A card component for dashboards with multiple footer variants.",
+			"dependencies": [],
+			"registryDependencies": [],
 			"files": [
 			]
 		},

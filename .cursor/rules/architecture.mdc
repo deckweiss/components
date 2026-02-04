@@ -1,0 +1,8 @@
+---
+description: Project architecture
+alwaysApply: true
+---
+
+The project architecture is defined in `docs/architecture.md`. This file serves as the single source of truth for the project's architectural decisions, structure, and design patterns.
+
+**Important**: If major changes are made to the project (such as adding new components, changing the folder structure, modifying dependencies, or altering architectural patterns), the `docs/architecture.md` file must be updated to reflect these changes. This ensures that the documentation stays current and accurately represents the project's architecture.

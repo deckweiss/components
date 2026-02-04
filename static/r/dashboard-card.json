@@ -1,0 +1,8 @@
+{
+	"$schema": "https://shadcn-svelte.com/schema/registry-item.json",
+	"name": "dashboard-card",
+	"title": "Dashboard Card",
+	"type": "registry:block",
+	"description": "A card component for dashboards with multiple footer variants.",
+	"files": []
+}

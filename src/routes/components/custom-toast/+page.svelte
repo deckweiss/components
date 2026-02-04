@@ -7,9 +7,16 @@
 	import { Button } from "$lib/components/ui/button";
 	import { toaster } from "$lib/registry/blocks/custom-toast/index.js";
 	import { Toaster } from "$lib/registry/ui/sonner";
+	import { toast } from "svelte-sonner";
 
 	let { data } = $props();
+
+	// Single Toaster position - defaults to bottom-left
+	let toasterPosition = $state<"bottom-left" | "top-right">("bottom-left");
 </script>
+
+<!-- Single Toaster instance at page level - position controlled by state -->
+<Toaster position={toasterPosition} offset="20px" />
 
 <ComponentPageWrapper component={data.component}>
 	{#snippet firstExample()}
@@ -18,10 +25,13 @@
 				<Card class="mb-0 rounded-b-none border-b-0">
 					<div class="px-4 py-8">
 						<div class="flex flex-col gap-3">
-							<Toaster position="bottom-left" offset="20px" />
-
 							<Button
 								onclick={() => {
+									// Dismiss all toasts if position is changing
+									if (toasterPosition !== "bottom-left") {
+										toast.dismiss();
+									}
+									toasterPosition = "bottom-left";
 									toaster.pushToast({ message: "Success!", variant: "success" });
 								}}
 							>
@@ -29,6 +39,10 @@
 							</Button>
 							<Button
 								onclick={() => {
+									if (toasterPosition !== "bottom-left") {
+										toast.dismiss();
+									}
+									toasterPosition = "bottom-left";
 									toaster.pushToast({ message: "Error occurred", variant: "error" });
 								}}
 								variant="destructive"
@@ -37,6 +51,10 @@
 							</Button>
 							<Button
 								onclick={() => {
+									if (toasterPosition !== "bottom-left") {
+										toast.dismiss();
+									}
+									toasterPosition = "bottom-left";
 									toaster.pushToast({ message: "Loading...", variant: "loading" });
 								}}
 								variant="outline"
@@ -59,10 +77,13 @@
 				<Card class="mb-0 rounded-b-none border-b-0">
 					<div class="px-4 py-8">
 						<div class="flex flex-col gap-3">
-							<Toaster position="top-right" offset="20px" />
-
 							<Button
 								onclick={() => {
+									// Dismiss all toasts if position is changing
+									if (toasterPosition !== "top-right") {
+										toast.dismiss();
+									}
+									toasterPosition = "top-right";
 									toaster.pushToast({ message: "Toast opened at top right", variant: "success" });
 								}}
 							>

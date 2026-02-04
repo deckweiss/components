@@ -38,23 +38,19 @@ pnpm storybook
 
 Here is the standard workflow for adding a new component to the registry.
 
-### Step 1: Develop the Component Internally
+### Step 1: Develop the Component in the lib/registry folder
 
-Create your component in the `src/lib/components/ui` directory. This is where you'll build and perfect it. For example, to create a new `avatar` component:
+*   **For a simple UI component**: Create a new file such as `avatar.svelte` inside `src/lib/registry/ui/`.
+*   **For a complex "Block" component**: Create a new directory like `src/lib/registry/blocks/data-table/` and add all the files that should be included when a user installs that block.
 
-1.  Create the component directory: `src/lib/components/ui/avatar/`
+For example, to create a new `avatar` component:
+
+1.  Create the component directory: `src/lib/registry/ui/avatar/`
 2.  Create the Svelte file: `avatar.svelte`
 3.  Create an `index.ts` to export it: `export { default as Avatar } from './avatar.svelte'`
-4.  Create a Storybook story (`src/stories/Avatar.stories.svelte`) to view and test it in isolation.
+4.  (optional) Create a Storybook story (`src/stories/Avatar.stories.svelte`) to view and test it in isolation.
 
-### Step 2: Prepare the Component for the Registry
-
-Once your component is ready for distribution, you need to add its files to the `src/lib/registry` directory.
-
-*   **For a simple UI component**: Copy the `avatar.svelte` file to `src/lib/registry/ui/avatar.svelte`.
-*   **For a complex "Block" component**: Create a new directory like `src/lib/registry/blocks/new-block/` and add all the files that should be included when a user installs that block.
-
-### Step 3: Register the Component
+### Step 2: Register the Component
 
 Add a new entry to the `items` array in the `registry.json` file. This entry tells the `shadcn-svelte` CLI where to find the component's files.
 
@@ -76,13 +72,17 @@ Add a new entry to the `items` array in the `registry.json` file. This entry tel
 }
 ```
 
-### Step 4: Build the Registry
+### Step 3: Build the Registry
 
 After adding your component to `registry.json`, run the build command. This generates the final JSON definitions in the `static/r` directory that the CLI will consume.
 
 ```bash
 pnpm build:registry
 ```
+
+### Step 4: Showcase the Component
+
+Create a new folder with your components slug inside `routes/components` and create a new `+page.svelte`. Like the other example pages, build a demo page by using the `ComponentPageWrapper`. You will also need a `page.server.ts` with a simple load function and the components slug (refer to the other component's pages).
 
 ## Consuming Components
 

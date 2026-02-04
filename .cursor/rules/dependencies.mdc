@@ -1,0 +1,56 @@
+---
+description: Project dependencies
+alwaysApply: false
+---
+
+# Dependency Management Rules
+
+## Always Check Dependencies and Versions
+
+When working with dependencies, the agent MUST:
+
+1. **Check existing dependencies** before suggesting or installing new packages
+2. **Verify version compatibility** with existing dependencies
+3. **Use the project's dependency management tool** - never use npm/yarn for Node projects or pip for Python projects
+
+## Node.js Projects
+
+- **MUST use `pnpm`** for all dependency management operations:
+
+  - `pnpm install` - to install dependencies
+  - `pnpm add <package>` - to add new dependencies
+  - `pnpm add -D <package>` - to add dev dependencies
+  - `pnpm remove <package>` - to remove dependencies
+  - `pnpm list` - to check installed packages and versions
+  - `pnpm outdated` - to check for outdated packages
+
+- Before adding a new dependency:
+  1. Check `package.json` for existing versions
+  2. Verify compatibility with existing dependencies
+  3. Use `pnpm add <package>@<version>` to specify exact versions when needed
+
+## Python Projects
+
+- **MUST use `uv`** for all dependency management operations:
+
+  - `uv pip install` - to install dependencies
+  - `uv pip install <package>` - to add new dependencies
+  - `uv pip uninstall <package>` - to remove dependencies
+  - `uv pip list` - to check installed packages and versions
+  - `uv pip show <package>` - to check specific package version
+
+- Before adding a new dependency:
+  1. Check `pyproject.toml`, `requirements.txt`, or `Pipfile` for existing versions
+  2. Verify compatibility with existing dependencies
+  3. Use `uv pip install <package>==<version>` to specify exact versions when needed
+
+## Detection
+
+- Detect project type by checking for:
+  - Node.js: presence of `package.json` or `pnpm-lock.yaml`
+  - Python: presence of `pyproject.toml`, `requirements.txt`, `Pipfile`, or `uv.lock`
+
+## Never Use
+
+- **Node.js projects**: Do NOT use `npm`, `yarn`, or `npx` commands
+- **Python projects**: Do NOT use `pip`, `pipenv`, or `poetry` commands (unless explicitly requested by the user)

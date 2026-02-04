@@ -4,8 +4,5 @@
 	"title": "Dropdown Card",
 	"type": "registry:block",
 	"description": "A card component for dropdowns.",
-	"registryDependencies": [
-		"card"
-	],
 	"files": []
 }

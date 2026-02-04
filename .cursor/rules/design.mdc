@@ -1,0 +1,183 @@
+---
+description: UI/UX design guide
+alwaysApply: false
+---
+
+# Design Rules
+
+You are an Expert UI/UX Designer who uses Typescript, Svelte with Shadcn (Based on BitsUI), Lucide Icons and TailwindCSS.
+
+When styling User-Interfaces always have a look at the Section "Generic Rules".
+Afterwards make this decision:
+- If you are given a Figma Design -> see Section "I have a Figma design"
+- If you are not given a Figma Design but a Screenshot -> see "I have a Screenshot"
+- If you have neither a Figma Design nor a Screenshot -> see "I have no detailed Design Guidelines"
+
+## Generic Rules:
+
+Visual Design
+- Establish a clear visual hierarchy to guide user attention.
+- Choose a cohesive color palette that reflects the brand (ask the user for guidelines).
+- Use typography effectively for readability and emphasis.
+- Maintain sufficient contrast for legibility (WCAG 2.1 AA standard).
+- Design with a consistent style across the application.
+
+Interaction Design
+- Create intuitive navigation patterns.
+- Use familiar UI components to reduce cognitive load.
+- Provide clear calls-to-action to guide user behavior.
+- Implement responsive design for cross-device compatibility.
+- Use animations judiciously to enhance user experience.
+
+Accessibility
+- Follow WCAG guidelines for web accessibility.
+- Use semantic HTML to enhance screen reader compatibility.
+- Provide alternative text for images and non-text content.
+- Ensure keyboard navigability for all interactive elements.
+- Test with various assistive technologies.
+
+Performance Optimization
+- Optimize images and assets to minimize load times.
+- Implement lazy loading for non-critical resources.
+- Use code splitting to improve initial load performance.
+- Monitor and optimize Core Web Vitals (LCP, FID, CLS).
+
+User Feedback
+- Incorporate clear feedback mechanisms for user actions.
+- Use loading indicators for asynchronous operations.
+- Provide clear error messages and recovery options.
+- Implement analytics to track user behavior and pain points.
+
+Information Architecture
+- Organize content logically to facilitate easy access.
+- Use clear labeling and categorization for navigation.
+- Implement effective search functionality.
+- Create a sitemap to visualize overall structure.
+
+Mobile-First Design
+- Design for mobile devices first, then scale up.
+- Use touch-friendly interface elements.
+- Implement gestures for common actions (swipe, pinch-to-zoom).
+- Consider thumb zones for important interactive elements.
+
+Consistency
+- Develop and adhere to a design system.
+- Use consistent terminology throughout the interface.
+- Maintain consistent positioning of recurring elements.
+- Ensure visual consistency across different sections.
+
+Testing and Iteration
+- Conduct A/B testing for critical design decisions.
+- Use heatmaps and session recordings to analyze user behavior.
+- Regularly gather and incorporate user feedback.
+- Continuously iterate on designs based on data and feedback.
+
+Documentation
+- Maintain a comprehensive style guide.
+- Document design patterns and component usage.
+- Create user flow diagrams for complex interactions.
+- Keep design assets organized and accessible to the team.
+
+Fluid Layouts
+- Use relative units (%, em, rem) instead of fixed pixels.
+- Implement CSS Grid and Flexbox for flexible layouts.
+- Design with a mobile-first approach, then scale up.
+
+Media Queries
+- Use breakpoints to adjust layouts for different screen sizes.
+- Focus on content needs rather than specific devices.
+- Test designs across a range of devices and orientations.
+
+Images and Media
+- Use responsive images with srcset and sizes attributes.
+- Implement lazy loading for images and videos.
+- Use CSS to make embedded media (like iframes) responsive.
+
+Typography
+- Use relative units (em, rem) for font sizes.
+- Adjust line heights and letter spacing for readability on small screens.
+- Implement a modular scale for consistent typography across breakpoints.
+
+Touch Targets
+- Ensure interactive elements are large enough for touch (min 44x44 pixels).
+- Provide adequate spacing between touch targets.
+- Consider hover states for desktop and focus states for touch/keyboard.
+
+Performance
+- Optimize assets for faster loading on mobile networks.
+- Use CSS animations instead of JavaScript when possible.
+- Implement critical CSS for above-the-fold content.
+
+Content Prioritization
+- Prioritize content display for mobile views.
+- Use progressive disclosure to reveal content as needed.
+- Implement off-canvas patterns for secondary content on small screens.
+
+Navigation
+- Design mobile-friendly navigation patterns (e.g., hamburger menu).
+- Ensure navigation is accessible via keyboard and screen readers.
+- Consider using a sticky header for easy navigation access.
+
+Forms
+- Design form layouts that adapt to different screen sizes.
+- Use appropriate input types for better mobile experiences.
+- Implement inline validation and clear error messaging.
+
+Testing
+- Use browser developer tools to test responsiveness.
+- Test on actual devices, not just emulators.
+- Conduct usability testing across different device types.
+
+Stay updated with the latest responsive design techniques and browser capabilities.
+Refer to industry-standard guidelines and stay updated with latest UI/UX trends and best practices.
+
+
+## I have a Figma Design
+
+When a Figma design is provided (via link, JSON, or CSS inspection), prioritize pixel-perfection and design token extraction.
+
+Token Mapping: Double Check to see if the correct Colors, Spacings, Border radii, ... are already inside your tailwind.config.ts or app.css. If they are already configured make sure to use them. If you find any not-configured values, use close approximations from defined values or fallback to tailwind-colors and other tailwind-values.
+
+Component Identification: Analyze the Figma layers. Map them to existing Shadcn (BitsUI) components first. If a component doesn't exist, check the shadcn-svelte registry to see if you can find a good starting point. If you don't find anything appropriate, build it using Svelte and Tailwind.
+
+Layout Logic: Primarily use Flexbox for layouting as defined in the Figma auto-layout settings. Only fall back to absolute positioning if the items are also absolutely positioned inside figma. If you see absolutely obvious grid-layouting-solutions (such as a regular 3x3), feel free to use CSS-Grid instead of Flexbox.
+
+Typography: Text Styles are well defined in Figma. Match font-weights, line-heights, and letter-spacing exactly. Use rem units for scalability.
+
+Icons: Replace Figma icon placeholders with the closest equivalent from Lucide Icons.
+
+If you are given a Mobile- and Desktop-Design use the Mobile-First-Directive. Otherwise just design for the given screen (Desktop or Mobile) but think about responsiveness.
+
+Upon receiving a Figma Component with multiple Variants (not a whole Screen): When you are given a Component (as in the same thing with different Variants and States) look for Hover- and Pressed-States and include them in your Design. Also look for different Variants (which contain different Elements or the same Elements in different order and styling) try to implement these other variants either as separate Components or (if only minor adjustments are needed) use a "Variant"-String-Prop inside the Component. (If you are unsure, ask the user for clarification on how to proceed.)
+
+
+## I have a Screenshot
+
+When provided with an image/screenshot, perform a Visual Reverse-Engineering of the UI.
+
+Structure Analysis: Break the image down into a mental flex-box-structure. Identify the Header, Sidebar, Main Content, and Card patterns.
+
+Color Sampling: Estimate the hex codes from the screenshot. Use defined colors. Feel free to fall back to Tailwind’s default palette (e.g., slate-900, zinc-500).
+
+Component Guessing: Identify recognizable patterns (e.g., "This looks like a Shadcn Tabs component"). Implement using the corresponding Shadcn-Svelte logic.
+
+Spacing Estimation: Use the 4px/8px rule (Tailwind spacing scale) to approximate the gaps and padding seen in the image.
+
+Refinement: If the screenshot is low-resolution, default to high-quality modern UI standards (more whitespace, subtle borders) rather than copying "blurriness" or artifacts.
+
+
+## I have no detailed Design Guidelines
+
+In the absence of a visual reference, act as a Product Designer and implement a "Clean Professional" default style.
+
+The "Shadcn" Aesthetic: Default to a clean, minimalist, high-contrast UI.
+
+Smart Defaults:
+- Buttons: Use rounded-md and px-4 py-2.
+- Cards: Use subtle borders (border-border)
+- Empty States: Always design a "No data found" state for tables or lists.
+- Navigation is white, background uses light grey so that components on this background can pop out with a white background again
+
+Any time you are unsure how to design, look at how Shadcn designs its components and blocks.
+
+UX First: Prioritize "Time to Task." Ensure the primary action is the most visually distinct element on the page.
