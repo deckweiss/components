@@ -1,10 +1,10 @@
-import { isRecentlyAdded } from "./version-manager";
-import { isRecentlyUpdated } from "./version-manager";
+import { isRecentlyAdded, isRecentlyUpdated } from "$lib/versions/version-manager";
 import { outsourcedComponents, type ComponentSource } from "./outsourced-components";
 import DeckweissIcon from "$lib/assets/deckweiss-icon-white.svg";
 import ShadcnIcon from "$lib/assets/shadcn-logo.png";
 import ShadcnSvelteExtrasIcon from "$lib/assets/shadcn-svelte-extras-logo.svg";
 import MoreShadCnIcon from "$lib/assets/more-shadcn-logo.svg";
+import { error } from "@sveltejs/kit";
 
 /**
  * Registry data management
@@ -62,7 +62,7 @@ export function setRegistryData(data: RegistryJson) {
  */
 export function getComponents(): RegistryItem[] {
 	const data = getRegistryData();
-	
+
 	// Deckweiss components from registry.json
 	const deckweissComponents = data.items
 		.filter((item) => item.type === "registry:component" || item.type === "registry:block")
@@ -77,7 +77,7 @@ export function getComponents(): RegistryItem[] {
 			link: undefined,
 			isOutsourced: false,
 		}));
-	
+
 	// Outsourced components
 	const outsourced = outsourcedComponents.map((comp) => ({
 		name: comp.title,
@@ -90,9 +90,31 @@ export function getComponents(): RegistryItem[] {
 		link: comp.link,
 		isOutsourced: true,
 	}));
-	
+
 	// Merge and sort alphabetically
 	return [...deckweissComponents, ...outsourced].sort((a, b) => a.name.localeCompare(b.name));
+}
+
+/**
+ * Get page templates from registry.json
+ * Only includes items with type "registry:page"
+ * Sorted alphabetically by name
+ */
+export function getPageTemplates(): RegistryItem[] {
+	const data = getRegistryData();
+
+	const templates = data.items
+		.filter((item) => item.type === "registry:page")
+		.map((item) => ({
+			name: item.title,
+			slug: item.name,
+			description: item.description,
+			isWip: !item.files || item.files.length === 0,
+			isNew: isRecentlyAdded(item.name),
+			isUpdated: isRecentlyUpdated(item.name),
+		}));
+
+	return templates.sort((a, b) => a.name.localeCompare(b.name));
 }
 
 /**
@@ -102,7 +124,7 @@ export function getComponents(): RegistryItem[] {
  */
 export function getUtils(): RegistryItem[] {
 	const data = getRegistryData();
-	
+
 	// Deckweiss components from registry.json
 	const utils = data.items
 		.filter((item) => item.type === "registry:file")
@@ -115,7 +137,6 @@ export function getUtils(): RegistryItem[] {
 			isUpdated: isRecentlyUpdated(item.name),
 		}));
 
-	
 	// Merge and sort alphabetically
 	return utils.sort((a, b) => a.name.localeCompare(b.name));
 }
@@ -127,8 +148,8 @@ export function getUtils(): RegistryItem[] {
 export const sourceIconMap: Record<ComponentSource, string> = {
 	deckweiss: DeckweissIcon,
 	shadcn: ShadcnIcon,
-	'shadcn-svelte-extras': ShadcnSvelteExtrasIcon,
-	'more-shadcn': MoreShadCnIcon,
+	"shadcn-svelte-extras": ShadcnSvelteExtrasIcon,
+	"more-shadcn": MoreShadCnIcon,
 };
 
 /**
@@ -154,16 +175,13 @@ export function getComponentBySlug(slug: string): RegistryJsonItem | null {
  * Throws 404 error if component not found
  */
 export async function loadComponentData(slug: string) {
-	const { error } = await import("@sveltejs/kit");
-	const { isRecentlyAdded, isRecentlyUpdated } = await import("./version-manager");
-	
 	const component = getComponentBySlug(slug);
-	
+
 	if (!component) {
 		error(404, "Component not found");
 		throw new Error("Unreachable"); // TypeScript doesn't know error() throws
 	}
-	
+
 	return {
 		component: {
 			title: component.title,
@@ -172,7 +190,35 @@ export async function loadComponentData(slug: string) {
 			isNew: isRecentlyAdded(component.name),
 			isUpdated: isRecentlyUpdated(component.name),
 			slug: component.name,
-		}
+		},
+	};
+}
+
+/**
+ * Load page template data for a page
+ * Returns formatted data with title, description, isWip, isNew, and isUpdated flags
+ * Throws 404 error if page template not found
+ */
+export async function loadPageTemplateData(slug: string) {
+	const { error } = await import("@sveltejs/kit");
+	const { isRecentlyAdded, isRecentlyUpdated } = await import("$lib/versions/version-manager");
+
+	const template = getComponentBySlug(slug);
+
+	if (!template || template.type !== "registry:page") {
+		error(404, "Page template not found");
+		throw new Error("Unreachable");
+	}
+
+	return {
+		pageTemplate: {
+			title: template.title,
+			description: template.description || "",
+			isWip: !template.files || template.files.length === 0,
+			isNew: isRecentlyAdded(template.name),
+			isUpdated: isRecentlyUpdated(template.name),
+			slug: template.name,
+		},
 	};
 }
 
@@ -183,15 +229,15 @@ export async function loadComponentData(slug: string) {
  */
 export async function loadUtilData(slug: string) {
 	const { error } = await import("@sveltejs/kit");
-	const { isRecentlyAdded, isRecentlyUpdated } = await import("./version-manager");
-	
+	const { isRecentlyAdded, isRecentlyUpdated } = await import("$lib/versions/version-manager");
+
 	const util = getComponentBySlug(slug);
-	
+
 	if (!util) {
 		error(404, "Utility not found");
 		throw new Error("Unreachable"); // TypeScript doesn't know error() throws
 	}
-	
+
 	return {
 		util: {
 			title: util.title,
@@ -200,7 +246,7 @@ export async function loadUtilData(slug: string) {
 			isNew: isRecentlyAdded(util.name),
 			isUpdated: isRecentlyUpdated(util.name),
 			slug: util.name,
-		}
+		},
 	};
 }
 
@@ -211,7 +257,7 @@ const createRegistryProxy = (getter: () => RegistryItem[]) => {
 			const current = getter();
 			const value = (current as unknown as Record<string, unknown>)[prop as string];
 			if (value !== undefined) {
-				return typeof value === 'function' ? value.bind(current) : value;
+				return typeof value === "function" ? value.bind(current) : value;
 			}
 			return Reflect.get(current, prop);
 		},
@@ -223,10 +269,11 @@ const createRegistryProxy = (getter: () => RegistryItem[]) => {
 		},
 		ownKeys() {
 			return Reflect.ownKeys(getter());
-		}
+		},
 	}) as unknown as RegistryItem[];
 };
 
-// Export components and utils as proxies that read from cache
+// Export components, utils, and page templates as proxies that read from cache
 export const components = createRegistryProxy(getComponents);
 export const utils = createRegistryProxy(getUtils);
+export const pageTemplates = createRegistryProxy(getPageTemplates);

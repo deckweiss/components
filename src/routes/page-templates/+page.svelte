@@ -1,0 +1,53 @@
+<script lang="ts">
+	import { Badge } from "$lib/components/ui/badge";
+	import { pageTemplates } from "$lib/registry";
+	import { Sparkles, LayoutTemplate, Repeat } from "@lucide/svelte";
+	import DeckweissIcon from "$lib/assets/deckweiss-icon.png";
+</script>
+
+<svelte:head>
+	<title>Page Templates - Deckweiss Components</title>
+</svelte:head>
+
+<div class="mx-auto max-w-5xl px-6 py-12">
+	<!-- Header -->
+	<div class="mb-12">
+		<Badge variant="secondary" class="mb-4">
+			<LayoutTemplate class="mr-1 size-3" />
+			Page Templates
+		</Badge>
+		<h1 class="text-foreground mb-4 text-4xl font-bold tracking-tight">Page Template Library</h1>
+		<p class="text-muted-foreground max-w-2xl text-lg">
+			Installable page templates for common use cases. Add full pages to your project with one command.
+		</p>
+	</div>
+
+	<!-- Page Templates Grid (3 columns) -->
+	<div class="grid gap-x-8 gap-y-6 md:grid-cols-3">
+		{#each pageTemplates as template}
+			{@const isNew = template.isNew}
+			{@const isSoon = template.isWip}
+			{@const isUpdated = template.isUpdated}
+			<a
+				href={`/page-templates/${template.slug}`}
+				class="group text-foreground hover:border-primary inline-flex items-center gap-2 border-b-2 border-transparent pb-1 transition-colors"
+			>
+				<img
+					src={DeckweissIcon}
+					alt="Deckweiss"
+					class="size-4 flex-shrink-0 rounded"
+				/>
+				<span class="text-sm font-medium">{template.name}</span>
+				{#if isNew}
+					<span class="rounded-sm bg-emerald-500/10 p-1">
+						<Sparkles class="size-2.5 text-emerald-500" />
+					</span>
+				{:else if isSoon}
+					<span class="rounded-sm bg-gray-500/10 p-1 text-[7px] text-gray-500">WIP</span>
+				{:else if isUpdated}
+					<Repeat class="mr-0.5 size-3 text-blue-500" />
+				{/if}
+			</a>
+		{/each}
+	</div>
+</div>

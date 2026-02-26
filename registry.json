@@ -34,9 +34,7 @@
 			"type": "registry:component",
 			"title": "Page Progress",
 			"description": "A page loading progress bar.",
-			"registryDependencies": [
-				"progress"
-			],
+			"registryDependencies": ["progress"],
 			"files": [
 				{
 					"path": "src/lib/registry/blocks/page-progress/page-progress.svelte",
@@ -57,26 +55,16 @@
 			"type": "registry:component",
 			"title": "Custom Toast",
 			"description": "A toast component with custom look.",
-			"dependencies": [
-				"svelte-sonner",
-				"@lucide/svelte"
-			],
-			"registryDependencies": [
-				"button"
-			],
-			"files": [
-			]
+			"dependencies": ["svelte-sonner", "@lucide/svelte"],
+			"registryDependencies": ["button"],
+			"files": []
 		},
 		{
 			"name": "data-table",
 			"type": "registry:block",
 			"title": "Data Table",
 			"description": "Fully functional data table with sorting, filtering with many filter operators including range filters, hideable columns, sticky columns, search with prioritized 'includesString' logic, toolbar snippets, truncate logic, row select, pagination, expandable rows. Based on Tanstack Table and Shadcn Svelte. Responsive apart from filter and sort popovers.",
-			"dependencies": [
-				"@tanstack/table-core",
-				"@lucide/svelte",
-				"runed"
-			],
+			"dependencies": ["@tanstack/table-core", "@lucide/svelte", "runed"],
 			"registryDependencies": [
 				"badge",
 				"button",
@@ -90,56 +78,56 @@
 				"table"
 			],
 			"files": [
-			{
-				"path": "src/lib/registry/blocks/data-table/index.ts",
-				"type": "registry:file",
-				"target": "blocks/data-table/index.ts"
-			},
-			{
-				"path": "src/lib/registry/blocks/data-table/utils.ts",
-				"type": "registry:file",
-				"target": "blocks/data-table/utils.ts"
-			},
-			{
-				"path": "src/lib/registry/blocks/data-table/filter-operators.ts",
-				"type": "registry:file",
-				"target": "blocks/data-table/filter-operators.ts"
-			},
-			{
-				"path": "src/lib/registry/blocks/data-table/data-table.svelte",
-				"type": "registry:component",
-				"target": "blocks/data-table/data-table.svelte"
-			},
-			{
-				"path": "src/lib/registry/blocks/data-table/data-table-toolbar.svelte",
-				"type": "registry:component",
-				"target": "blocks/data-table/data-table-toolbar.svelte"
-			},
-			{
-				"path": "src/lib/registry/blocks/data-table/data-table-view-options.svelte",
-				"type": "registry:component",
-				"target": "blocks/data-table/data-table-view-options.svelte"
-			},
-			{
-				"path": "src/lib/registry/blocks/data-table/data-table-filter-popover.svelte",
-				"type": "registry:component",
-				"target": "blocks/data-table/data-table-filter-popover.svelte"
-			},
-			{
-				"path": "src/lib/registry/blocks/data-table/data-table-column-filter.svelte",
-				"type": "registry:component",
-				"target": "blocks/data-table/data-table-column-filter.svelte"
-			},
-			{
-				"path": "src/lib/registry/blocks/data-table/data-table-sort-popover.svelte",
-				"type": "registry:component",
-				"target": "blocks/data-table/data-table-sort-popover.svelte"
-			},
-			{
-				"path": "src/lib/registry/blocks/data-table/data-table-pagination-menu.svelte",
-				"type": "registry:component",
-				"target": "blocks/data-table/data-table-pagination-menu.svelte"
-			}
+				{
+					"path": "src/lib/registry/blocks/data-table/index.ts",
+					"type": "registry:file",
+					"target": "blocks/data-table/index.ts"
+				},
+				{
+					"path": "src/lib/registry/blocks/data-table/utils.ts",
+					"type": "registry:file",
+					"target": "blocks/data-table/utils.ts"
+				},
+				{
+					"path": "src/lib/registry/blocks/data-table/filter-operators.ts",
+					"type": "registry:file",
+					"target": "blocks/data-table/filter-operators.ts"
+				},
+				{
+					"path": "src/lib/registry/blocks/data-table/data-table.svelte",
+					"type": "registry:component",
+					"target": "blocks/data-table/data-table.svelte"
+				},
+				{
+					"path": "src/lib/registry/blocks/data-table/data-table-toolbar.svelte",
+					"type": "registry:component",
+					"target": "blocks/data-table/data-table-toolbar.svelte"
+				},
+				{
+					"path": "src/lib/registry/blocks/data-table/data-table-view-options.svelte",
+					"type": "registry:component",
+					"target": "blocks/data-table/data-table-view-options.svelte"
+				},
+				{
+					"path": "src/lib/registry/blocks/data-table/data-table-filter-popover.svelte",
+					"type": "registry:component",
+					"target": "blocks/data-table/data-table-filter-popover.svelte"
+				},
+				{
+					"path": "src/lib/registry/blocks/data-table/data-table-column-filter.svelte",
+					"type": "registry:component",
+					"target": "blocks/data-table/data-table-column-filter.svelte"
+				},
+				{
+					"path": "src/lib/registry/blocks/data-table/data-table-sort-popover.svelte",
+					"type": "registry:component",
+					"target": "blocks/data-table/data-table-sort-popover.svelte"
+				},
+				{
+					"path": "src/lib/registry/blocks/data-table/data-table-pagination-menu.svelte",
+					"type": "registry:component",
+					"target": "blocks/data-table/data-table-pagination-menu.svelte"
+				}
 			]
 		},
 		{
@@ -147,12 +135,8 @@
 			"type": "registry:block",
 			"title": "Navbar",
 			"description": "Mulit layer navbar",
-			"dependencies": [
-				"@lucide/svelte"
-			],
-			"registryDependencies": [
-				"dropdown-menu"
-			],
+			"dependencies": ["@lucide/svelte"],
+			"registryDependencies": ["dropdown-menu"],
 			"files": [
 				{
 					"path": "src/lib/registry/blocks/navbar/index.ts",
@@ -206,16 +190,8 @@
 			"type": "registry:block",
 			"title": "Posthog Feedback",
 			"description": "A feedback button integrated with Posthog",
-			"dependencies": [
-				"posthog-js",
-				"lucide-svelte"
-			],
-			"registryDependencies": [
-				"button",
-				"dialog",
-				"label",
-				"select"
-			],
+			"dependencies": ["posthog-js", "lucide-svelte"],
+			"registryDependencies": ["button", "dialog", "label", "select"],
 			"files": [
 				{
 					"path": "src/lib/registry/blocks/posthog-feedback/index.ts",
@@ -239,14 +215,8 @@
 			"type": "registry:block",
 			"title": "Add On",
 			"description": "A component to dynamically render add-ons",
-			"dependencies": [
-				"@lucide/svelte",
-				"runed"
-			],
-			"registryDependencies": [
-				"button",
-				"resizable"
-			],
+			"dependencies": ["@lucide/svelte", "runed"],
+			"registryDependencies": ["button", "resizable"],
 			"files": [
 				{
 					"path": "src/lib/registry/blocks/add-on/index.ts",
@@ -285,9 +255,7 @@
 			"type": "registry:block",
 			"title": "Zaunkonfigurator Button",
 			"description": "The button component for the Zaunkonfigurator with multiple variants.",
-			"dependencies": [
-				"tailwind-variants"
-			],
+			"dependencies": ["tailwind-variants"],
 			"registryDependencies": [],
 			"files": [
 				{
@@ -309,8 +277,7 @@
 			"description": "A card component for dropdowns.",
 			"dependencies": [],
 			"registryDependencies": [],
-			"files": [
-			]
+			"files": []
 		},
 		{
 			"name": "dashboard-card",
@@ -319,8 +286,7 @@
 			"description": "A card component for dashboards with multiple footer variants.",
 			"dependencies": [],
 			"registryDependencies": [],
-			"files": [
-			]
+			"files": []
 		},
 		{
 			"name": "format-measurement-value",
@@ -339,6 +305,60 @@
 					"path": "src/lib/registry/utils/format-measurement-value/index.ts",
 					"type": "registry:file",
 					"target": "utils/format-measurement-value/index.ts"
+				}
+			]
+		},
+		{
+			"name": "update-popup",
+			"type": "registry:block",
+			"title": "Update Popup",
+			"description": "A popup component for displaying updates.",
+			"dependencies": ["@lucide/svelte"],
+			"registryDependencies": ["dialog", "button", "separator"],
+			"files": [
+				{
+					"path": "src/lib/registry/blocks/update-popup/update-popup.svelte",
+					"type": "registry:component"
+				},
+				{
+					"path": "src/lib/registry/blocks/update-popup/index.ts",
+					"type": "registry:file"
+				},
+				{
+					"path": "src/lib/versions/version-manager.ts",
+					"type": "registry:file"
+				},
+				{
+					"path": "src/lib/versions/content/v1.0.0.ts",
+					"type": "registry:file"
+				},
+				{
+					"path": "src/lib/versions/content/v1.1.0.ts",
+					"type": "registry:file"
+				},
+				{
+					"path": "src/lib/versions/types.ts",
+					"type": "registry:file"
+				}
+			]
+		},
+		{
+			"name": "changelog-page",
+			"type": "registry:page",
+			"title": "Changelog Page",
+			"description": "A page template for displaying version history with new features, improvements, and bug fixes.",
+			"dependencies": ["@lucide/svelte"],
+			"registryDependencies": ["update-popup", "button", "card"],
+			"files": [
+				{
+					"path": "src/lib/registry/blocks/changelog-page/changelog-page.svelte",
+					"type": "registry:component",
+					"target": "blocks/changelog-page/changelog-page.svelte"
+				},
+				{
+					"path": "src/lib/registry/blocks/changelog-page/index.ts",
+					"type": "registry:file",
+					"target": "blocks/changelog-page/index.ts"
 				}
 			]
 		}

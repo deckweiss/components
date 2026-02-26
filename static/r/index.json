@@ -145,5 +145,35 @@
 		"dependencies": [],
 		"registryDependencies": [],
 		"relativeUrl": "format-measurement-value.json"
+	},
+	{
+		"name": "update-popup",
+		"title": "Update Popup",
+		"type": "registry:block",
+		"description": "A popup component for displaying updates.",
+		"dependencies": [
+			"@lucide/svelte"
+		],
+		"registryDependencies": [
+			"dialog",
+			"button",
+			"separator"
+		],
+		"relativeUrl": "update-popup.json"
+	},
+	{
+		"name": "changelog-page",
+		"title": "Changelog Page",
+		"type": "registry:page",
+		"description": "A page template for displaying version history with new features, improvements, and bug fixes.",
+		"dependencies": [
+			"@lucide/svelte"
+		],
+		"registryDependencies": [
+			"update-popup",
+			"button",
+			"card"
+		],
+		"relativeUrl": "changelog-page.json"
 	}
 ]

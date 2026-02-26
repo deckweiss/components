@@ -11,6 +11,8 @@
 		Sparkles,
 		Boxes,
 		Wrench,
+		File,
+		LayoutTemplate,
 	} from "@lucide/svelte";
 	import { UseClipboard } from "$lib/hooks/use-clipboard.svelte";
 
@@ -56,6 +58,26 @@
 				<h3 class="text-foreground mb-1 font-semibold">Explore Utils</h3>
 				<p class="text-muted-foreground text-sm">
 					Check out our utilities for common patterns and functionality.
+				</p>
+			</a>
+			<a
+				href="/resources"
+				class="group hover:border-primary/50 rounded-lg border p-6 transition-all hover:shadow-md"
+			>
+				<File class="text-primary mb-3 size-8" />
+				<h3 class="text-foreground mb-1 font-semibold">Browse Resources</h3>
+				<p class="text-muted-foreground text-sm">
+					Copy-paste code snippets and reference content for your project.
+				</p>
+			</a>
+			<a
+				href="/page-templates"
+				class="group hover:border-primary/50 rounded-lg border p-6 transition-all hover:shadow-md"
+			>
+				<LayoutTemplate class="text-primary mb-3 size-8" />
+				<h3 class="text-foreground mb-1 font-semibold">Page Templates</h3>
+				<p class="text-muted-foreground text-sm">
+					Installable ready-to-use page templates for changelog, dashboards, and more.
 				</p>
 			</a>
 		</div>

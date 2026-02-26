@@ -5,6 +5,7 @@
 	import { Menu, X } from "@lucide/svelte";
 	import { Button } from "$lib/components/ui/button";
 	import { setRegistryData } from "$lib/registry";
+	import { UpdatePopup } from "$lib/registry/blocks/update-popup";
 
 	let { data, children } = $props();
 
@@ -72,3 +73,5 @@
 		</main>
 	</div>
 {/if}
+
+<UpdatePopup />

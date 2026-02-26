@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { Badge } from "$lib/components/ui/badge";
-	import { changelog } from "$lib/version-manager";
+	import { getChangelog } from "$lib/versions/version-manager";
 	import { History, Repeat, Bug, Trash2, Sparkles } from "@lucide/svelte";
+	import { ChangelogPage } from "$lib/registry/blocks/changelog-page";
+
+	const changelog = getChangelog();
 
 	const typeIcons = {
 		added: Sparkles,
@@ -35,66 +38,5 @@
 		</p>
 	</div>
 
-	<!-- Changelog Entries -->
-	<div class="relative">
-		<!-- Timeline line -->
-		<div class="bg-border absolute top-0 bottom-0 left-[15.75px] hidden w-px sm:block"></div>
-
-		<div class="space-y-12">
-			{#each changelog as entry, index}
-				<div class="relative">
-					<!-- Timeline dot -->
-					<div
-						class="bg-primary absolute top-1 left-4 hidden size-3 -translate-x-1/2 rounded-full sm:block"
-					></div>
-
-					<div class="sm:pl-12">
-						<!-- Version Header -->
-						<div class="mb-4 flex flex-wrap items-center gap-3">
-							<h2 class="text-foreground text-2xl font-bold">v{entry.version}</h2>
-							<Badge variant="outline" class="text-muted-foreground">
-								{new Date(entry.date).toLocaleDateString("en-US", {
-									year: "numeric",
-									month: "long",
-									day: "numeric",
-								})}
-							</Badge>
-							{#if index === 0}
-								<Badge class="bg-primary/10 text-primary">Latest</Badge>
-							{/if}
-						</div>
-
-						<!-- Changes -->
-						<div class="space-y-3">
-							{#each entry.changes as change}
-								{@const Icon = typeIcons[change.type]}
-								<div class="flex items-start gap-3">
-									<div
-										class="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded {typeColors[
-											change.type
-										]}"
-									>
-										<Icon class="size-3.5" />
-									</div>
-									<p class="text-foreground">
-										{change.description}
-										{#if change.ref}
-											<a
-												href={change.category === "util"
-													? `/utils/${change.ref}`
-													: `/components/${change.ref}`}
-												class="text-primary/60 ml-1 text-xs hover:underline"
-											>
-												→ View
-											</a>
-										{/if}
-									</p>
-								</div>
-							{/each}
-						</div>
-					</div>
-				</div>
-			{/each}
-		</div>
-	</div>
+	<ChangelogPage />
 </div>

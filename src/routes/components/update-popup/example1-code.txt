@@ -1,0 +1,9 @@
+<script lang="ts">
+  import { ChangelogPage } from "$lib/components/blocks/changelog-page";
+  import { UpdatePopup } from "$lib/components/blocks/update-popup";
+</script>
+
+<ChangelogPage />
+
+<!-- Add to layout for "Highlights anzeigen" popup -->
+<UpdatePopup />

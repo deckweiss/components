@@ -2,7 +2,7 @@
 	import { Button } from "$lib/components/ui/button";
 	import { Badge } from "$lib/components/ui/badge";
 	import { components, utils } from "$lib/registry";
-	import { getLatestVersion } from "$lib/version-manager";
+	import { getLatestVersion } from "$lib/versions/version-manager";
 	import {
 		Boxes,
 		ArrowRight,
@@ -80,7 +80,7 @@
 					<span
 						class="mb-2 bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-2xl font-bold text-transparent"
 					>
-						v{getLatestVersion()}
+						v{getLatestVersion().version}
 					</span>
 					<span class="text-muted-foreground text-xs font-medium tracking-wider uppercase">
 						Latest Version

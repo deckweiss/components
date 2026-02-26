@@ -1,13 +1,15 @@
 <script lang="ts">
 	import { page } from "$app/state";
 	import { Badge } from "$lib/components/ui/badge";
-	import { components, utils, getSourceIcon } from "$lib/registry";
-	import { changelog, getLatestVersion } from "$lib/version-manager";
+	import { components, utils, pageTemplates, getSourceIcon } from "$lib/registry";
+	import { getLatestVersion } from "$lib/versions/version-manager";
 	import {
 		Boxes,
 		BookOpen,
+		File,
 		GitBranch,
 		History,
+		LayoutTemplate,
 		Wrench,
 		ChevronDown,
 		Sparkles,
@@ -21,6 +23,7 @@
 	import DeckweissIcon from "$lib/assets/deckweiss-icon.png";
 	import * as Dialog from "$lib/components/ui/dialog";
 	import { outsourcedComponents, type ComponentSource } from "$lib/outsourced-components";
+	import { getResources } from "$lib/resources";
 
 	interface Props {
 		class?: string;
@@ -30,6 +33,8 @@
 
 	let componentsExpanded = $state(true);
 	let utilsExpanded = $state(true);
+	let resourcesExpanded = $state(true);
+	let pageTemplatesExpanded = $state(true);
 	let creditsOpen = $state(false);
 
 	// Create a source credits map
@@ -102,6 +107,54 @@
 				</li>
 				<li>
 					<a
+						href="/components"
+						class="text-sidebar-foreground hover:bg-sidebar-accent flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors {page
+							.url.pathname.startsWith('/components')
+							? 'bg-sidebar-accent text-sidebar-accent-foreground'
+							: ''}"
+					>
+						<Boxes class="size-4 opacity-60" />
+						Components
+					</a>
+				</li>
+				<li>
+					<a
+						href="/utils"
+						class="text-sidebar-foreground hover:bg-sidebar-accent flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors {page
+							.url.pathname.startsWith('/utils')
+							? 'bg-sidebar-accent text-sidebar-accent-foreground'
+							: ''}"
+					>
+						<Wrench class="size-4 opacity-60" />
+						Utils
+					</a>
+				</li>
+				<li>
+					<a
+						href="/resources"
+						class="text-sidebar-foreground hover:bg-sidebar-accent flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors {page
+							.url.pathname.startsWith('/resources')
+							? 'bg-sidebar-accent text-sidebar-accent-foreground'
+							: ''}"
+					>
+						<File class="size-4 opacity-60" />
+						Resources
+					</a>
+				</li>
+				<li>
+					<a
+						href="/page-templates"
+						class="text-sidebar-foreground hover:bg-sidebar-accent flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors {page
+							.url.pathname.startsWith('/page-templates')
+							? 'bg-sidebar-accent text-sidebar-accent-foreground'
+							: ''}"
+					>
+						<LayoutTemplate class="size-4 opacity-60" />
+						Page Templates
+					</a>
+				</li>
+				<li>
+					<a
 						href="/changelog"
 						class="text-sidebar-foreground hover:bg-sidebar-accent flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors {page
 							.url.pathname === '/changelog'
@@ -110,7 +163,7 @@
 					>
 						<History class="size-4 opacity-60" />
 						Changelog
-						<Badge variant="secondary" class="ml-auto text-[10px]">{getLatestVersion()}</Badge>
+						<Badge variant="secondary" class="ml-auto text-[10px]">{getLatestVersion().version}</Badge>
 					</a>
 				</li>
 			</ul>
@@ -216,6 +269,73 @@
 									{/if}
 									{#if util.isUpdated}
 										<Repeat class="mr-0.5 size-3 text-blue-500" />
+									{/if}
+								</span>
+							</a>
+						</li>
+					{/each}
+				</ul>
+			{/if}
+		</div>
+
+		<!-- Resources -->
+		<div class="mb-6">
+			<button
+				onclick={() => (resourcesExpanded = !resourcesExpanded)}
+				class="text-sidebar-foreground/50 hover:text-sidebar-foreground mb-2 flex w-full items-center justify-between px-3 text-[10px] font-semibold tracking-wider uppercase transition-colors"
+			>
+				<span>Resources</span>
+				<ChevronDown class="size-3 transition-transform {resourcesExpanded ? '' : '-rotate-90'}" />
+			</button>
+			{#if resourcesExpanded}
+				<ul class="space-y-0.5">
+					{#each getResources() as resource (resource.slug)}
+						<li>
+							<a
+								href="/resources/{resource.slug}"
+								class="text-sidebar-foreground hover:bg-sidebar-accent flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors {page
+									.url.pathname === `/resources/${resource.slug}`
+									? 'bg-sidebar-accent text-sidebar-accent-foreground'
+									: ''}"
+							>
+								<span class="flex items-center gap-2">
+									<span class="truncate">{resource.name}</span>
+								</span>
+							</a>
+						</li>
+					{/each}
+				</ul>
+			{/if}
+		</div>
+
+		<!-- Page Templates -->
+		<div class="mb-6">
+			<button
+				onclick={() => (pageTemplatesExpanded = !pageTemplatesExpanded)}
+				class="text-sidebar-foreground/50 hover:text-sidebar-foreground mb-2 flex w-full items-center justify-between px-3 text-[10px] font-semibold tracking-wider uppercase transition-colors"
+			>
+				<span>Page Templates</span>
+				<ChevronDown class="size-3 transition-transform {pageTemplatesExpanded ? '' : '-rotate-90'}" />
+			</button>
+			{#if pageTemplatesExpanded}
+				<ul class="space-y-0.5">
+					{#each pageTemplates as template (template.slug)}
+						<li>
+							<a
+								href="/page-templates/{template.slug}"
+								class="text-sidebar-foreground hover:bg-sidebar-accent flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors {page
+									.url.pathname === `/page-templates/${template.slug}`
+									? 'bg-sidebar-accent text-sidebar-accent-foreground'
+									: ''}"
+							>
+								<span class="flex items-center gap-2">
+									<span class="truncate">{template.name}</span>
+									{#if template.isNew}
+										<span class="rounded-sm bg-emerald-500/10 p-1">
+											<Sparkles class="size-2.5 text-emerald-500" />
+										</span>
+									{:else if template.isUpdated}
+										<Repeat class="size-3 text-blue-500" />
 									{/if}
 								</span>
 							</a>

@@ -14,13 +14,13 @@ export interface OutsourcedComponent {
 
 export const outsourcedComponents: OutsourcedComponent[] = [
 	{
-	 	title: "Button",
+		title: "Button",
 		link: "https://shadcn-svelte.com/docs/components/button",
 		source: "shadcn",
 	},
 	{
 		title: "Badge",
-	   	link: "https://shadcn-svelte.com/docs/components/badge",
+		link: "https://shadcn-svelte.com/docs/components/badge",
 		source: "shadcn",
 	},
 	{
@@ -40,12 +40,12 @@ export const outsourcedComponents: OutsourcedComponent[] = [
 	},
 	{
 		title: "Walkthrough",
-		link: "https://more-shadcn.noair.fun/components/walkthrough",
+		link: "https://more-shadcn.noair.fun/docs/components/walkthrough",
 		source: "more-shadcn",
 	},
 	{
 		title: "Stepper",
 		link: "https://shadcn-svelte-extras.com/components/stepper",
 		source: "shadcn-svelte-extras",
-	}
+	},
 ];

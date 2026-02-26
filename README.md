@@ -40,8 +40,8 @@ Here is the standard workflow for adding a new component to the registry.
 
 ### Step 1: Develop the Component in the lib/registry folder
 
-*   **For a simple UI component**: Create a new file such as `avatar.svelte` inside `src/lib/registry/ui/`.
-*   **For a complex "Block" component**: Create a new directory like `src/lib/registry/blocks/data-table/` and add all the files that should be included when a user installs that block.
+- **For a simple UI component**: Create a new file such as `avatar.svelte` inside `src/lib/registry/ui/`.
+- **For a complex "Block" component**: Create a new directory like `src/lib/registry/blocks/data-table/` and add all the files that should be included when a user installs that block.
 
 For example, to create a new `avatar` component:
 
@@ -57,18 +57,21 @@ Add a new entry to the `items` array in the `registry.json` file. This entry tel
 **Crucially, the `files.path` property must point to the component's location within the `src/lib/registry` directory.**
 
 **Example for a simple `avatar` component:**
+
 ```json
 {
-  "name": "avatar",
-  "type": "registry:component",
-  "title": "Avatar",
-  "description": "An image element with a fallback for representing a user.",
-  "files": [
-    {
-      "path": "src/lib/registry/ui/avatar.svelte",
-      "type": "registry:component"
-    }
-  ]
+	"name": "avatar",
+	"type": "registry:component",
+	"title": "Avatar",
+	"description": "An image element with a fallback for representing a user.",
+	"dependencies": ["@lucide/svelte"],
+	"registryDependencies": ["card", "button", "separator"],
+	"files": [
+		{
+			"path": "src/lib/registry/ui/avatar.svelte",
+			"type": "registry:component"
+		}
+	]
 }
 ```
 
