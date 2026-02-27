@@ -5,5 +5,4 @@
 
 <ChangelogPage />
 
-<!-- Add to layout for "Highlights anzeigen" popup -->
 <UpdatePopup />

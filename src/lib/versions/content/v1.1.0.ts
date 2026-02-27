@@ -29,6 +29,7 @@ export const versionData: VersionData = {
 			"Added sidebar items for viewing all components, utils, resources and page templates",
 			"Added Update Popup component alongside a version manager",
 			"Added Changelog Page as first entry in the Page Templates category",
+			"Added Glowing Gradient Button resource",
 		],
 		improvements: [],
 		bugFixes: [],

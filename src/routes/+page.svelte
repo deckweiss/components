@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { Button } from "$lib/components/ui/button";
 	import { Badge } from "$lib/components/ui/badge";
-	import { components, utils } from "$lib/registry";
+	import { components, utils, pageTemplates } from "$lib/registry";
+	import { getResources } from "$lib/resources";
 	import { getLatestVersion } from "$lib/versions/version-manager";
 	import {
 		Boxes,
@@ -13,6 +14,8 @@
 		Palette,
 		Github,
 		Construction,
+		File,
+		LayoutTemplate,
 	} from "@lucide/svelte";
 	import { goto } from "$app/navigation";
 	import DeckweissLogo from "$lib/assets/deckweiss-logo.svg";
@@ -65,28 +68,8 @@
 		</div>
 
 		<!-- Stats -->
-		<div class="mt-20 w-full max-w-3xl">
-			<div class="grid gap-6 sm:grid-cols-3">
-				<!-- Version Stat -->
-				<button
-					onclick={() => goto("/changelog")}
-					class="group border-border/50 relative flex cursor-pointer flex-col items-center justify-center rounded-2xl border bg-gradient-to-br from-orange-500/5 to-orange-500/0 p-6 backdrop-blur-sm transition-all hover:border-orange-500/50 hover:shadow-lg"
-				>
-					<div
-						class="mb-3 flex size-14 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-500/10 text-orange-500 transition-transform group-hover:scale-110"
-					>
-						<Sparkles class="size-6" />
-					</div>
-					<span
-						class="mb-2 bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-2xl font-bold text-transparent"
-					>
-						v{getLatestVersion().version}
-					</span>
-					<span class="text-muted-foreground text-xs font-medium tracking-wider uppercase">
-						Latest Version
-					</span>
-				</button>
-
+		<div class="mt-20 w-full max-w-4xl">
+			<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
 				<!-- Components Stat -->
 				<button
 					onclick={() => goto("/components")}
@@ -124,6 +107,46 @@
 					</span>
 					<span class="text-muted-foreground text-xs font-medium tracking-wider uppercase">
 						Utilities
+					</span>
+				</button>
+
+				<!-- Resources Stat -->
+				<button
+					onclick={() => goto("/resources")}
+					class="group border-border/50 relative flex cursor-pointer flex-col items-center justify-center rounded-2xl border bg-gradient-to-br from-orange-500/5 to-orange-500/0 p-6 backdrop-blur-sm transition-all hover:border-orange-500/50 hover:shadow-lg"
+				>
+					<div
+						class="mb-3 flex size-14 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-500/10 text-orange-500 transition-transform group-hover:scale-110"
+					>
+						<File class="size-6" />
+					</div>
+					<span
+						class="mb-2 bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-2xl font-bold text-transparent"
+					>
+						{getResources().length}
+					</span>
+					<span class="text-muted-foreground text-xs font-medium tracking-wider uppercase">
+						Resources
+					</span>
+				</button>
+
+				<!-- Page Templates Stat -->
+				<button
+					onclick={() => goto("/page-templates")}
+					class="group border-border/50 relative flex cursor-pointer flex-col items-center justify-center rounded-2xl border bg-gradient-to-br from-orange-500/5 to-orange-500/0 p-6 backdrop-blur-sm transition-all hover:border-orange-500/50 hover:shadow-lg"
+				>
+					<div
+						class="mb-3 flex size-14 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-500/10 text-orange-500 transition-transform group-hover:scale-110"
+					>
+						<LayoutTemplate class="size-6" />
+					</div>
+					<span
+						class="mb-2 bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-2xl font-bold text-transparent"
+					>
+						{pageTemplates.length}
+					</span>
+					<span class="text-muted-foreground text-xs font-medium tracking-wider uppercase">
+						Page Templates
 					</span>
 				</button>
 			</div>

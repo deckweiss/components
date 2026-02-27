@@ -7,13 +7,23 @@
 		backHref: string;
 		title: string;
 		description: string;
+		isNew?: boolean;
+		isUpdated?: boolean;
 		children: Snippet;
 	}
 
-	let { backHref, title, description, children }: Props = $props();
+	let { backHref, title, description, isNew, isUpdated, children }: Props = $props();
 </script>
 
-<GenericPageLayout {backHref} badgeIcon={File} badgeText="Resource" {title} {description}>
+<GenericPageLayout
+	{backHref}
+	badgeIcon={File}
+	badgeText="Resource"
+	{isNew}
+	{isUpdated}
+	{title}
+	{description}
+>
 	{#snippet children()}
 		{@render children()}
 	{/snippet}

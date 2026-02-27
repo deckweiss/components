@@ -2,7 +2,6 @@
 	import { Badge } from "$lib/components/ui/badge";
 	import { pageTemplates } from "$lib/registry";
 	import { Sparkles, LayoutTemplate, Repeat } from "@lucide/svelte";
-	import DeckweissIcon from "$lib/assets/deckweiss-icon.png";
 </script>
 
 <svelte:head>
@@ -32,11 +31,6 @@
 				href={`/page-templates/${template.slug}`}
 				class="group text-foreground hover:border-primary inline-flex items-center gap-2 border-b-2 border-transparent pb-1 transition-colors"
 			>
-				<img
-					src={DeckweissIcon}
-					alt="Deckweiss"
-					class="size-4 flex-shrink-0 rounded"
-				/>
 				<span class="text-sm font-medium">{template.name}</span>
 				{#if isNew}
 					<span class="rounded-sm bg-emerald-500/10 p-1">

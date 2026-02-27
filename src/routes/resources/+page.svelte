@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Badge } from "$lib/components/ui/badge";
 	import { getResources } from "$lib/resources";
-	import { File } from "@lucide/svelte";
+	import { File, Repeat, Sparkles, SquareArrowOutUpRight } from "@lucide/svelte";
 
 	const resources = getResources();
 </script>
@@ -27,10 +27,25 @@
 	<div class="grid gap-x-8 gap-y-6 md:grid-cols-3">
 		{#each resources as resource}
 			<a
-				href={`/resources/${resource.slug}`}
-				class="group text-foreground hover:border-primary inline-flex items-center gap-2 border-b-2 border-transparent pb-1 transition-colors"
+				href={resource.link ?? `/resources/${resource.slug}`}
+				target={resource.link ? "_blank" : undefined}
+				rel={resource.link ? "noopener noreferrer" : undefined}
+				class="group text-foreground hover:border-primary inline-flex items-center justify-between gap-2 border-b-2 border-transparent pb-1 transition-colors"
 			>
 				<span class="text-sm font-medium">{resource.name}</span>
+				<span class="flex shrink-0 items-center gap-1">
+					{#if resource.isNew}
+						<span class="rounded-sm bg-emerald-500/10 p-1">
+							<Sparkles class="size-2.5 text-emerald-500" />
+						</span>
+					{/if}
+					{#if resource.isUpdated}
+						<Repeat class="size-3 text-blue-500" />
+					{/if}
+					{#if resource.link}
+						<SquareArrowOutUpRight class="size-3 opacity-40" />
+					{/if}
+				</span>
 			</a>
 		{/each}
 	</div>

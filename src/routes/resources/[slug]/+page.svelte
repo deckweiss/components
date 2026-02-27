@@ -1,6 +1,8 @@
 <script lang="ts">
 	import ResourcePageWrapper from "$lib/components/page-layout/resource-page-wrapper.svelte";
+	import { Button } from "$lib/components/ui/button";
 	import { outsourcedComponents } from "$lib/outsourced-components";
+	import { SquareArrowOutUpRight } from "@lucide/svelte";
 
 	let { data } = $props();
 </script>
@@ -11,7 +13,8 @@
 			<section class="mb-12">
 				<h2 class="text-foreground mb-4 text-2xl font-semibold">Reference</h2>
 				<p class="text-muted-foreground mb-6">
-					This project uses components from external sources. Copy the documentation URLs below for reference.
+					This project uses components from external sources. Copy the documentation URLs below for
+					reference.
 				</p>
 				<div class="border-border overflow-hidden rounded-lg border">
 					<table class="w-full text-sm">
@@ -31,6 +34,18 @@
 						</tbody>
 					</table>
 				</div>
+			</section>
+		{:else if data.resource.link}
+			<section class="mb-12">
+				<p class="text-muted-foreground mb-6">
+					This resource links to an external page. Click below to open it in a new tab.
+				</p>
+				<a href={data.resource.link} target="_blank" rel="noopener noreferrer">
+					<Button class="gap-2">
+						<SquareArrowOutUpRight class="size-4" />
+						Open external resource
+					</Button>
+				</a>
 			</section>
 		{:else}
 			<section class="mb-12">

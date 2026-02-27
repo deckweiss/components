@@ -1,9 +1,13 @@
 <script lang="ts">
-  import { ChangelogPage } from "$lib/components/blocks/changelog-page";
+  import { Button } from "$lib/components/ui/button";
   import { UpdatePopup } from "$lib/components/blocks/update-popup";
+  import { getLatestVersion, showVersionHighlights } from "$lib/versions/version-manager";
 </script>
 
-<ChangelogPage />
-
-<!-- Add to layout for "Highlights anzeigen" popup -->
+<!-- Add UpdatePopup to your layout - it auto-opens for unseen versions -->
 <UpdatePopup />
+
+<!-- Optional: manual trigger button -->
+<Button onclick={() => showVersionHighlights(getLatestVersion())}>
+  Open Update Popup
+</Button>

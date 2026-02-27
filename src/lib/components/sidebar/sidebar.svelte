@@ -6,16 +6,17 @@
 	import {
 		Boxes,
 		BookOpen,
+		ExternalLink,
 		File,
 		GitBranch,
 		History,
 		LayoutTemplate,
+		SquareArrowOutUpRight,
 		Wrench,
 		ChevronDown,
 		Sparkles,
 		Package,
 		ArrowUp,
-		ExternalLink,
 		Heart,
 		Repeat,
 		Construction,
@@ -108,8 +109,9 @@
 				<li>
 					<a
 						href="/components"
-						class="text-sidebar-foreground hover:bg-sidebar-accent flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors {page
-							.url.pathname.startsWith('/components')
+						class="text-sidebar-foreground hover:bg-sidebar-accent flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors {page.url.pathname.startsWith(
+							'/components'
+						)
 							? 'bg-sidebar-accent text-sidebar-accent-foreground'
 							: ''}"
 					>
@@ -120,8 +122,9 @@
 				<li>
 					<a
 						href="/utils"
-						class="text-sidebar-foreground hover:bg-sidebar-accent flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors {page
-							.url.pathname.startsWith('/utils')
+						class="text-sidebar-foreground hover:bg-sidebar-accent flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors {page.url.pathname.startsWith(
+							'/utils'
+						)
 							? 'bg-sidebar-accent text-sidebar-accent-foreground'
 							: ''}"
 					>
@@ -132,8 +135,9 @@
 				<li>
 					<a
 						href="/resources"
-						class="text-sidebar-foreground hover:bg-sidebar-accent flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors {page
-							.url.pathname.startsWith('/resources')
+						class="text-sidebar-foreground hover:bg-sidebar-accent flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors {page.url.pathname.startsWith(
+							'/resources'
+						)
 							? 'bg-sidebar-accent text-sidebar-accent-foreground'
 							: ''}"
 					>
@@ -144,8 +148,9 @@
 				<li>
 					<a
 						href="/page-templates"
-						class="text-sidebar-foreground hover:bg-sidebar-accent flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors {page
-							.url.pathname.startsWith('/page-templates')
+						class="text-sidebar-foreground hover:bg-sidebar-accent flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors {page.url.pathname.startsWith(
+							'/page-templates'
+						)
 							? 'bg-sidebar-accent text-sidebar-accent-foreground'
 							: ''}"
 					>
@@ -163,7 +168,9 @@
 					>
 						<History class="size-4 opacity-60" />
 						Changelog
-						<Badge variant="secondary" class="ml-auto text-[10px]">{getLatestVersion().version}</Badge>
+						<Badge variant="secondary" class="ml-auto text-[10px]"
+							>{getLatestVersion().version}</Badge
+						>
 					</a>
 				</li>
 			</ul>
@@ -255,22 +262,22 @@
 									? 'bg-sidebar-accent text-sidebar-accent-foreground'
 									: ''}"
 							>
-								<span class="flex items-center gap-2">
+								<span class="flex min-w-0 items-center gap-2">
 									<span class="truncate">{util.name}</span>
-									{#if util.isWip}
-										<span class="rounded-sm bg-gray-500/10 p-1 text-[7px] text-gray-500">
-											WIP
-										</span>
-									{/if}
-									{#if util.isNew}
-										<span class="rounded-sm bg-emerald-500/10 p-1">
-											<Sparkles class="size-2.5 text-emerald-500" />
-										</span>
-									{/if}
-									{#if util.isUpdated}
-										<Repeat class="mr-0.5 size-3 text-blue-500" />
-									{/if}
 								</span>
+								{#if util.isWip}
+									<span class="shrink-0 rounded-sm bg-gray-500/10 p-1 text-[7px] text-gray-500">
+										WIP
+									</span>
+								{/if}
+								{#if util.isNew}
+									<span class="shrink-0 rounded-sm bg-emerald-500/10 p-1">
+										<Sparkles class="size-2.5 text-emerald-500" />
+									</span>
+								{/if}
+								{#if util.isUpdated}
+									<Repeat class="mr-0.5 size-3 shrink-0 text-blue-500" />
+								{/if}
 							</a>
 						</li>
 					{/each}
@@ -292,14 +299,29 @@
 					{#each getResources() as resource (resource.slug)}
 						<li>
 							<a
-								href="/resources/{resource.slug}"
-								class="text-sidebar-foreground hover:bg-sidebar-accent flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors {page
-									.url.pathname === `/resources/${resource.slug}`
+								href={resource.link ?? `/resources/${resource.slug}`}
+								target={resource.link ? "_blank" : undefined}
+								rel={resource.link ? "noopener noreferrer" : undefined}
+								class="text-sidebar-foreground hover:bg-sidebar-accent flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors {!resource.link &&
+								page.url.pathname === `/resources/${resource.slug}`
 									? 'bg-sidebar-accent text-sidebar-accent-foreground'
 									: ''}"
 							>
-								<span class="flex items-center gap-2">
+								<span class="flex min-w-0 items-center gap-2">
 									<span class="truncate">{resource.name}</span>
+								</span>
+								<span class="flex shrink-0 items-center gap-1">
+									{#if resource.isNew}
+										<span class="rounded-sm bg-emerald-500/10 p-1">
+											<Sparkles class="size-2.5 text-emerald-500" />
+										</span>
+									{/if}
+									{#if resource.isUpdated}
+										<Repeat class="size-3 text-blue-500" />
+									{/if}
+									{#if resource.link}
+										<SquareArrowOutUpRight class="size-3 opacity-40" />
+									{/if}
 								</span>
 							</a>
 						</li>
@@ -315,7 +337,9 @@
 				class="text-sidebar-foreground/50 hover:text-sidebar-foreground mb-2 flex w-full items-center justify-between px-3 text-[10px] font-semibold tracking-wider uppercase transition-colors"
 			>
 				<span>Page Templates</span>
-				<ChevronDown class="size-3 transition-transform {pageTemplatesExpanded ? '' : '-rotate-90'}" />
+				<ChevronDown
+					class="size-3 transition-transform {pageTemplatesExpanded ? '' : '-rotate-90'}"
+				/>
 			</button>
 			{#if pageTemplatesExpanded}
 				<ul class="space-y-0.5">
@@ -328,16 +352,16 @@
 									? 'bg-sidebar-accent text-sidebar-accent-foreground'
 									: ''}"
 							>
-								<span class="flex items-center gap-2">
+								<span class="flex min-w-0 items-center gap-2">
 									<span class="truncate">{template.name}</span>
-									{#if template.isNew}
-										<span class="rounded-sm bg-emerald-500/10 p-1">
-											<Sparkles class="size-2.5 text-emerald-500" />
-										</span>
-									{:else if template.isUpdated}
-										<Repeat class="size-3 text-blue-500" />
-									{/if}
 								</span>
+								{#if template.isNew}
+									<span class="shrink-0 rounded-sm bg-emerald-500/10 p-1">
+										<Sparkles class="size-2.5 text-emerald-500" />
+									</span>
+								{:else if template.isUpdated}
+									<Repeat class="size-3 shrink-0 text-blue-500" />
+								{/if}
 							</a>
 						</li>
 					{/each}

@@ -5,6 +5,7 @@
 	import { ChangelogPage } from "$lib/registry/blocks/changelog-page";
 	import { UpdatePopup } from "$lib/registry/blocks/update-popup";
 	import exampleCode from "./example-code.txt?raw";
+	import example2ComponentCode from "./example2-component-code.txt?raw";
 
 	let { data } = $props();
 </script>
@@ -21,6 +22,12 @@
 
 				<Code code={exampleCode} lang="svelte" />
 			</div>
+		</section>
+	{/snippet}
+	{#snippet remainingExamples()}
+		<section class="mt-8">
+			<h2 class="text-foreground mb-4 text-2xl font-semibold">Component Source</h2>
+			<Code code={example2ComponentCode} lang="svelte" />
 		</section>
 	{/snippet}
 </PageTemplatePageWrapper>

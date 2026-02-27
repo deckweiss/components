@@ -20,7 +20,6 @@
 				? 'border-primary/50 ring-primary/20 ring-1'
 				: ''}"
 		>
-			<!-- Header: title + button (button stays close to heading on all breakpoints) -->
 			<div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
 				<div class="min-w-0 flex-1 space-y-2">
 					<div class="flex flex-wrap items-center gap-2">

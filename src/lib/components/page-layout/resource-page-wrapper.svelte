@@ -7,6 +7,8 @@
 			title: string;
 			description: string;
 			slug: string;
+			isNew?: boolean;
+			isUpdated?: boolean;
 		};
 		children: Snippet;
 	}
@@ -18,7 +20,13 @@
 	<title>{resource.title} - Deckweiss Components</title>
 </svelte:head>
 
-<ResourcePageLayout backHref="/resources" title={resource.title} description={resource.description}>
+<ResourcePageLayout
+	backHref="/resources"
+	title={resource.title}
+	description={resource.description}
+	isNew={resource.isNew}
+	isUpdated={resource.isUpdated}
+>
 	{#snippet children()}
 		{@render children()}
 	{/snippet}
