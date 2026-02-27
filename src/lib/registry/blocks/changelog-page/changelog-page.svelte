@@ -48,7 +48,7 @@
 							<SparklesIcon class="text-primary size-4" />
 							Neue Funktionen
 						</h3>
-						<ul class="text-muted-foreground ml-1.5 list-inside list-disc space-y-1 text-sm">
+						<ul class="text-muted-foreground list-outside list-disc space-y-1 pl-5 text-sm">
 							{#each version.detailedChanges.newFeatures as item}
 								<li>{item}</li>
 							{/each}
@@ -62,7 +62,7 @@
 							<TrendingUpIcon class="text-primary size-4" />
 							Verbesserungen
 						</h3>
-						<ul class="text-muted-foreground ml-1.5 list-inside list-disc space-y-1 text-sm">
+						<ul class="text-muted-foreground list-outside list-disc space-y-1 pl-5 text-sm">
 							{#each version.detailedChanges.improvements as item}
 								<li>{item}</li>
 							{/each}
@@ -76,7 +76,7 @@
 							<BugIcon class="text-primary size-4" />
 							Bugfixes
 						</h3>
-						<ul class="text-muted-foreground ml-1.5 list-inside list-disc space-y-1 text-sm">
+						<ul class="text-muted-foreground list-outside list-disc space-y-1 pl-5 text-sm">
 							{#each version.detailedChanges.bugFixes as item}
 								<li>{item}</li>
 							{/each}

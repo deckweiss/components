@@ -1,3 +1,4 @@
+import { WrenchIcon, TableIcon } from "@lucide/svelte";
 import type { VersionData } from "$lib/versions/types";
 
 export const versionData: VersionData = {
@@ -7,19 +8,21 @@ export const versionData: VersionData = {
 	learnMoreUrl: "/changelog",
 	changes: [
 		{
-			title: "Format Measurement Value",
+			title: "New Utility: Format Measurement Value",
 			description: "Utility for formatting measurement values",
-			icon: "RocketIcon",
+			icon: WrenchIcon,
 		},
 		{
-			title: "Data Table",
+			title: "Updated Data Table",
 			description: "Updated Data Table component",
-			icon: "TrendingUpIcon",
+			icon: TableIcon,
 		},
 	],
 	detailedChanges: {
 		newFeatures: ["Added format-measurement-value utility function"],
-		improvements: ["Updated Data Table component"],
+		improvements: [
+			"Updated Data Table component with improved filtering, sorting, responsiveness and more more text for a second line",
+		],
 		bugFixes: [],
 	},
 };

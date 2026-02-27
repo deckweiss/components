@@ -8,36 +8,7 @@
 	import * as Dialog from "$lib/components/ui/dialog";
 	import { Button } from "$lib/components/ui/button";
 	import { Separator } from "$lib/components/ui/separator";
-	import {
-		TrendingUpIcon,
-		LayoutGridIcon,
-		HistoryIcon,
-		ZapIcon,
-		BarChart3Icon,
-		XIcon,
-		ExternalLinkIcon,
-		RocketIcon,
-		LayoutTemplateIcon,
-		SparklesIcon,
-		FileIcon,
-	} from "@lucide/svelte";
-	import type { Component } from "svelte";
-
-	const iconMap: Record<string, Component> = {
-		TrendingUpIcon,
-		LayoutGridIcon,
-		HistoryIcon,
-		ZapIcon,
-		BarChart3Icon,
-		RocketIcon,
-		LayoutTemplateIcon,
-		SparklesIcon,
-		FileIcon,
-	};
-
-	function getIconComponent(iconName: string): Component | null {
-		return iconMap[iconName] ?? null;
-	}
+	import { XIcon, ExternalLinkIcon } from "@lucide/svelte";
 
 	let dismissed = $state(false);
 	let mounted = $state(false);
@@ -107,7 +78,7 @@
 					<!-- Features -->
 					<div class="mt-4 space-y-4">
 						{#each displayedVersion.changes as change, i (change.title + "-" + i)}
-							{@const IconComponent = getIconComponent(change.icon)}
+							{@const IconComponent = change.icon}
 							<div class="flex gap-3">
 								{#if IconComponent}
 									<div

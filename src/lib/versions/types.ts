@@ -1,3 +1,5 @@
+import type { Component } from "svelte";
+
 export interface VersionData {
 	version: string;
 	date: string;
@@ -11,7 +13,8 @@ export interface VersionData {
 export interface ChangeEntry {
 	title: string;
 	description: string;
-	icon: string;
+	/** Svelte component for the icon (e.g. from @lucide/svelte). Import in the version content file and pass directly. */
+	icon?: Component;
 }
 
 export interface DetailedChanges {

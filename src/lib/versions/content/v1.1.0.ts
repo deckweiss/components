@@ -1,3 +1,4 @@
+import { FileIcon, LayoutTemplateIcon, SparklesIcon } from "@lucide/svelte";
 import type { VersionData } from "$lib/versions/types";
 
 export const versionData: VersionData = {
@@ -9,17 +10,17 @@ export const versionData: VersionData = {
 		{
 			title: "Update Popup",
 			description: "Added Update Popup component alongside a version manager",
-			icon: "SparklesIcon",
+			icon: SparklesIcon,
 		},
 		{
 			title: "Resources Category",
 			description: "Added new category for copy-paste code snippets",
-			icon: "FileIcon",
+			icon: FileIcon,
 		},
 		{
 			title: "Page Templates Category",
 			description: "Added new category for ready-to-use pages",
-			icon: "LayoutTemplateIcon",
+			icon: LayoutTemplateIcon,
 		},
 	],
 	detailedChanges: {
