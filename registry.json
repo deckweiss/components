@@ -312,7 +312,7 @@
 			"name": "update-popup",
 			"type": "registry:block",
 			"title": "Update Popup",
-			"description": "A popup component for displaying updates.",
+			"description": "A popup component for displaying updates. Auto-installs a version-manager system: add your changelog content and the system does the rest.",
 			"dependencies": ["@lucide/svelte"],
 			"registryDependencies": ["dialog", "button", "separator"],
 			"files": [

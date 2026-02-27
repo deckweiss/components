@@ -16,10 +16,7 @@
 			<div>
 				<Card class="mb-0 rounded-b-none border-b-0">
 					<div class="space-y-6 px-4 py-2">
-						<h3 class="text-foreground text-lg font-semibold">
-							Auto-installs a version-manager system: add your changelog content and the system does
-							the rest. Here is how it works:
-						</h3>
+						<h3 class="text-foreground text-lg font-semibold">Here is how it works:</h3>
 						<div class="space-y-3">
 							<p class="text-muted-foreground text-sm">
 								The Update Popup auto-opens when the user visits your app and hasn't seen the latest
