@@ -17,11 +17,6 @@ export interface ResourceItem {
 
 export const resourcesData: Omit<ResourceItem, "isNew" | "isUpdated">[] = [
 	{
-		name: "Outsourced Components",
-		slug: "outsourced-components",
-		description: "Reference list of components from external sources (shadcn, more-shadcn, etc.) used in this project.",
-	},
-	{
 		name: "Glowing Gradient Button",
 		slug: "glowing-gradient-button",
 		description: "A button component with a glowing gradient background effect.",

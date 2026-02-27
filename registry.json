@@ -318,27 +318,33 @@
 			"files": [
 				{
 					"path": "src/lib/registry/blocks/update-popup/update-popup.svelte",
-					"type": "registry:component"
+					"type": "registry:component",
+					"target": "blocks/update-popup/update-popup.svelte"
 				},
 				{
 					"path": "src/lib/registry/blocks/update-popup/index.ts",
-					"type": "registry:file"
+					"type": "registry:file",
+					"target": "blocks/update-popup/index.ts"
 				},
 				{
 					"path": "src/lib/versions/version-manager.ts",
-					"type": "registry:file"
+					"type": "registry:file",
+					"target": "src/lib/versions/version-manager.ts"
 				},
 				{
 					"path": "src/lib/versions/content/v1.0.0.ts",
-					"type": "registry:file"
+					"type": "registry:file",
+					"target": "src/lib/versions/content/v1.0.0.ts"
 				},
 				{
 					"path": "src/lib/versions/content/v1.1.0.ts",
-					"type": "registry:file"
+					"type": "registry:file",
+					"target": "src/lib/versions/content/v1.1.0.ts"
 				},
 				{
 					"path": "src/lib/versions/types.ts",
-					"type": "registry:file"
+					"type": "registry:file",
+					"target": "src/lib/versions/types.ts"
 				}
 			]
 		},
@@ -352,13 +358,8 @@
 			"files": [
 				{
 					"path": "src/lib/registry/blocks/changelog-page/changelog-page.svelte",
-					"type": "registry:component",
-					"target": "blocks/changelog-page/changelog-page.svelte"
-				},
-				{
-					"path": "src/lib/registry/blocks/changelog-page/index.ts",
-					"type": "registry:file",
-					"target": "blocks/changelog-page/index.ts"
+					"type": "registry:page",
+					"target": "src/routes/changelog/+page.svelte"
 				}
 			]
 		}
